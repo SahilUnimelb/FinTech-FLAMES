@@ -1,21 +1,17 @@
-import React from 'react'
-
-export default function Navbar() {
+import React from 'react';
+import { Link } from 'react-router-dom';
+export default function Login() {
   return (
     <div className='login'>
-        <div className='login-container'>
-            <h1>Sign Up</h1>
-            <div className='login-fields'></div>
-                <input type = "text" placeholder='Name' />
-                <input type = "email" placeholder='Email Address' />
-                <input type = "password" placeholder='Password' />
+      <div className='login-container'>
+        <h1>Login</h1>
+        <div className='login-fields'>
+          <input type="text" placeholder='Username' />
+          <input type="password" placeholder='Password' />
         </div>
-        <button>Continue</button>
-        <p className="login-login">Already have an account? <span>Login here </span></p>
-        <div className='login-agree'>
-            <input type = "checkbox" name = " " id = " " />
-            <p>By continuing, I agree to the terms of use & privacy policy.</p>
-        </div>
+        <button>Login</button>
+        <p className="login-signup">Don't have an account? <span><Link to = "/signup" className='login-signup-link'>Sign up</Link></span></p>
+      </div>
     </div>
-  )
+  );
 }
