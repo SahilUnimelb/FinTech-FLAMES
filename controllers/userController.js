@@ -1,6 +1,6 @@
 // controllers/userController.js
 
-const User = require('../models/user');
+const User = require('../models/model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -41,13 +41,13 @@ exports.login = async (req, res) => {
         // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'Invalid Email' });
         }
 
         // Compare passwords
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'Invalid Password' });
         }
 
         // Generate JWT
