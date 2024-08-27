@@ -4,18 +4,19 @@ import Account from './Components/Account';
 import Layout from './Components/Layout.jsx';
 import Login from './Components/Login.jsx';
 import SignUp from './Components/SignUp.jsx';
+import Homepage from './Components/Homepage.jsx';
+
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Routes>
-        <Route path = '/signup' element = {<SignUp/>}/>
-        <Route path = '/' element = {<Login/>}/>
-        <Route path='/account' element = {<Layout> <Account/> </Layout>}/>
-      </Routes>
-
+        <Routes>
+          <Route path = '/homepage' element = {<Homepage/>}/>
+          <Route path = '/signup' element = {<SignUp/>}/>
+          <Route path = '/' element = {<Login/>}/>
+          <Route path = '/account' element = {<Layout> <Account/> </Layout>}/>
+        </Routes>
       </BrowserRouter>
-
     </div>
   );
 }

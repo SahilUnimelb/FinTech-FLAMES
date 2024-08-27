@@ -12,7 +12,7 @@ export default function SignUp() {
           <input type="password" placeholder='Password' />
         </div>
         <div className='signup-agree'>
-          <p>By clicking on Signup you automatically agree to the terms and conditions</p>
+          <p>By clicking on Continue you automatically agree to the terms and conditions</p>
         </div>
         <button>Continue</button>
         <p className="signup-login">Already have an account? <span><Link to = "/" className='signup-login-link'>Login</Link></span></p>
