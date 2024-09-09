@@ -27,6 +27,12 @@ const loginDetailSchema = new mongoose.Schema({
 });
 
 
+// Define the Acc No and Bsb schema
+const AccnoBsbSchema = new mongoose.Schema({
+  accNo: {type: Number, required: true, unique: true},
+  bsb: {type: Number, required: true, unique: true}
+});
+
 
 // Define the card details schema
 const cardDetailSchema = new mongoose.Schema({
@@ -44,7 +50,7 @@ const UserSchema = new mongoose.Schema({
   phoneNo: {type: Number, required: true, unique: true},
   email: { type: String, required: true, unique: true },
   login: [loginDetailSchema], // Embedding login inside the user
-  AccNoBsb: {type: Number, required: true, unique: true},
+  AccNoBsb: [AccnoBsbSchema], // Embedding accnobsb inside the user
   Balance: {type: Number, required: true, default: 30000},
   lastLogedInAt: {type: Date, default: Date.now },
   cardDetails: [cardDetailSchema], // Embedding card inside the user
