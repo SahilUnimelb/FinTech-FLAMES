@@ -35,3 +35,20 @@ Content-Type: application/json
   "toBsb": "560425",
   "amount": 100
 }
+
+### Delete Account
+POST http://localhost:5000/api/admin/delete
+Content-Type: application/json
+
+{
+  "username": "mitchellzheng"
+}
+
+### Admin - set user balance
+POST http://localhost:5000/api/admin/setBalance
+Content-Type: application/json
+
+{
+  "accNumber": "51695661",
+  "newBalance": 30000
+}

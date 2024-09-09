@@ -1,13 +1,13 @@
 const express = require('express');
 
-const { deleteAccount, modifyTransactions } = require('../controllers/adminController');
+const { deleteAccount, setUserBalance } = require('../controllers/adminController');
 
 const router = express.Router();
 
 // Delete an account
 router.post('/delete', deleteAccount);
 
-// Modify transactions
-router.post('/modify', modifyTransactions);
+// Set Balance of a User
+router.post('/setBalance', setUserBalance);
 
 module.exports = router;
