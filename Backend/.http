@@ -1,0 +1,22 @@
+### Create Account
+POST http://localhost:5000/api/accounts/create
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phoneNo": "1234567890",
+  "username": "johndoe",
+  "password": "password123",
+  "initialDeposit": 30000
+}
+
+### Transfer Money
+POST http://localhost:5000/api/accounts/transfer
+Content-Type: application/json
+
+{
+  "fromAccNoBsb": "123456789",
+  "toAccNoBsb": "987654321",
+  "amount": 100
+}
