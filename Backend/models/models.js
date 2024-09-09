@@ -68,23 +68,37 @@ module.exports = {
   User,
   generateRandomCardNumber,
   generateRandomCVV,
-  generateAccNoBsb
+  generateAccNo,
+  generateBsb
 };
 
 //const randomCardNumber = generateRandomCardNumber();
 //const randomCVV = generateRandomCVV(); // 3-digit CVV
 
-async function generateAccNoBsb() {
-  let accNoBsb;
+async function generateAccNo() {
+  let accNo;
   let existingUser;
   
   // Keep generating until a unique one is found
   do {
-    accNoBsb = Math.floor(100000000 + Math.random() * 900000000); // Generates a random 9-digit number
-    existingUser = await User.findOne({ AccNoBsb: accNoBsb });
+    accNo = Math.floor(10000000 + Math.random() * 90000000); // Generates a random 8-digit number
+    existingUser = await User.findOne({ 'AccNoBsb.accNo': accNo});
   } while (existingUser);
 
-  return accNoBsb;
+  return accNo;
+};
+
+async function generateBsb() {
+  let bsb;
+  let existingUser;
+  
+  // Keep generating until a unique one is found
+  do {
+    bsb = Math.floor(100000 + Math.random() * 900000); // Generates a random 6-digit number
+    existingUser = await User.findOne({ 'AccNoBsb.bsb': bsb });
+  } while (existingUser);
+
+  return bsb;
 };
 
 

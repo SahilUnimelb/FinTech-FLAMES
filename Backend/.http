@@ -1,13 +1,26 @@
-### Create Account
+### Create Account 1
 POST http://localhost:5000/api/accounts/create
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "john@example.com",
+  "name": "Mitchell Zheng",
+  "email": "mitchell@example.com",
   "phoneNo": "1234567890",
-  "username": "johndoe",
+  "username": "mitchellzheng",
   "password": "password123",
+  "initialDeposit": 30000
+}
+
+### Create Account 2
+POST http://localhost:5000/api/accounts/create
+Content-Type: application/json
+
+{
+  "name": "Fischer Zhang",
+  "email": "fischer@example.com",
+  "phoneNo": "0987654321",
+  "username": "fischerzhang",
+  "password": "password1234",
   "initialDeposit": 30000
 }
 
@@ -16,7 +29,9 @@ POST http://localhost:5000/api/accounts/transfer
 Content-Type: application/json
 
 {
-  "fromAccNoBsb": "123456789",
-  "toAccNoBsb": "987654321",
+  "fromAccNo": "62916259",
+  "fromBsb": "848646",
+  "toAccNo": "51695661",
+  "toBsb": "560425",
   "amount": 100
 }

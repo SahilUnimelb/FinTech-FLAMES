@@ -1,5 +1,5 @@
 // controllers/accountController.js
-const { User, generateRandomCardNumber, generateRandomCVV, generateAccNoBsb } = require('../models/models');
+const { User, generateRandomCardNumber, generateRandomCVV, generateAccNo, generateBsb } = require('../models/models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -18,7 +18,8 @@ exports.createAccount = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Generate random unique Account Number and BSB
-        const AccNoBsb = await generateAccNoBsb();
+        const accNo = await generateAccNo();
+        const bsb = await generateBsb();
 
         // Card Details
         const cardNumber = generateRandomCardNumber();
@@ -36,7 +37,10 @@ exports.createAccount = async (req, res) => {
                 username,
                 password: hashedPassword
             }],
-            AccNoBsb,
+            AccNoBsb: [{
+                accNo,
+                bsb
+            }],
             Balance: initialDeposit || 0,
             cardDetails: [{
                 number: cardNumber,
@@ -101,11 +105,11 @@ exports.getUserDetails = async (req, res) => {
 
 // Transfer money between accounts
 exports.transferMoney = async (req, res) => {
-    const { fromAccNoBsb, toAccNoBsb, amount } = req.body;
+    const { fromAccNo, fromBsb, toAccNo, toBsb, amount } = req.body;
 
     try {
-        const sender = await User.findOne({ AccNoBsb: fromAccNoBsb });
-        const receiver = await User.findOne({ AccNoBsb: toAccNoBsb });
+        const sender = await User.findOne({ 'AccNoBsb.accNo': fromAccNo, 'AccNoBsb.bsb': fromBsb});
+        const receiver = await User.findOne({ 'AccNoBsb.accNo': toAccNo,  'AccNoBsb.bsb': toBsb});
 
         if (!sender || !receiver) {
             return res.status(404).json({ message: 'Account not found' });
@@ -120,8 +124,17 @@ exports.transferMoney = async (req, res) => {
         receiver.Balance += amount;
 
         // Record the transaction
-        sender.transactions.push({ amount: -amount, description: `Transfer to ${toAccNoBsb}` });
-        receiver.transactions.push({ amount, description: `Transfer from ${fromAccNoBsb}` });
+        const transactionDate = new Date();
+        sender.transactions.push({ 
+            amount: -amount, 
+            description: `Transfer to ${receiver.name}`,
+            date: transactionDate 
+        });
+        receiver.transactions.push({ 
+            amount, 
+            description: `Transfer from ${sender.name}` ,
+            date: transactionDate
+        });
 
         await sender.save();
         await receiver.save();
