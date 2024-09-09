@@ -4,7 +4,6 @@ const rateLimit = require('express-rate-limit');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const app = express();
-const User = require('./User');
 const crypto = require('crypto'); // For generating secure tokens
 const nodemailer = require('nodemailer'); // For sending emails
 
@@ -32,8 +31,8 @@ const loginDetailSchema = new mongoose.Schema({
 const cardDetailSchema = new mongoose.Schema({
   number: {type: String, required: true, unique: true},
   cvv: {type: String, required: true},
-  expiryMonth: {type: Number,required: true, default: Date().getMonth() + 1},
-  expiryYear: {type: Number,required: true, default: (((Date().getFullYear())%100) + 5)}
+  expiryMonth: {type: Number,required: true, default: new Date().getMonth() + 1},
+  expiryYear: {type: Number,required: true, default: (((new Date().getFullYear())%100) + 5)}
 });
 
 
@@ -59,11 +58,28 @@ const UserSchema = new mongoose.Schema({
 // Create a model from the schema
 const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+module.exports = {
+  User,
+  generateRandomCardNumber,
+  generateRandomCVV,
+  generateAccNoBsb
+};
 
-const randomCardNumber = generateRandomCardNumber();
-const randomCVV = generateRandomCVV(); // 3-digit CVV
+//const randomCardNumber = generateRandomCardNumber();
+//const randomCVV = generateRandomCVV(); // 3-digit CVV
 
+async function generateAccNoBsb() {
+  let accNoBsb;
+  let existingUser;
+  
+  // Keep generating until a unique one is found
+  do {
+    accNoBsb = Math.floor(100000000 + Math.random() * 900000000); // Generates a random 9-digit number
+    existingUser = await User.findOne({ AccNoBsb: accNoBsb });
+  } while (existingUser);
+
+  return accNoBsb;
+};
 
 
 async function updateLastLoggedIn(email) {

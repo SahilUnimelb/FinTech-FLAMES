@@ -4,10 +4,10 @@ const dotenv = require('dotenv');
 
 // Importing route handlers
 const accountRoutes = require('./routes/accountRoutes');
-const transactionRoutes = require('./routes/transactionRoutes');
+// const transactionRoutes = require('./routes/transactionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const billRoutes = require('.routes/adminRoutes');
-const { ScheduleRecurringPayments } = require('.utils/scheduler');
+// const billRoutes = require('.routes/adminRoutes');
+// const { ScheduleRecurringPayments } = require('.utils/scheduler');
 
 dotenv.config();
 
@@ -24,14 +24,14 @@ app.use((req, res, next) => {
 
 // Route handlers
 app.use('/api/accounts', accountRoutes);
-app.use('/api/transactions', transactionRoutes);
+// app.use('/api/transactions', transactionRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/bills', billRoutes);
+// app.use('/api/bills', billRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+//  useNewUrlParser: true,
+//  useUnifiedTopology: true,
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 

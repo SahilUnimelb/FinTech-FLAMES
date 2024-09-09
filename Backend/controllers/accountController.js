@@ -1,12 +1,11 @@
-// controllers/userController.js
-
-const User = require('../models/model');
+// controllers/accountController.js
+const { User, generateRandomCardNumber, generateRandomCVV, generateAccNoBsb } = require('../models/models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// User registration
-exports.register = async (req, res) => {
-    const { name, email, username, password } = req.body;
+// Account Registration / Creation
+exports.createAccount = async (req, res) => {
+    const { name, email, phoneNo, username, password, initialDeposit } = req.body;
 
     try {
         // Check if user already exists
@@ -18,30 +17,62 @@ exports.register = async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Generate random unique Account Number and BSB
+        const AccNoBsb = await generateAccNoBsb();
+
+        // Card Details
+        const cardNumber = generateRandomCardNumber();
+        const cvv = generateRandomCVV();
+        const expiryMonth = new Date().getMonth() + 1;
+        const expiryYear = new Date().getFullYear() + 5;
+
+
         // Create new user
         const newUser = new User({
             name,
+            phoneNo,
             email,
-            username,
-            password: hashedPassword
+            login: [{
+                username,
+                password: hashedPassword
+            }],
+            AccNoBsb,
+            Balance: initialDeposit || 0,
+            cardDetails: [{
+                number: cardNumber,
+                cvv,
+                expiryMonth,
+                expiryYear
+            }],
+            roles: 'user',
+            lastLogedInAt: new Date(),
+            is2FAEnabled: true,
+            isDeleted: false
         });
 
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error('Error creating account:', error);
+        res.status(500).json({ message: 'Server error - Create Account' });
     }
 };
 
-// User login
+// Account Login
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     try {
-        // Find user by email
-        const user = await User.findOne({ email });
+        // Find user by login schema username
+        const user = await User.findOne({ 'login.username': username });
+
+         // Check if user is deleted (soft delete)
+         if (user.isDeleted) {
+            return res.status(403).json({ message: 'User account is inactive or deleted.' });
+        }
+
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Email' });
+            return res.status(400).json({ message: 'Invalid username' });
         }
 
         // Compare passwords
@@ -58,12 +89,45 @@ exports.login = async (req, res) => {
     }
 };
 
-// Get user details
+// Get Account Details
 exports.getUserDetails = async (req, res) => {
     try {
         const user = await User.findById(req.userId);
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Transfer money between accounts
+exports.transferMoney = async (req, res) => {
+    const { fromAccNoBsb, toAccNoBsb, amount } = req.body;
+
+    try {
+        const sender = await User.findOne({ AccNoBsb: fromAccNoBsb });
+        const receiver = await User.findOne({ AccNoBsb: toAccNoBsb });
+
+        if (!sender || !receiver) {
+            return res.status(404).json({ message: 'Account not found' });
+        }
+
+        if (sender.Balance < amount) {
+            return res.status(400).json({ message: 'Insufficient balance' });
+        }
+
+        // Perform the transfer
+        sender.Balance -= amount;
+        receiver.Balance += amount;
+
+        // Record the transaction
+        sender.transactions.push({ amount: -amount, description: `Transfer to ${toAccNoBsb}` });
+        receiver.transactions.push({ amount, description: `Transfer from ${fromAccNoBsb}` });
+
+        await sender.save();
+        await receiver.save();
+
+        res.status(200).json({ message: 'Transfer successful' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

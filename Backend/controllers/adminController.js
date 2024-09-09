@@ -1,6 +1,6 @@
 // controllers/adminController.js
 
-const User = require('../models/model');
+const User = require('../models/models');
 
 // Delete an account
 exports.deleteAccount = async (req, res) => {
