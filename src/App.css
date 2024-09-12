@@ -286,11 +286,6 @@
   margin-bottom: 30px;
 }
 
-.login button {
-  position: relative;
-  left: 115px;
-}
-
 .login-fields input {
   height: 25px;
   width: 250px;

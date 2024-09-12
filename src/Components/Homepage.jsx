@@ -26,6 +26,7 @@ export default function Homepage() {
             </div>
           </div>
           <button className="login-button">Continue</button>
+          <p classname="forgot-password">Forgot password? <span>Click here.</span></p>
         </div>
       </div>
     </div>
