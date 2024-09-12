@@ -128,10 +128,11 @@
   font-weight: 600;
 }
 
+/*
 .login {
   width: 100%;
   height: 100vh;
-  /*background: #FFCC00 !important; */
+  // background: #FFCC00 !important;
   background: #8fd3f2;
   padding-top: 50px;
 }
@@ -187,6 +188,7 @@
   color: #1a3b4a;
   font-weight: 600;
 }
+  */
 
 /* Homepage section */
 .homepage {
@@ -196,45 +198,106 @@
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .homepage-header {
   position: sticky;
-  width: 100%;
+  width: 100vw;
   height: 60px;
-  background: white;
+  background: rgb(96, 109, 155);
   padding: 40px;
   align-items: center;
+}
+
+.bottom-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
 .login-button, .signup-button {
   padding: 15px 45px;
   border: none;
   cursor: pointer;
+  border-radius: 50px;
   background-color: #1a3b4a;
   color: white;
 }
 
+.signup-button {
+  position: relative;
+  left: 45%;
+}
+/* 
 .login-button {
   position:absolute;
   margin-left: 83%;
   align-items: center;
+} */
+
+.homepage-content {
+  width: 80%;
+  height: 100%;
+  border-radius: 0 350px 350px 0;
+  background-image: url(https://i.ebayimg.com/images/g/da0AAOSwa7JllakO/s-l1200.jpg);
+  /* ignore the placeholder background image --> gave up trying to find a high def photo*/
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.homepage-container {
-  width: 450px;
-  height: 450px;
-  margin: 100px 0px 0px 400px;
+.homepage-content h1, .homepage-content p {
+  margin-bottom: 20px;
+  margin-left: 200px;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px  1px 0 black, 1px  1px 0 black;
+
 }
 
-.homepage-container h1 {
+.homepage-content h1 {
+  width: 50%;
   color: rgb(96, 109, 155);
-  margin-bottom: 40px;
+  margin-top: 150px;
   font-size: 350%;
 }
 
-.homepage-container p {
-  margin-bottom: 20px;
+.homepage-content p {
+  color: white;
+}
+
+.login {
+  display: inline-block;
+  padding-top: 150px;
+  padding-left: 57px;
+  width: 15%;
+  height: 50vh;
+}
+
+.login label {
+  width: 100px;
+  margin-top: 5px;
+}
+
+.login-fields {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.login button {
+  position: relative;
+  left: 115px;
+}
+
+.login-fields input {
+  height: 25px;
+  width: 250px;
+}
+
+.login h1 {
+  width: 5vw;
 }
 
 /* account section */
@@ -246,6 +309,7 @@
   overflow: hidden;
 }
 .account-container {
+  position: absolute;
   width: 50vw;
   height: 50vh;
   margin-left: 5% 0% 0% 25%;
