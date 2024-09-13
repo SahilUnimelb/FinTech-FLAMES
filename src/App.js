@@ -1,20 +1,28 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Account from './Components/Account';
+import Account from './Components/Account.jsx';
+import Homepage from './Components/Homepage.jsx';
 import Layout from './Components/Layout.jsx';
 import Login from './Components/Login.jsx';
+import SavingAccount from './Components/SavingAccount.jsx';
 import SignUp from './Components/SignUp.jsx';
-import Homepage from './Components/Homepage.jsx';
+import TransactionAccount from './Components/TransactionAccount.jsx';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path = '/homepage' element = {<Homepage/>}/>
+          <Route path = '/' element = {<Homepage/>}/>
           <Route path = '/signup' element = {<SignUp/>}/>
-          <Route path = '/' element = {<Login/>}/>
-          <Route path = '/account' element = {<Layout> <Account/> </Layout>}/>
+          <Route path = '/login' element = {<Login/>}/>
+          <Route path = '/home' element = {<Layout> <Account category = "home"/> </Layout>}/>
+          <Route path = '/view' element = {<Layout> <Account category = "view"/> </Layout>}/>
+          <Route path = '/business' element = {<Layout> <Account category = "business"/> </Layout>}/>
+          <Route path = '/transfer' element = {<Layout> <Account category = "transfer"/> </Layout>}/>
+          <Route path = '/settings' element = {<Layout> <Account category = "settings"/> </Layout>}/>
+          <Route path = '/savingaccount' element = {<Layout> <SavingAccount/> </Layout>}/>
+          <Route path = '/transactionaccount' element = {<Layout> <TransactionAccount/> </Layout>}/>
         </Routes>
       </BrowserRouter>
     </div>

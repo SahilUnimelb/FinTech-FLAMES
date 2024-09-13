@@ -5,7 +5,7 @@ export default function Homepage() {
   return (
     <div className="homepage">
         <header className="homepage-header">
-            <Link to="/"><button className="login-button">Login</button></Link>
+            <Link to="/login"><button className="login-button">Login</button></Link>
         </header>
         <div className="homepage-container">
             <h1>Learn the way you money online!</h1>
