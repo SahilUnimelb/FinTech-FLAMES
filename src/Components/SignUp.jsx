@@ -15,7 +15,7 @@ export default function SignUp() {
           <p>By clicking on Continue you automatically agree to the terms and conditions</p>
         </div>
         <button>Continue</button>
-        <p className="signup-login">Already have an account? <span><Link to = "/" className='signup-login-link'>Login</Link></span></p>
+        <p className="signup-login">Already have an account? <span><Link to = "/login" className='signup-login-link'>Login</Link></span></p>
       </div>
     </div>
   );
