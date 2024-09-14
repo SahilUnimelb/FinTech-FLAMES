@@ -25,11 +25,12 @@ POST http://localhost:5000/api/accounts/transfer
 Content-Type: application/json
 
 {
-  "fromAccNo": "83487119",
-  "fromBsb": "983693",
-  "toAccNo": "18076990",
-  "toBsb": "110916",
-  "amount": 100
+  "fromAccNo": "56087953",
+  "fromBsb": "281435",
+  "toAccNo": "78268145",
+  "toBsb": "847995",
+  "amount": 1000,
+  "description": ""
 }
 
 ### Login Account
@@ -44,7 +45,7 @@ Content-Type: application/json
 ### Get Account Info
 POST http://localhost:5000/api/accounts/getUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MTNiNGQ2YWY3MWE3Yjg3NTc3MDAiLCJpYXQiOjE3MjYyODk4NTQsImV4cCI6MTcyNjI5MzQ1NH0.CrTcdiBrAbjTp4H9z_lWQAHJYOknQ99hgvWtYNiWMyg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MjJiYjE1ZGVjYTk3ZGQ0MGQ2YmUiLCJpYXQiOjE3MjYyOTU4NDYsImV4cCI6MTcyNjI5OTQ0Nn0.tbuxNJ_DfeGbsvaEjOnhAVj6XaqidFbww80Tx12k2gc
 
 ### Delete Account
 POST http://localhost:5000/api/admin/delete

@@ -114,7 +114,6 @@ exports.login = async (req, res) => {
 
 // Get Account Details
 exports.getUserAccount = async (req, res) => {
-    console.log("UserId from token: ", req.userId);
     try{
         const user = await User.findById(req.userId);
 
@@ -143,9 +142,14 @@ exports.getUserAccount = async (req, res) => {
     
 };
 
-// Transfer money between accounts
+// Transfer money between user transaction accounts
 exports.transferMoney = async (req, res) => {
-    const { fromAccNo, fromBsb, toAccNo, toBsb, amount } = req.body;
+    let { fromAccNo, fromBsb, toAccNo, toBsb, amount, description, name } = req.body;
+
+    fromAccNo = Number(fromAccNo);  // Alternatively, parseInt(fromAccNo, 10);
+    fromBsb = Number(fromBsb);
+    toAccNo = Number(toAccNo);
+    toBsb = Number(toBsb);
 
     try {
         const sender = await User.findOne({ 'AccNoBsb.accNo': fromAccNo, 'AccNoBsb.bsb': fromBsb});
@@ -155,7 +159,7 @@ exports.transferMoney = async (req, res) => {
             return res.status(404).json({ message: 'Account not found' });
         }
 
-        if (sender.Balance < amount) {
+        if (sender.transactionAcc.balance < amount) {
             return res.status(400).json({ message: 'Insufficient balance' });
         }
 
@@ -166,14 +170,18 @@ exports.transferMoney = async (req, res) => {
         // Record the transaction
         const transactionDate = new Date();
         sender.transactionAcc.transactions.push({ 
-            amount: -amount, 
-            description: `Transfer to ${receiver.name}`,
-            date: transactionDate 
+            amount: -amount,
+            date: transactionDate,
+            log: `Transfer to ${name}`,
+            description: description
+            
         });
         receiver.transactionAcc.transactions.push({ 
             amount, 
-            description: `Transfer from ${sender.name}` ,
-            date: transactionDate
+            date: transactionDate,
+            log: `Transfer from ${sender.name}` ,
+            description: description
+            
         });
 
         await sender.save();

@@ -27,7 +27,6 @@ export default function Home() {
 
         setAccountData(response.data); // Set the account data received from backend
       } catch (error) {
-        console.error('Error fetching account details:', error);
         if (error.response && error.response.data) {
           setMessage(error.response.data.message); // Display error message
         } else {

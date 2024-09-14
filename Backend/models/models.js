@@ -14,6 +14,7 @@ app.use(express.json());
 const transactionSchema = new mongoose.Schema({
   amount: Number,
   date: { type: Date, default: Date.now },
+  log: String,
   description: String
 });
 

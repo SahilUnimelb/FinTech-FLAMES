@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function Transfer() {
   const [formData, setFormData] = useState({
-    senderAccount: "",
     transferMethod: "",
     amount: "",
     description: "",
@@ -15,20 +15,84 @@ export default function Transfer() {
     recurring: "",
     frequency: ""
   })
+  const [accountData, setAccountData] = useState(null);
+  const [message, setMessage] = useState('');
+
+  // Fetch user account details on component mount
+  useEffect(() => {
+    const fetchAccountDetails = async () => {
+      // Retrieve the token from localStorage
+      const token = localStorage.getItem('authToken'); 
+
+      if (!token) {
+        setMessage('You are not logged in');
+        return;
+      }
+
+      try {
+        // Make a request to get the user account details
+        const response = await axios.post('http://localhost:5000/api/accounts/getUser', {}, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+          },
+        });
+
+        setAccountData(response.data); // Set the account data received from backend
+      } catch (error) {
+        if (error.response && error.response.data) {
+          setMessage(error.response.data.message); // Display error message
+        } else {
+          setMessage('Failed to fetch account details. Please try again.');
+        }
+      }
+    };
+
+    fetchAccountDetails();
+  }, []);
 
   function handleChange (event) {
+    const {name, value} = event.target;
     setFormData(prevFormData => {
         return {
             ...prevFormData,
-            [event.target.name]: event.target.value
+            [name]: value
         }
     })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+
+    if (formData.transferMethod === "Bank Transfer") {
+        handleBankTransfer();
+        console.log(formData)
+    }
+
+    
     setIsSubmitted(true);
+  }
+
+  const handleBankTransfer = async () => {
+    try{
+        const response = await axios.post('http://localhost:5000/api/accounts/transfer', {
+            fromAccNo: accountData.accNo,
+            fromBsb: accountData.bsb,
+            toAccNo: formData.accountNumber,
+            toBsb: formData.bsb,
+            amount: formData.amount,
+            description: formData.description,
+            name: formData.name
+          }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+          });
+
+        console.log('Transfer response:', response);
+    } catch(error) {
+        setMessage('Bank transfer failed. Please try again.');
+    }
+    
   }
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -73,14 +137,14 @@ export default function Transfer() {
                                 <select
                                     id='sender-account'
                                     name='senderAccount'
-                                    value={formData.senderAccount}
+                                    //value={formData.senderAccount}
                                     onChange={handleChange}
                                     className='sender-account-select'
                                     required
                                 >
                                     <option value="">-- Choose Account --</option>
-                                    <option value="063786 48543425213">Transaction Account: $30,000</option>
-                                    <option value="063123 4857252935">Savings Account: $30,000</option>
+                                    <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                    <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                                 </select>
                             </span>
                             <p className='transfer-section-content-header'>To:</p>
@@ -117,13 +181,14 @@ export default function Transfer() {
                                 <span>
                                     <p className='transfer-section-content-sub-header'>BSB</p>
                                         <input
-                                            type="text"
+                                            type="number"
                                             placeholder="BSB"
                                             onChange={handleChange}
                                             name="bsb"
                                             value={formData.bsb}
                                             className="transfer-receiver-details"
-                                            maxLength={5}
+                                            min={100000}  // Ensures BSB is at least 5 digits
+                                            max={999999}  // Ensures BSB is at most 5 digits
                                             pattern="\d{5}"
                                             title="Please enter exactly 5 digits"
                                             required
@@ -132,13 +197,14 @@ export default function Transfer() {
                                 <span>
                                     <p className='transfer-section-content-sub-header'>Account Number</p>
                                         <input
-                                            type="text"
+                                            type="number"
                                             placeholder="Account Number"
                                             onChange={handleChange}
                                             name="accountNumber"
                                             value={formData.accountNumber}
                                             className="transfer-receiver-details"
-                                            maxLength={8}
+                                            min={10000000}  // Ensures account number is at least 8 digits
+                                            max={99999999}  // Ensures account number is at most 8 digits
                                             pattern="\d{8}"
                                             title="Please enter exactly 8 digits"
                                             required
