@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const app = express();
+const cors = require('cors');
 
 // Importing route handlers
 const accountRoutes = require('./routes/accountRoutes');
@@ -11,7 +13,7 @@ const adminRoutes = require('./routes/adminRoutes');
 
 dotenv.config();
 
-const app = express();
+app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(express.json());

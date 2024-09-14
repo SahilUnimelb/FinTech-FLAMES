@@ -69,11 +69,27 @@ module.exports = {
   generateRandomCardNumber,
   generateRandomCVV,
   generateAccNo,
-  generateBsb
+  generateBsb,
+  generatePhoneNo
 };
 
 //const randomCardNumber = generateRandomCardNumber();
 //const randomCVV = generateRandomCVV(); // 3-digit CVV
+async function generatePhoneNo() {
+  do{
+    areaCode = Math.floor(Math.random() * 800) + 200;
+    exchangeCode = Math.floor(Math.random() * 900) + 100;
+    lineNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+
+    phoneNumber = parseInt(`${areaCode}${exchangeCode}${lineNumber}`, 10);
+
+    existingUser = await User.findOne({phoneNumber})
+  } while(existingUser)
+  
+
+  // Combine the parts into a phone number format (XXX-XXX-XXXX)
+  return phoneNumber;
+}
 
 async function generateAccNo() {
   let accNo;

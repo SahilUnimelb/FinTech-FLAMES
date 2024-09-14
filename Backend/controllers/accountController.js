@@ -1,17 +1,26 @@
 // controllers/accountController.js
-const { User, generateRandomCardNumber, generateRandomCVV, generateAccNo, generateBsb } = require('../models/models');
+const { User, generateRandomCardNumber, generateRandomCVV, generateAccNo, generateBsb, generatePhoneNo } = require('../models/models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 // Account Registration / Creation
 exports.createAccount = async (req, res) => {
-    const { name, email, phoneNo, username, password, initialDeposit } = req.body;
+    const { name, email, username, password} = req.body;
 
     try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+        // Check if username is already taken
+        const existingUser = await User.findOne({ 'login.username': username });
+        // Check if email is already in use
+        const existingEmail = await User.findOne({ email });
+
+        if(existingUser && existingEmail) {
+            return res.status(400).json({ message: 'Username and email are already registered to an account' });
+        }
+        else if (existingUser) {
+            return res.status(400).json({ message: 'Username has been taken' });
+        }
+        else if (existingEmail) {
+            return res.status(400).json({ message: 'This email already has an registered account, please login instead' });
         }
 
         // Hash the password
@@ -27,6 +36,11 @@ exports.createAccount = async (req, res) => {
         const expiryMonth = new Date().getMonth() + 1;
         const expiryYear = new Date().getFullYear() + 5;
 
+        // Deposit
+        const initialDeposit = 30000;
+
+        // Phone Number
+        const phoneNo = await generatePhoneNo();
 
         // Create new user
         const newUser = new User({
@@ -41,7 +55,7 @@ exports.createAccount = async (req, res) => {
                 accNo,
                 bsb
             }],
-            Balance: initialDeposit || 0,
+            Balance: initialDeposit,
             cardDetails: [{
                 number: cardNumber,
                 cvv,
