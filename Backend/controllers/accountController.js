@@ -47,21 +47,26 @@ exports.createAccount = async (req, res) => {
             name,
             phoneNo,
             email,
-            login: [{
+            login: {
                 username,
                 password: hashedPassword
-            }],
-            AccNoBsb: [{
+            },
+            AccNoBsb: {
                 accNo,
                 bsb
-            }],
-            Balance: initialDeposit,
-            cardDetails: [{
+            },
+            transactionAcc: {
+                balance: initialDeposit
+            },
+            savingsAcc: {
+                balance: 0
+            },
+            cardDetails: {
                 number: cardNumber,
                 cvv,
                 expiryMonth,
                 expiryYear
-            }],
+            },
             roles: 'user',
             lastLogedInAt: new Date(),
             is2FAEnabled: true,
@@ -83,18 +88,17 @@ exports.login = async (req, res) => {
     try {
         // Find user by login schema username
         const user = await User.findOne({ 'login.username': username });
-
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid Username' });
+        }
          // Check if user is deleted (soft delete)
-         if (user.isDeleted) {
+        else if (user.isDeleted) {
             return res.status(403).json({ message: 'User account is inactive or deleted.' });
         }
 
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid username' });
-        }
-
+        
         // Compare passwords
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.login.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid Password' });
         }
@@ -103,18 +107,40 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token, userId: user._id, name: user.name });
     } catch (error) {
+        //console.error("Login server error: ", error);
         res.status(500).json({ message: 'Server error' });
     }
 };
 
 // Get Account Details
-exports.getUserDetails = async (req, res) => {
-    try {
+exports.getUserAccount = async (req, res) => {
+    console.log("UserId from token: ", req.userId);
+    try{
         const user = await User.findById(req.userId);
-        res.json(user);
-    } catch (error) {
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Extract the relevant account information
+        const accountData = {
+            name: user.name,
+            bsb: user.AccNoBsb.bsb, 
+            accNo: user.AccNoBsb.accNo,
+            transAccDetails: {
+                balance: user.transactionAcc.balance
+            },
+            savingAccDetails: {
+                balance: user.savingsAcc.balance
+            }
+        };
+        res.json(accountData);
+    } catch(error) {
+        // console.error("Error fetching user account details:", error);
         res.status(500).json({ message: 'Server error' });
     }
+
+    
 };
 
 // Transfer money between accounts
@@ -134,17 +160,17 @@ exports.transferMoney = async (req, res) => {
         }
 
         // Perform the transfer
-        sender.Balance -= amount;
-        receiver.Balance += amount;
+        sender.transactionAcc.balance -= amount;
+        receiver.transactionAcc.balance += amount;
 
         // Record the transaction
         const transactionDate = new Date();
-        sender.transactions.push({ 
+        sender.transactionAcc.transactions.push({ 
             amount: -amount, 
             description: `Transfer to ${receiver.name}`,
             date: transactionDate 
         });
-        receiver.transactions.push({ 
+        receiver.transactionAcc.transactions.push({ 
             amount, 
             description: `Transfer from ${sender.name}` ,
             date: transactionDate

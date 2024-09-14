@@ -17,8 +17,6 @@ const transactionSchema = new mongoose.Schema({
   description: String
 });
 
-
-
 // Define the Login schema
 const loginDetailSchema = new mongoose.Schema({
   username: {type: String, required: true, unique: true},
@@ -41,6 +39,12 @@ const cardDetailSchema = new mongoose.Schema({
   expiryYear: {type: Number,required: true, default: (((new Date().getFullYear())%100) + 5)}
 });
 
+// Define account schema
+const accountDetailSchema = new mongoose.Schema({
+  balance: {type: Number, required: true},
+  transactions: [transactionSchema] // Embedding transactions inside the account instance
+})
+
 
 
 // Define a schema for User
@@ -48,13 +52,14 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phoneNo: {type: Number, required: true, unique: true},
   email: { type: String, required: true, unique: true },
-  login: [loginDetailSchema], // Embedding login inside the user
-  AccNoBsb: [AccnoBsbSchema], // Embedding accnobsb inside the user
-  Balance: {type: Number, required: true, default: 30000},
+  login: loginDetailSchema, // Embedding login inside the user
+  AccNoBsb: AccnoBsbSchema, // Embedding accnobsb inside the user
+  transactionAcc: accountDetailSchema, // Embedding transaction account object inside the user
+  savingsAcc: accountDetailSchema, // Embedding savings account object inside the user
   lastLogedInAt: {type: Date, default: Date.now },
-  cardDetails: [cardDetailSchema], // Embedding card inside the user
+  cardDetails: cardDetailSchema, // Embedding card inside the user
   roles: {type: String, required: true, default: "user"},
-  transactions: [transactionSchema], // Embedding transactions inside the user
+  transactions: [transactionSchema], 
   is2FAEnabled: {type: Boolean, default: true},
   isDeleted: { type: Boolean, default: false }
 });

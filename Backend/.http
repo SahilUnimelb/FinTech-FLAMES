@@ -25,12 +25,26 @@ POST http://localhost:5000/api/accounts/transfer
 Content-Type: application/json
 
 {
-  "fromAccNo": "62916259",
-  "fromBsb": "848646",
-  "toAccNo": "51695661",
-  "toBsb": "560425",
+  "fromAccNo": "83487119",
+  "fromBsb": "983693",
+  "toAccNo": "18076990",
+  "toBsb": "110916",
   "amount": 100
 }
+
+### Login Account
+POST http://localhost:5000/api/accounts/login
+Content-Type: application/json
+
+{
+  "username": "mitchellzheng",
+  "password": "password123"
+}
+
+### Get Account Info
+POST http://localhost:5000/api/accounts/getUser
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MTNiNGQ2YWY3MWE3Yjg3NTc3MDAiLCJpYXQiOjE3MjYyODk4NTQsImV4cCI6MTcyNjI5MzQ1NH0.CrTcdiBrAbjTp4H9z_lWQAHJYOknQ99hgvWtYNiWMyg
 
 ### Delete Account
 POST http://localhost:5000/api/admin/delete
@@ -39,6 +53,8 @@ Content-Type: application/json
 {
   "username": "mitchellzheng"
 }
+
+
 
 ### Admin - set user balance
 POST http://localhost:5000/api/admin/setBalance

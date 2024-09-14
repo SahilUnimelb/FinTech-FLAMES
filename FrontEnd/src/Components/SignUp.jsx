@@ -27,7 +27,6 @@ export default function SignUp() {
       const response = await axios.post('http://localhost:5000/api/accounts/create', formData);
       setMessage(response.data.message); // Success message from backend
     } catch (error) {
-      console.error("Signup error:", error);
       if (error.response && error.response.data) {
         setMessage(error.response.data.message); // Error message from backend
       } else {
@@ -37,9 +36,6 @@ export default function SignUp() {
 
 
   }
-
-
-
 
   return (
     <div className='signup'>
