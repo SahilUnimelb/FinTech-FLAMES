@@ -7,6 +7,8 @@ import Login from './Components/Login.jsx';
 import SavingAccount from './Components/SavingAccount.jsx';
 import SignUp from './Components/SignUp.jsx';
 import TransactionAccount from './Components/TransactionAccount.jsx';
+import ForgotPassword from './Components/Forgot.jsx';
+import ResetPassword from './Components/Reset.jsx';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path = '/settings' element = {<Layout> <Account category = "settings"/> </Layout>}/>
           <Route path = '/savingaccount' element = {<Layout> <SavingAccount/> </Layout>}/>
           <Route path = '/transactionaccount' element = {<Layout> <TransactionAccount/> </Layout>}/>
+          <Route path = '/forgot-password' element = {<ForgotPassword/>}/>
+          <Route path = '/reset-password' element = {<ResetPassword/>}/>
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../Assets/logo.jpeg';
+import logo from '../Assets/logo.png';
 import logoff from '../Assets/logoff-icon.png';
 export default function Navbar() {
   const [page, setPage] = useState('home');
