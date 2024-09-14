@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import ScheduledBillsTable from './ScheduledBillsTable';
 export default function Transfer() {
   const [formData, setFormData] = useState({
     senderAccount: "",
@@ -149,6 +149,18 @@ export default function Transfer() {
                             {formData.transferMethod === "PayID" && (
                                 <>
                                 <span>
+                                    <p className='transfer-section-content-sub-header'>Name</p>
+                                        <input
+                                            type="name"
+                                            placeholder="Name"
+                                            onChange={handleChange}
+                                            name="name"
+                                            value={formData.name}
+                                            className="transfer-receiver-details"
+                                            required
+                                        />
+                                </span>
+                                <span>
                                     <p className='transfer-section-content-sub-header'>Phone Number</p>
                                         <input
                                             type="text"
@@ -272,12 +284,13 @@ export default function Transfer() {
                     )
                 }
 
-                {active === 'view' && (
+
+            </div>
+            {active === 'view' && (
                     <>
-                    Some more garbage
+                    <ScheduledBillsTable/>
                     </>
                 )}
-            </div>
             {isSubmitted && (
                 <div className="modal-overlay">
                 <div className="modal-content">
