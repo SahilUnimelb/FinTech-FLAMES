@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../Assets/logo.png';
 import logoff from '../Assets/logoff-icon.png';
 export default function Navbar() {
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState(localStorage.getItem('activePage') || 'home');
 
   const onClickPage = (currPage) => {
-    return setPage(currPage);
-  }
+    setPage(currPage);
+    localStorage.setItem('activePage', currPage);
+  };
+
+  useEffect(() => {
+    const storedPage = localStorage.getItem('activePage');
+    if (storedPage) {
+      setPage(storedPage);
+    }
+  }, []);
 
   const setHrTag = (currPage) => {
     if (page === currPage) {
