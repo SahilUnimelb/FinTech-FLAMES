@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import ScheduledBillsTable from './ScheduledBillsTable';
 
 export default function Transfer() {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ export default function Transfer() {
   useEffect(() => {
     const fetchAccountDetails = async () => {
       // Retrieve the token from localStorage
-      const token = localStorage.getItem('authToken'); 
+      const token = localStorage.getItem('authToken');
 
       if (!token) {
         setMessage('You are not logged in');
@@ -68,7 +69,7 @@ export default function Transfer() {
         console.log(formData)
     }
 
-    
+
     setIsSubmitted(true);
   }
 
@@ -92,7 +93,7 @@ export default function Transfer() {
     } catch(error) {
         setMessage('Bank transfer failed. Please try again.');
     }
-    
+
   }
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -100,7 +101,12 @@ export default function Transfer() {
     setIsSubmitted(false);
   };
 
-  const [active, setActive] = useState('pay');
+  const [active, setActive] = useState(localStorage.getItem('active') || 'pay');
+
+  useEffect(() => {
+    localStorage.setItem('active', active);
+  }, [active]);
+
   function onClickDiv(type) {
     setActive(type);
   }
@@ -338,11 +344,6 @@ export default function Transfer() {
                     )
                 }
 
-                {active === 'view' && (
-                    <>
-                    Some more garbage
-                    </>
-                )}
             </div>
             {isSubmitted && (
                 <div className="modal-overlay">
@@ -351,6 +352,11 @@ export default function Transfer() {
                     <button onClick={closeModal}>Close</button>
                 </div>
                 </div>
+            )}
+            {active === 'view' && (
+                <>
+                <ScheduledBillsTable/>
+                </>
             )}
         </div>
     </div>
