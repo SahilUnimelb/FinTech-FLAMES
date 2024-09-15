@@ -34,7 +34,7 @@ export default function Navbar() {
         <ul className='navbar-section'>
             <li onClick={() => onClickPage('home')}> <Link to = "/home" className='navbar-link'>Home </Link>{setHrTag("home")}</li>
             <li onClick={() => onClickPage('view')}> <Link to = "/view" className='navbar-link'>View Accounts </Link>{setHrTag("view")}</li>
-            <li onClick={() => onClickPage('business')}> <Link to = "/business" className='navbar-link'>Business </Link>{setHrTag("business")}</li>
+            <li onClick={() => onClickPage('contacts')}> <Link to = "/contacts" className='navbar-link'>Contacts </Link>{setHrTag("contacts")}</li>
             <li onClick={() => onClickPage('transfer')}> <Link to = "/transfer" className='navbar-link'>Transfer </Link>{setHrTag("transfer")}</li>
             <li onClick={() => onClickPage('settings')}> <Link to = "/settings" className='navbar-link'>Settings </Link>{setHrTag("settings")}</li>
         </ul>

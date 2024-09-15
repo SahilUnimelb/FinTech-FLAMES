@@ -18,7 +18,7 @@ function App() {
           <Route path = '/signup' element = {<SignUp/>}/>
           <Route path = '/home' element = {<Layout> <Account category = "home"/> </Layout>}/>
           <Route path = '/view' element = {<Layout> <Account category = "view"/> </Layout>}/>
-          <Route path = '/business' element = {<Layout> <Account category = "business"/> </Layout>}/>
+          <Route path = '/contacts' element = {<Layout> <Account category = "contacts"/> </Layout>}/>
           <Route path = '/transfer' element = {<Layout> <Account category = "transfer"/> </Layout>}/>
           <Route path = '/settings' element = {<Layout> <Account category = "settings"/> </Layout>}/>
           <Route path = '/savingaccount' element = {<Layout> <SavingAccount/> </Layout>}/>

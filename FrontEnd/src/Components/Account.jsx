@@ -1,5 +1,5 @@
 import React from 'react';
-import Business from './Business';
+import Contacts from './Contacts';
 import Home from './Home';
 import Settings from './Settings';
 import Transfer from './Transfer';
@@ -15,8 +15,8 @@ export default function Account({category}) {
     else if (category === 'view') {
       return <ViewAccounts/>
     }
-    else if (category === 'business') {
-      return <Business/>
+    else if (category === 'contacts') {
+      return <Contacts/>
     }
     else if (category === 'settings') {
       return <Settings/>
