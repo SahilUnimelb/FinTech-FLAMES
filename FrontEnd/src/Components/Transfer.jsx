@@ -18,7 +18,7 @@ export default function Transfer() {
   })
   const [accountData, setAccountData] = useState(null);
   const [message, setMessage] = useState('');
-
+  const flag = false;
   // Fetch user account details on component mount
   useEffect(() => {
     const fetchAccountDetails = async () => {
@@ -137,6 +137,7 @@ export default function Transfer() {
                 {(active === 'pay' || active === 'schedule') &&(
                     <>
                         <form onSubmit={handleSubmit}>
+                            {flag && <p>{message}</p>}
                             <p className='transfer-section-content-header'>From:</p>
                             <span>
                                 <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>

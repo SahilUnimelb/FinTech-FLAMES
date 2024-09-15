@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import './Homepage.css'
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Homepage.css';
 
 export default function Homepage() {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ export default function Homepage() {
 
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const flag = false;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +48,7 @@ export default function Homepage() {
       </header>
       <div className="bottom-container">
         <div className="homepage-content">
+          {flag && <p>{message}</p>}
           <h1>Your first steps to the world of online banking</h1>
           <p>For those who want to learn how to perform online banking. Sign up in minutes!</p>
           <Link to="/signup"><button className='signup-button'>Sign Up</button></Link>
@@ -56,18 +58,18 @@ export default function Homepage() {
           <form onSubmit={handleSubmit}>
             <div className='login-fields'>
               <p className="username">Username:</p>
-              <input 
-                type="text" 
-                placeholder="Username" 
+              <input
+                type="text"
+                placeholder="Username"
                 name='username'
                 value={formData.username}
                 onChange={handleChange}
                 required
               />
               <p className="password">Password:</p>
-              <input 
-                type="password" 
-                placeholder="Password" 
+              <input
+                type="password"
+                placeholder="Password"
                 name='password'
                 value={formData.password}
                 onChange={handleChange}
@@ -80,8 +82,8 @@ export default function Homepage() {
             </div>
             <button className="login-button">Continue</button>
           </form>
-          
-          
+
+
           <div className="forgot-pass-container">
             <p classname="forgot-password">Forgot password? <span><Link to = "/forgot-password" className='homepage-forgot-link'>Click here.</Link></span></p>
           </div>

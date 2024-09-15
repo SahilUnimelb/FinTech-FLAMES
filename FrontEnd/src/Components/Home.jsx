@@ -1,16 +1,16 @@
-import React, { useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   const [accountData, setAccountData] = useState(null);
   const [message, setMessage] = useState('');
-
+  const flag = false;
   // Fetch user account details on component mount
   useEffect(() => {
     const fetchAccountDetails = async () => {
       // Retrieve the token from localStorage
-      const token = localStorage.getItem('authToken'); 
+      const token = localStorage.getItem('authToken');
 
       if (!token) {
         setMessage('You are not logged in');
@@ -37,12 +37,18 @@ export default function Home() {
 
     fetchAccountDetails();
   }, []);
+  const getDay = (date) => {
+    const dayIndex = date.getDay();
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return daysOfWeek[dayIndex];
+  };
 
   return (
     <div className="home">
       <div className='home-greeting'>
         <div className='home-greeting-message'>
-          <p>Happy Friday {accountData ? accountData.name : 'User'}</p>
+          {flag && <p>{message}</p>}
+          <p>Happy {getDay(new Date())} {accountData ? accountData.name : 'User'}</p>
         </div>
         <div className='home-greeting-empty'>
         </div>
