@@ -55,7 +55,7 @@ export default function ViewAccounts() {
 
   const TransactionTable = ({ transactions }) => {
     const rows = [...transactions];
-    
+
     while (rows.length < 20) {
       rows.push({ date: '', description: '', amount: '' });
     }

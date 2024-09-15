@@ -14,7 +14,13 @@
     align-items: center;
     margin-top: 20px;
 }
-
+.view-container {
+    width: 90vw;
+    height: 109vh;
+    background-color: rgb(235, 235, 235);
+    display: flex;
+    margin-top: 0;
+}
 .view-header p {
     color: white;
     font-weight: 700;
@@ -26,11 +32,11 @@
     display: flex;
     border-right: 1px solid rgb(146, 145, 145);
     flex-direction: column;
-    width: 21vw;
+    min-width: 21vw;
     background-color: #D9D9D9;
 }
 
-.view-container {
+.view-content {
     display: flex;
 }
 
@@ -76,7 +82,7 @@
 
 .scrollable-container {
     max-height: 60vh;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 .transaction-table {
