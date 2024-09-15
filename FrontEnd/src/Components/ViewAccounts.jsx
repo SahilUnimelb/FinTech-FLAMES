@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ViewAccounts.css';
+import { Link } from 'react-router-dom';
 
 export default function ViewAccounts() {
   const [active, setActive] = useState('profile');
@@ -145,7 +146,7 @@ if the formatting needs changing. */
                     <label>Email:</label>
                     <span>{user.email}</span>
                   </div>
-                  <button className="edit-profile">Edit Profile</button>
+                  <Link to="/editprofile"><button className="edit-profile-button">Edit Profile</button></Link>
                 </div>
                 <div className="credit-card-container" onClick={flipCard}>
                   <div className={`credit-card ${flipped ? 'flipped' : ''}`}>

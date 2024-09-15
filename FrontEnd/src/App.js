@@ -8,6 +8,7 @@ import ResetPassword from './Components/Reset.jsx';
 import SavingAccount from './Components/SavingAccount.jsx';
 import SignUp from './Components/SignUp.jsx';
 import TransactionAccount from './Components/TransactionAccount.jsx';
+import EditProfile from './Components/EditProfile.jsx';
 
 function App() {
   return (
@@ -23,8 +24,9 @@ function App() {
           <Route path = '/settings' element = {<Layout> <Account category = "settings"/> </Layout>}/>
           <Route path = '/savingaccount' element = {<Layout> <SavingAccount/> </Layout>}/>
           <Route path = '/transactionaccount' element = {<Layout> <TransactionAccount/> </Layout>}/>
-          <Route path = '/forgot-password' element = {<ForgotPassword/>}/>
-          <Route path = '/reset-password' element = {<ResetPassword/>}/>
+          <Route path = '/forgotpassword' element = {<ForgotPassword/>}/>
+          <Route path = '/resetpassword' element = {<ResetPassword/>}/>
+          <Route path = '/editprofile' element = {<Layout> <EditProfile/> </Layout>}/>
         </Routes>
       </BrowserRouter>
     </div>

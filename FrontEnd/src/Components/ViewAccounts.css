@@ -109,20 +109,26 @@
     font-size: 25px;
 }
 
-.edit-profile {
+.edit-profile-button {
+    background-color: #2196F3;
     padding: 15px 45px;
-    margin: 10px 0 0 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 50px;
-    background-color: #1a3b4a;
     color: white;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    margin: 20px;
+    font-size: larger;
+}
+
+.edit-profile-button:hover {
+    background-color: #0b7dda;
 }
 
 /* credit card css */
 .credit-card-container {
     perspective: 1000px;
     margin: 5% 0 0 70%;
+    height: 180px;
 }
 
 .credit-card {
@@ -133,6 +139,10 @@
     transform-style: preserve-3d;
     transition: transform 0.6s;
     transform-origin: center;
+}
+
+.credit-card:hover {
+    cursor: pointer;
 }
 
 .card-front, .card-back {
@@ -217,13 +227,18 @@
 /* ============================== */
 
 .print-pdf {
-    padding: 10px 20px;
-    font-size: 16px;
     background-color: #1a3b4a;
+    padding: 15px 45px;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 35px;
     cursor: pointer;
+    margin: 20px;
+    font-size: larger;
+}
+
+.print-pdf:hover {
+    background-color: #142d39;
 }
 
 /* Transaction History Table CSS */
