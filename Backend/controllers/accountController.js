@@ -96,7 +96,7 @@ exports.login = async (req, res) => {
             return res.status(403).json({ message: 'User account is inactive or deleted.' });
         }
 
-        
+
         // Compare passwords
         const isMatch = await bcrypt.compare(password, user.login.password);
         if (!isMatch) {
@@ -124,7 +124,7 @@ exports.getUserAccount = async (req, res) => {
         // Extract the relevant account information
         const accountData = {
             name: user.name,
-            bsb: user.AccNoBsb.bsb, 
+            bsb: user.AccNoBsb.bsb,
             accNo: user.AccNoBsb.accNo,
             transAccDetails: {
                 balance: user.transactionAcc.balance
@@ -139,7 +139,7 @@ exports.getUserAccount = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 
-    
+
 };
 
 // Transfer money between user transaction accounts
@@ -150,6 +150,7 @@ exports.transferMoney = async (req, res) => {
     fromBsb = Number(fromBsb);
     toAccNo = Number(toAccNo);
     toBsb = Number(toBsb);
+    amount = Number(amount)
 
     try {
         const sender = await User.findOne({ 'AccNoBsb.accNo': fromAccNo, 'AccNoBsb.bsb': fromBsb});
@@ -169,19 +170,19 @@ exports.transferMoney = async (req, res) => {
 
         // Record the transaction
         const transactionDate = new Date();
-        sender.transactionAcc.transactions.push({ 
+        sender.transactionAcc.transactions.push({
             amount: -amount,
             date: transactionDate,
             log: `Transfer to ${name}`,
             description: description
-            
+
         });
-        receiver.transactionAcc.transactions.push({ 
-            amount, 
+        receiver.transactionAcc.transactions.push({
+            amount,
             date: transactionDate,
             log: `Transfer from ${sender.name}` ,
             description: description
-            
+
         });
 
         await sender.save();

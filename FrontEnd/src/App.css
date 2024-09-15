@@ -401,7 +401,7 @@
 }
 .sender-account-select, .transfer-method-select,
 .transfer-description-textarea, .transfer-amount-input,
-.transfer-receiver-details, .transfer-schedule-select,
+.transfer-schedule-select,
 .transfer-date-input, .transfer-recurring-select,
 .transfer-frequency-select {
   width: calc(100%-100px);
@@ -413,7 +413,21 @@
   color: #333;
   resize: none;
 }
-
+.transfer-receiver-details {
+  width: 250px;
+  margin-left: 50px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  background-color: white;
+  color: #333;
+  resize: none;
+}
+.transfer-receiver-details::-webkit-inner-spin-button,
+.transfer-receiver-details::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 .transfer-amount-wrapper {
   position: relative;

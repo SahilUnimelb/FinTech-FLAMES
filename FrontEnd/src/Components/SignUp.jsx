@@ -1,6 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -43,33 +43,33 @@ export default function SignUp() {
         <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div className='signup-fields'>
-            <input 
-              type="text" 
-              placeholder='Name' 
+            <input
+              type="text"
+              placeholder='Name'
               name='name'
               value={formData.name}
               onChange={handleChange}
               required
             />
-            <input 
-              type="text" 
-              placeholder='Username' 
+            <input
+              type="text"
+              placeholder='Username'
               name='username'
               value={formData.username}
               onChange={handleChange}
               required
             />
-            <input 
-              type="email" 
-              placeholder='Email Address' 
+            <input
+              type="email"
+              placeholder='Email Address'
               name='email'
               value={formData.email}
               onChange={handleChange}
               required
             />
-            <input 
-              type="password" 
-              placeholder='Password' 
+            <input
+              type="password"
+              placeholder='Password'
               name='password'
               value={formData.password}
               onChange={handleChange}
@@ -82,7 +82,7 @@ export default function SignUp() {
           <button>Continue</button>
         </form>
         {message && <p>{message}</p>}
-        <p className="signup-login">Already have an account? <span><Link to = "/login" className='signup-login-link'>Login</Link></span></p>
+        <p className="signup-login">Already have an account? <span><Link to = "/" className='signup-login-link'>Login</Link></span></p>
       </div>
     </div>
   );
