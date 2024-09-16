@@ -135,6 +135,11 @@ export default function Transfer() {
                 >
                     <p >View Scheduled Bills</p>
                 </div>
+                <div className={`transfer-section-sidebar-first-elem ${active === 'transfer' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
+                     onClick = {() => {onClickDiv('transfer')}}
+                >
+                    <p >Transfer Funds</p>
+                </div>
             </div>
             <div className='transfer-section-content'>
                 {(active === 'pay' || active === 'schedule') &&(
@@ -361,6 +366,77 @@ export default function Transfer() {
             {active === 'view' && (
                 <>
                 <ScheduledBillsTable/>
+                </>
+            )}
+            {active === 'transfer' && (
+                <>
+                <div className='transfer-section-content'>
+                    <form onSubmit={handleSubmit}>
+                        <p className='transfer-section-content-header'>From:</p>
+                        <span>
+                            <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
+                            <select
+                                id='sender-account'
+                                name='senderAccount'
+                                //value={formData.senderAccount}
+                                onChange={handleChange}
+                                className='sender-account-select'
+                                required
+                            >
+                                <option value="">-- Choose Account --</option>
+                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                            </select>
+                        </span>
+                        <p className='transfer-section-content-header'>From:</p>
+                        <span>
+                            <label htmlFor='receiver-account' className='transfer-section-content-sub-header'>To</label>
+                            <select
+                                id='receiver-account'
+                                name='receiverAccount'
+                                //value={formData.senderAccount}
+                                onChange={handleChange}
+                                className='sender-account-select'
+                                required
+                            >
+                                <option value="">-- Choose Account --</option>
+                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                            </select>
+                        </span>
+                        <p className='transfer-section-content-header'>Payment Details:</p>
+                        <span>
+                            <p className='transfer-section-content-sub-header'>Amount</p>
+                            <div className='transfer-amount-wrapper'>
+                                <span className='currency-symbol'>$</span>
+                                    <input
+                                        type="number"
+                                        placeholder="Amount"
+                                        onChange={handleChange}
+                                        name="amount"
+                                        //value={formData.amount}
+                                        className="transfer-amount-input"
+                                        step="0.01"
+                                        min="0"
+                                        required
+                                    />
+                            </div>
+                        </span>
+                        <span>
+                        <p className='transfer-section-content-sub-header'>Description (Optional)</p>
+                            <textarea
+                                placeholder="Description (Optional)"
+                                onChange={handleChange}
+                                name="description"
+                                //value={formData.description}
+                                className="transfer-description-textarea"
+                            />
+                        </span>
+                        <div className='transfer-section-button-wrapper'>
+                            <button type='submit'>Pay</button>
+                        </div>
+                    </form>
+                </div>
                 </>
             )}
         </div>
