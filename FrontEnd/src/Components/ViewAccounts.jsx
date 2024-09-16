@@ -5,72 +5,58 @@ import { Link } from 'react-router-dom';
 export default function ViewAccounts() {
   const [active, setActive] = useState('profile');
   const [flipped, setFlipped] = useState(false);
+  const [accountData] = useState(() => {
+    const storedData = localStorage.getItem('accountData');
+    return storedData ? JSON.parse(storedData) : null;
+  });
+
+  function parseCardNumber(cardNumber) {
+    return cardNumber.replace(/(.{4})/g, '$1 ');
+  }
+
+  function parseExpiryDate(month, year) {
+    // Ensure the month is two digits (pad with zero if necessary)
+    const formattedMonth = month.toString().padStart(2, '0');
+    // Extract the last two digits of the year
+    const formattedYear = year.toString().slice(-2);
+    // Return the formatted string in MM/YY format
+    return `${formattedMonth}/${formattedYear}`;
+  }
+
+  function parseBsb(bsb) {
+    const bsbString = bsb.toString();
+    return bsbString.replace(/(\d{3})(?=\d)/g, '$1 ');
+  }
+
+  function parseTransactions(transactions) {
+    return transactions.map(transaction => {
+      // Format the amount with a dollar sign and two decimal places
+      const amountFormatted = transaction.amount < 0 
+        ? `-$${Math.abs(transaction.amount).toFixed(2)}` 
+        : `$${transaction.amount.toFixed(2)}`;
+  
+      // Format the date (assuming it's in ISO format)
+      const dateFormatted = new Date(transaction.date).toLocaleDateString();
+  
+      return {
+        date: dateFormatted,
+        description: transaction.description || transaction.log, // Use description or log
+        amount: amountFormatted
+      };
+    });
+  }
 
   /* This is a proxy data. idk how the backend is storing their data, so if yall need me to make tweaks and shit. lmk */
-  const savingsHistory = [
-    { date: '2024-09-01', description: 'Deposit', amount: '$500' },
-    { date: '2024-09-05', description: 'Withdrawal', amount: '-$200' },
-    { date: '2024-09-10', description: 'Interest', amount: '-$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '-$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '-$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '-$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '-$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-    { date: '2024-09-10', description: 'Interest', amount: '$5' },
-  ];
+  const savingsHistory = parseTransactions(accountData.savingAccDetails.transactions);
 
-  const transactionsHistory = [
-    { date: '2024-09-02', description: 'Grocery Store', amount: '$50' },
-    { date: '2024-09-06', description: 'Electricity Bill', amount: '-$100' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '-$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '-$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '-$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-    { date: '2024-09-12', description: 'Online Shopping', amount: '$150' },
-  ];
+  const transactionsHistory = parseTransactions(accountData.transAccDetails.transactions);
 
 /* more proxy data for backend to deal with. PLEASE let me know with ample time
 if the formatting needs changing. */
   const user = {
-    name: 'Fischer Zhang',
-    username: 'FishyZ420',
-    email: 'fischer.fish@fishbeswimmin.com.fsh'
+    name: accountData.name,
+    username: accountData.username,
+    email: accountData.email
   };
 
   const flipCard = () => {
@@ -155,21 +141,21 @@ if the formatting needs changing. */
                         <div className="card-logo">VISA</div>
                         <div className="card-chip"></div>
                       </div>
-                      <div className="card-number">1234 5678 9012 3456</div>
+                      <div className="card-number">{parseCardNumber(accountData.cardDetails.number)}</div>
                       <div className="card-holder">
                         <span>Card Holder</span>
-                        <div className="card-holder-name">Fischer Zhang</div>
+                        <div className="card-holder-name">{accountData.name}</div>
                       </div>
                       <div className="card-expiry">
                         <span>Expires</span>
-                        <div className="card-expiry-date">MM/YY</div>
+                        <div className="card-expiry-date">{parseExpiryDate(accountData.cardDetails.expiryMonth, accountData.cardDetails.expiryYear)}</div>
                       </div>
                     </div>
                     <div className="card-back">
                       <div className="card-info">
-                        <div className="card-bsb">BSB: 123 456</div>
-                        <div className="card-account-number">Account Number: 12345678</div>
-                        <div className="card-cvv">CVV: 123</div>
+                        <div className="card-bsb">BSB: {parseBsb(accountData.bsb)}</div>
+                        <div className="card-account-number">Account Number: {accountData.accNo}</div>
+                        <div className="card-cvv">CVV: {accountData.cardDetails.cvv}</div>
                       </div>
                     </div>
                   </div>
@@ -178,12 +164,12 @@ if the formatting needs changing. */
             )}
             {active === "savings" && (
               <>
-                <h1>Balance: $30,000</h1>
+                <h1>Balance: ${accountData.savingAccDetails.balance}</h1>
               </>
             )}
             {active === "transactions" && (
               <>
-                <h1>Balance: $30,000</h1>
+                <h1>Balance: ${accountData.transAccDetails.balance}</h1>
               </>
             )}
           </div>

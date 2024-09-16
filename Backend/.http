@@ -56,7 +56,7 @@ Content-Type: application/json
 ### Get Account Info
 POST http://localhost:5000/api/accounts/getUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MjJiYjE1ZGVjYTk3ZGQ0MGQ2YmUiLCJpYXQiOjE3MjYyOTU4NDYsImV4cCI6MTcyNjI5OTQ0Nn0.tbuxNJ_DfeGbsvaEjOnhAVj6XaqidFbww80Tx12k2gc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY0Njc2NDUsImV4cCI6MTcyNjQ3MTI0NX0.1Vtv7ZBiLIAELSG_wrDOCTdHay48hScnm-O2mAeaUE0
 
 ### Delete Account
 POST http://localhost:5000/api/admin/delete

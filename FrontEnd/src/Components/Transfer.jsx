@@ -16,40 +16,13 @@ export default function Transfer() {
     recurring: "",
     frequency: ""
   })
-  const [accountData, setAccountData] = useState(null);
+  const [accountData] = useState(() => {
+    const storedData = localStorage.getItem('accountData');
+    return storedData ? JSON.parse(storedData) : null;
+  });
   const [message, setMessage] = useState('');
   const flag = false;
-  // Fetch user account details on component mount
-  useEffect(() => {
-    const fetchAccountDetails = async () => {
-      // Retrieve the token from localStorage
-      const token = localStorage.getItem('authToken');
-
-      if (!token) {
-        setMessage('You are not logged in');
-        return;
-      }
-
-      try {
-        // Make a request to get the user account details
-        const response = await axios.post('http://localhost:5000/api/accounts/getUser', {}, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
-          },
-        });
-
-        setAccountData(response.data); // Set the account data received from backend
-      } catch (error) {
-        if (error.response && error.response.data) {
-          setMessage(error.response.data.message); // Display error message
-        } else {
-          setMessage('Failed to fetch account details. Please try again.');
-        }
-      }
-    };
-
-    fetchAccountDetails();
-  }, []);
+  
 
   function handleChange (event) {
     const {name, value} = event.target;
@@ -77,7 +50,7 @@ export default function Transfer() {
 
   const handleBankTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/accounts/transfer', {
+        await axios.post('http://localhost:5000/api/accounts/transfer', {
             fromAccNo: accountData.accNo,
             fromBsb: accountData.bsb,
             toAccNo: formData.accountNumber,
@@ -100,7 +73,7 @@ export default function Transfer() {
 
   const handlePayIdTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
+        await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
             fromPhoneNo: accountData.phoneNo,
             toPhoneNo: formData.phoneNumber,
             amount: formData.amount,

@@ -124,15 +124,21 @@ exports.getUserAccount = async (req, res) => {
         // Extract the relevant account information
         const accountData = {
             name: user.name,
+            username: user.login.username,
             phoneNo: user.phoneNo,
+            email: user.email,
             bsb: user.AccNoBsb.bsb,
             accNo: user.AccNoBsb.accNo,
             transAccDetails: {
-                balance: user.transactionAcc.balance
+                balance: user.transactionAcc.balance,
+                transactions: user.transactionAcc.transactions
             },
             savingAccDetails: {
-                balance: user.savingsAcc.balance
-            }
+                balance: user.savingsAcc.balance,
+                transactions: user.savingsAcc.transactions
+            },
+            cardDetails: user.cardDetails,
+            role: user.roles
         };
         res.json(accountData);
     } catch(error) {

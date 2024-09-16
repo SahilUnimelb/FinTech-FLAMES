@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const [accountData, setAccountData] = useState(null);
+  const [accountData, setAccountData] = useState(() => {
+    const storedData = localStorage.getItem('accountData');
+    return storedData ? JSON.parse(storedData) : null;
+  });
   const [message, setMessage] = useState('');
   const flag = false;
   // Fetch user account details on component mount
@@ -26,6 +29,7 @@ export default function Home() {
         });
 
         setAccountData(response.data); // Set the account data received from backend
+        localStorage.setItem('accountData', JSON.stringify(response.data));
       } catch (error) {
         if (error.response && error.response.data) {
           setMessage(error.response.data.message); // Display error message
