@@ -22,8 +22,8 @@ export default function Transfer() {
   });
   const [message, setMessage] = useState('');
   const flag = false;
-  
-  
+
+
   function handleChange (event) {
     const {name, value} = event.target;
     setFormData(prevFormData => {
@@ -116,6 +116,7 @@ export default function Transfer() {
     <div className='transfer'>
         <div className='transfer-header'>
                 <p>Move Money</p>
+                <p>HAHAHAAHAHAH</p>
         </div>
         <div className='transfer-section'>
             <div className='transfer-section-sidebar'>
