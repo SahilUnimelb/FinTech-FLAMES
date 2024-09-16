@@ -25,10 +25,21 @@ POST http://localhost:5000/api/accounts/transfer
 Content-Type: application/json
 
 {
-  "fromAccNo": "56087953",
-  "fromBsb": "281435",
-  "toAccNo": "78268145",
-  "toBsb": "847995",
+  "fromAccNo": "96134747",
+  "fromBsb": "286339",
+  "toAccNo": "27618500",
+  "toBsb": "536193",
+  "amount": 1000,
+  "description": ""
+}
+
+### Transfer Money PayID
+POST http://localhost:5000/api/accounts/payIdTransfer
+Content-Type: application/json
+
+{
+  "fromPhoneNo": "7537217894",
+  "toPhoneNo": "5424712610",
   "amount": 1000,
   "description": ""
 }
@@ -62,6 +73,6 @@ POST http://localhost:5000/api/admin/setBalance
 Content-Type: application/json
 
 {
-  "accNumber": "51695661",
+  "accNumber": "27618500",
   "newBalance": 30000
 }

@@ -69,19 +69,19 @@ exports.setUserBalance = async (req, res) => {
         }
 
         // Set Balance
-        amount = newBalance - receiver.Balance;
-        receiver.Balance = newBalance;
+        amount = newBalance - receiver.transactionAcc.balance;
+        receiver.transactionAcc.balance = newBalance;
 
         // Record transfer
         const transactionDate = new Date();
-        receiver.transactions.push({ 
+        receiver.transactionAcc.transactions.push({ 
             amount, 
             description: `Transfer from Administrator` ,
             date: transactionDate
         });
 
         await receiver.save();
-        res.status(200).json({ message: `Succesfully set user ${receiver.username} balance to ${newBalance}` });
+        res.status(200).json({ message: `Succesfully set user ${receiver.login.username} balance to ${newBalance}` });
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

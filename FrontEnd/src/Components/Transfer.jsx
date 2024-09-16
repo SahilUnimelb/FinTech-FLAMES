@@ -66,7 +66,9 @@ export default function Transfer() {
 
     if (formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
-        console.log(formData)
+    }
+    else if(formData.transferMethod === "PayID") {
+        handlePayIdTransfer();
     }
 
 
@@ -89,11 +91,30 @@ export default function Transfer() {
             }
           });
 
-        console.log('Transfer response:', response);
+        setMessage('Payment Succesfully Sent');
     } catch(error) {
         setMessage('Bank transfer failed. Please try again.');
     }
 
+  }
+
+  const handlePayIdTransfer = async () => {
+    try{
+        const response = await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
+            fromPhoneNo: accountData.phoneNo,
+            toPhoneNo: formData.phoneNumber,
+            amount: formData.amount,
+            description: formData.description
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        setMessage('Payment Succesfully Sent');
+    } catch(error) {
+        setMessage('PayId transfer failed. Please try again.')
+    }
   }
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -227,7 +248,7 @@ export default function Transfer() {
                                             type="text"
                                             placeholder="Phone Number"
                                             onChange={handleChange}
-                                            name="accountNumber"
+                                            name="phoneNumber"
                                             value={formData.phoneNumber}
                                             className="transfer-receiver-details"
                                             maxLength={10}
@@ -349,7 +370,7 @@ export default function Transfer() {
             {isSubmitted && (
                 <div className="modal-overlay">
                 <div className="modal-content">
-                    <p>Payment sent successfully!</p>
+                    <p>{message}</p>
                     <button onClick={closeModal}>Close</button>
                 </div>
                 </div>

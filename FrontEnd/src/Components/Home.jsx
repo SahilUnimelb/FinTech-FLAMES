@@ -57,29 +57,29 @@ export default function Home() {
         <div className='home-box-top'>
           <div className='home-box-left'>
             <h1>Savings home</h1>
-            <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : 'cannot retrieve bsb'}</p>
-            <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : 'cannot retrieve account number'}</p>
+            <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : ''}</p>
+            <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : ''}</p>
             <p className='home-box-left-view-p'>
             <Link to="/savingaccount">View Account History</Link>
           </p>
           </div>
           <div className='home-box-right'>
           <h2>Balance</h2>
-          <p className='home-box-left-info-p'>{accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</p>
+          <p className='home-box-left-info-p'>{accountData ? "$" + accountData.transAccDetails.balance : ''}</p>
           </div>
         </div>
         <div className='home-box-bottom'>
           <div className='home-box-left'>
           <h1>Transaction Account</h1>
-          <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : 'cannot retrieve bsb'}</p>
-          <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : 'cannot retrieve account number'}</p>
+          <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : ''}</p>
+          <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : ''}</p>
           <p className='home-box-left-view-p'>
             <Link to="/transactionaccount">View Account History</Link>
           </p>
           </div>
           <div className='home-box-right'>
             <h2>Balance</h2>
-            <p className='home-box-left-info-p'>{accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</p>
+            <p className='home-box-left-info-p'>{accountData ? "$" + accountData.savingAccDetails.balance : ''}</p>
           </div>
         </div>
       </div>

@@ -124,6 +124,7 @@ exports.getUserAccount = async (req, res) => {
         // Extract the relevant account information
         const accountData = {
             name: user.name,
+            phoneNo: user.phoneNo,
             bsb: user.AccNoBsb.bsb,
             accNo: user.AccNoBsb.accNo,
             transAccDetails: {
@@ -193,3 +194,56 @@ exports.transferMoney = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+exports.transferByPayId = async (req, res) => {
+    let { fromPhoneNo, toPhoneNo , amount, description } = req.body
+    
+    fromPhoneNo = Number(fromPhoneNo);
+    toPhoneNo = Number(toPhoneNo);
+    amount = Number(amount);
+    
+
+    try{
+        const sender = await User.findOne({ 'phoneNo': fromPhoneNo });
+        const receiver = await User.findOne({ 'phoneNo': toPhoneNo });
+
+        if (!sender) {
+            return res.status(404).json({ message: 'Sender account not found' });
+        }
+        if (!receiver){
+            return res.status(404).json({ message: 'Receiver account not found' });
+        }
+
+        if (sender.transactionAcc.balance < amount) {
+            return res.status(400).json({ message: 'Insufficient balance' });
+        }
+
+        // Perform the transfer
+        sender.transactionAcc.balance -= amount;
+        receiver.transactionAcc.balance += amount;
+
+        // Record the transaction
+        const transactionDate = new Date();
+        sender.transactionAcc.transactions.push({
+            amount: -amount,
+            date: transactionDate,
+            log: `Transfer to ${receiver.name} with PayID with phone number ${receiver.phoneNo}`,
+            description: description
+
+        });
+        receiver.transactionAcc.transactions.push({
+            amount,
+            date: transactionDate,
+            log: `Transfer from ${sender.name} with PayID with phone number ${sender.phoneNo}` ,
+            description: description
+
+        });
+
+        await sender.save();
+        await receiver.save();
+
+        res.status(200).json({ message: 'Transfer successful' });
+    } catch(error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
