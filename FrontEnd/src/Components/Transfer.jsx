@@ -23,7 +23,7 @@ export default function Transfer() {
   const [message, setMessage] = useState('');
   const flag = false;
   
-
+  
   function handleChange (event) {
     const {name, value} = event.target;
     setFormData(prevFormData => {
@@ -50,7 +50,7 @@ export default function Transfer() {
 
   const handleBankTransfer = async () => {
     try{
-        await axios.post('http://localhost:5000/api/accounts/transfer', {
+        const response = await axios.post('http://localhost:5000/api/accounts/transfer', {
             fromAccNo: accountData.accNo,
             fromBsb: accountData.bsb,
             toAccNo: formData.accountNumber,
@@ -64,16 +64,20 @@ export default function Transfer() {
             }
           });
 
-        setMessage('Payment Succesfully Sent');
+        setMessage(response.data.message);
     } catch(error) {
-        setMessage('Bank transfer failed. Please try again.');
+        if (error.response && error.response.data && error.response.data.message) {
+            setMessage(`${error.response.data.message}`);
+        } else {
+            setMessage('An unknown error occurred');
+        }
     }
 
   }
 
   const handlePayIdTransfer = async () => {
     try{
-        await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
+        const response = await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
             fromPhoneNo: accountData.phoneNo,
             toPhoneNo: formData.phoneNumber,
             amount: formData.amount,
@@ -84,9 +88,13 @@ export default function Transfer() {
             }
         });
 
-        setMessage('Payment Succesfully Sent');
+        setMessage(response.data.message);
     } catch(error) {
-        setMessage('PayId transfer failed. Please try again.')
+        if (error.response && error.response.data && error.response.data.message) {
+            setMessage(`${error.response.data.message}`);
+        } else {
+            setMessage('An unknown error occurred');
+        }
     }
   }
 

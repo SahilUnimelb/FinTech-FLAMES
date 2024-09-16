@@ -1,14 +1,49 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './ViewAccounts.css';
 import { Link } from 'react-router-dom';
 
 export default function ViewAccounts() {
   const [active, setActive] = useState('profile');
   const [flipped, setFlipped] = useState(false);
-  const [accountData] = useState(() => {
+  const [message, setMessage] = useState('');
+  const [accountData, setAccountData] = useState(() => {
     const storedData = localStorage.getItem('accountData');
     return storedData ? JSON.parse(storedData) : null;
   });
+
+  // Fetch user account details on component mount
+  useEffect(() => {
+    const fetchAccountDetails = async () => {
+      // Retrieve the token from localStorage
+      const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        setMessage('You are not logged in');
+        return;
+      }
+
+      try {
+        // Make a request to get the user account details
+        const response = await axios.post('http://localhost:5000/api/accounts/getUser', {}, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+          },
+        });
+
+        setAccountData(response.data); // Set the account data received from backend
+        localStorage.setItem('accountData', JSON.stringify(response.data));
+      } catch (error) {
+        if (error.response && error.response.data) {
+          setMessage(error.response.data.message); // Display error message
+        } else {
+          setMessage('Failed to fetch account details. Please try again.');
+        }
+      }
+    };
+
+    fetchAccountDetails();
+  }, []);
 
   function parseCardNumber(cardNumber) {
     return cardNumber.replace(/(.{4})/g, '$1 ');

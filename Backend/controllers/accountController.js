@@ -164,7 +164,7 @@ exports.transferMoney = async (req, res) => {
         const receiver = await User.findOne({ 'AccNoBsb.accNo': toAccNo,  'AccNoBsb.bsb': toBsb});
 
         if (!sender || !receiver) {
-            return res.status(404).json({ message: 'Account not found' });
+            return res.status(404).json({ message: 'Payment Failed: Account with this bsb and account number does not exist' });
         }
 
         if (sender.transactionAcc.balance < amount) {
@@ -195,7 +195,7 @@ exports.transferMoney = async (req, res) => {
         await sender.save();
         await receiver.save();
 
-        res.status(200).json({ message: 'Transfer successful' });
+        res.status(200).json({ message: 'Payment Successfully Sent' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
@@ -217,7 +217,7 @@ exports.transferByPayId = async (req, res) => {
             return res.status(404).json({ message: 'Sender account not found' });
         }
         if (!receiver){
-            return res.status(404).json({ message: 'Receiver account not found' });
+            return res.status(404).json({ message: `Payment Failed: Account with phone number ${toPhoneNo} does not exist` });
         }
 
         if (sender.transactionAcc.balance < amount) {
@@ -248,7 +248,7 @@ exports.transferByPayId = async (req, res) => {
         await sender.save();
         await receiver.save();
 
-        res.status(200).json({ message: 'Transfer successful' });
+        res.status(200).json({ message: 'Payment Successfully Sent' });
     } catch(error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
