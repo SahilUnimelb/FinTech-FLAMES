@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import closeSign from '../Assets/close-button.svg';
 import ScheduledBillsTable from './ScheduledBillsTable';
 
 export default function Transfer() {
@@ -116,7 +117,6 @@ export default function Transfer() {
     <div className='transfer'>
         <div className='transfer-header'>
                 <p>Move Money</p>
-                <p>HAHAHAAHAHAH</p>
         </div>
         <div className='transfer-section'>
             <div className='transfer-section-sidebar'>
@@ -352,6 +352,7 @@ export default function Transfer() {
             {isSubmitted && (
                 <div className="modal-overlay">
                 <div className="modal-content">
+                    <img src = {closeSign} alt='' onClick={closeModal}/>
                     <p>{message}</p>
                     <button onClick={closeModal}>Close</button>
                 </div>
