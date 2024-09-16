@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import ScheduledBillsTable from './ScheduledBillsTable';
 
 export default function Transfer() {
@@ -16,6 +16,7 @@ export default function Transfer() {
     recurring: "",
     frequency: ""
   })
+
   const [accountData, setAccountData] = useState(null);
   const [message, setMessage] = useState('');
   const flag = false;
@@ -122,6 +123,7 @@ export default function Transfer() {
                 >
                     <p >Pay or Transfer</p>
                 </div>
+
                 <div className={`transfer-section-sidebar-second-elem ${active === 'schedule' ? 'transfer-section-sidebar-second-elem-active' : ''}`}
                      onClick = {() => {onClickDiv('schedule')}}
                 >
@@ -132,12 +134,17 @@ export default function Transfer() {
                 >
                     <p >View Scheduled Bills</p>
                 </div>
+                <div className={`transfer-section-sidebar-first-elem ${active === 'transfer' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
+                     onClick = {() => {onClickDiv('transfer')}}
+                >
+                    <p >Transfer Funds</p>
+                </div>
             </div>
             <div className='transfer-section-content'>
                 {(active === 'pay' || active === 'schedule') &&(
                     <>
                         <form onSubmit={handleSubmit}>
-                            {flag && <p>{message}</p>}
+                        {flag && <p>{message}</p>}
                             <p className='transfer-section-content-header'>From:</p>
                             <span>
                                 <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
@@ -196,8 +203,8 @@ export default function Transfer() {
                                             className="transfer-receiver-details"
                                             min={100000}  // Ensures BSB is at least 5 digits
                                             max={999999}  // Ensures BSB is at most 5 digits
-                                            pattern="\d{5}"
-                                            title="Please enter exactly 5 digits"
+                                            pattern="\d{6}"
+                                            title="Please enter exactly 6 digits"
                                             required
                                         />
                                 </span>
@@ -227,7 +234,7 @@ export default function Transfer() {
                                             type="text"
                                             placeholder="Phone Number"
                                             onChange={handleChange}
-                                            name="accountNumber"
+                                            name="phoneNumber"
                                             value={formData.phoneNumber}
                                             className="transfer-receiver-details"
                                             maxLength={10}
@@ -266,6 +273,7 @@ export default function Transfer() {
                                     className="transfer-description-textarea"
                                 />
                             </span>
+
                             {active === 'schedule' && (
                                 <>
                                 <span>
@@ -357,6 +365,13 @@ export default function Transfer() {
             {active === 'view' && (
                 <>
                 <ScheduledBillsTable/>
+                </>
+            )}
+            {active === 'transfer' && (
+                <>
+                <h1>
+                Need to discuss with backend
+                </h1>
                 </>
             )}
         </div>
