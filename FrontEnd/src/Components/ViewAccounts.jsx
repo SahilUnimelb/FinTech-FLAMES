@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import './ViewAccounts.css';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './ViewAccounts.css';
 
 export default function ViewAccounts() {
   const [active, setActive] = useState('profile');
@@ -11,7 +11,7 @@ export default function ViewAccounts() {
     const storedData = localStorage.getItem('accountData');
     return storedData ? JSON.parse(storedData) : null;
   });
-
+  const flag = false;
   // Fetch user account details on component mount
   useEffect(() => {
     const fetchAccountDetails = async () => {
@@ -66,13 +66,13 @@ export default function ViewAccounts() {
   function parseTransactions(transactions) {
     return transactions.map(transaction => {
       // Format the amount with a dollar sign and two decimal places
-      const amountFormatted = transaction.amount < 0 
-        ? `-$${Math.abs(transaction.amount).toFixed(2)}` 
+      const amountFormatted = transaction.amount < 0
+        ? `-$${Math.abs(transaction.amount).toFixed(2)}`
         : `$${transaction.amount.toFixed(2)}`;
-  
+
       // Format the date (assuming it's in ISO format)
       const dateFormatted = new Date(transaction.date).toLocaleDateString();
-  
+
       return {
         date: dateFormatted,
         description: transaction.description || transaction.log, // Use description or log
@@ -139,7 +139,7 @@ if the formatting needs changing. */
       </div>
       <div className="view-container">
         <div className="view-sidebar">
-          <div clasName={`sidebar-profile ${active === "profile" ? "sidebar-profile-active" : ""}`} onClick={() => onClickDiv("profile")}>
+          <div className={`sidebar-profile ${active === "profile" ? "sidebar-profile-active" : ""}`} onClick={() => onClickDiv("profile")}>
             <p>Profile</p>
           </div>
           <div className={`sidebar-savings ${active === "savings" ? "sidebar-savings-active" : ""}`} onClick={() => onClickDiv("savings")}>
@@ -154,6 +154,11 @@ if the formatting needs changing. */
             {active === "profile" && (
               <div className="profile-container">
                 <div className="view-user-profile">
+                  {flag && (
+                    <>
+                    {message}
+                    </>
+                  )}
                   <h1>Profile Details</h1>
                   <div className="view-user-info">
                     <label>Name:</label>
@@ -199,12 +204,16 @@ if the formatting needs changing. */
             )}
             {active === "savings" && (
               <>
-                <h1>Balance: ${accountData.savingAccDetails.balance}</h1>
+                <div className='header'>
+                  <h1>Balance: ${accountData.savingAccDetails.balance}</h1>
+                </div>
               </>
             )}
             {active === "transactions" && (
               <>
+                <div className='header'>
                 <h1>Balance: ${accountData.transAccDetails.balance}</h1>
+                </div>
               </>
             )}
           </div>
