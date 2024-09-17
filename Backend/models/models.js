@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema({
   cardDetails: cardDetailSchema, // Embedding card inside the user
   roles: {type: String, required: true, default: "user"},
   transactions: [transactionSchema], 
-  is2FAEnabled: {type: Boolean, default: true},
+  is2FAEnabled: {type: Boolean, default: false},
   isDeleted: { type: Boolean, default: false }
 });
 
