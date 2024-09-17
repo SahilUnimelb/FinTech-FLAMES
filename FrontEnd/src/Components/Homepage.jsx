@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Homepage.css';
+import logo from '../Assets/logo.png';
 
 export default function Homepage() {
   const [formData, setFormData] = useState({
@@ -45,6 +46,9 @@ export default function Homepage() {
   return (
     <div className="homepage">
       <header className="homepage-header">
+        <img src = {logo} alt = "" />
+            <p className='homepage-bank-title'>Learn to Bank</p>
+            <p className = 'homepage-bank-slogan'>Where Money Pretends To Grow!</p>
       </header>
       <div className="bottom-container">
         <div className="homepage-content">
@@ -75,10 +79,10 @@ export default function Homepage() {
                 onChange={handleChange}
                 required
               />
-              <div className="remember-me">
+{/*               <div className="remember-me">
                 <p className="remember">Remember me:</p>
                 <input type="checkbox" id="remember" />
-              </div>
+              </div> */}
             </div>
             <button className="login-button">Continue</button>
           </form>
