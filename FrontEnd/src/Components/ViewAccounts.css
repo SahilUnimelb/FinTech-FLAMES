@@ -127,7 +127,7 @@
 /* credit card css */
 .credit-card-container {
     perspective: 1000px;
-    margin: 5% 0 0 70%;
+    margin: 5% 0 0 55%;
     height: 180px;
 }
 
@@ -283,9 +283,9 @@
 }
 
 .transaction-table .incoming {
-    color: green; /* Color for incoming transactions */
-  }
+    color: green;
+}
   
-  .transaction-table .outgoing {
-    color: red; /* Color for outgoing transactions */
-  }
+.transaction-table .outgoing {
+    color: red;
+}
