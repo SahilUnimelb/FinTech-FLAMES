@@ -69,7 +69,7 @@ export default function Home() {
           </div>
           <div className='home-box-right'>
           <h2>Balance</h2>
-          <p className='home-box-left-info-p'>{accountData ? "$" + accountData.transAccDetails.balance : ''}</p>
+          <p className='home-box-left-info-p'>{accountData ? "$" + accountData.savingAccDetails.balance : ''}</p>
           </div>
         </div>
         <div className='home-box-bottom'>
@@ -83,7 +83,7 @@ export default function Home() {
           </div>
           <div className='home-box-right'>
             <h2>Balance</h2>
-            <p className='home-box-left-info-p'>{accountData ? "$" + accountData.savingAccDetails.balance : ''}</p>
+            <p className='home-box-left-info-p'>{accountData ? "$" + accountData.transAccDetails.balance : ''}</p>
           </div>
         </div>
       </div>

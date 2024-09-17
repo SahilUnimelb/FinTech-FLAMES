@@ -255,13 +255,13 @@ exports.transferByPayId = async (req, res) => {
 };
 
 exports.transferWithinUser = async(req, res) => {
-    let {userId, fromAccountType, toAccountType, amount, description } = req.body;
+    let {username, fromAccountType, toAccountType, amount, description } = req.body;
     
     amount = Number(amount);
     
     try {
-        // Find the user by user ID
-        const user = await User.findById(userId);
+        // Find the user by username
+        const user = await User.findOne({ 'login.username': username });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
