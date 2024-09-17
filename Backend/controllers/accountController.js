@@ -327,3 +327,47 @@ exports.transferWithinUser = async(req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
+
+// update user email
+exports.updateUserProfile = async (req, res) => {
+    let { username, email } = req.body;
+    email = String(email);
+
+    try {
+        // Find the user by username
+        const user = await User.findOne({ 'login.username': username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.email = email;
+        
+        await user.save();
+        res.status(200).json({ message: 'Profile updated successfully', user });
+    } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+// forgot password
+exports.forgotPassword = async (req, res) => {
+    let { username, token } = req.body;
+    email = String(email);
+
+    try {
+        // Find the user by username
+        const user = await User.findOne({ 'login.username': username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        token = generateToken();
+        sendtoken(token);
+      
+        res.status(200).json({ message: 'Password reset email sent' });
+  } catch (error) {
+    console.error('Error in forgot password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
