@@ -15,6 +15,8 @@ export default function Transfer() {
     scheduleOption: "",
     date: "",
     recurring: "",
+    fromAccountType: "",
+    toAccountType: "",
     frequency: ""
   })
   const [accountData] = useState(() => {
@@ -37,17 +39,41 @@ export default function Transfer() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (formData.transferMethod === "Bank Transfer") {
+  
+    if (formData.transferMethod === "Internal Transfer") {
+        handleInternalTransfer();
+    } else if (formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
-    }
-    else if(formData.transferMethod === "PayID") {
+    } else if (formData.transferMethod === "PayID") {
         handlePayIdTransfer();
     }
-
-
+  
     setIsSubmitted(true);
-  }
+  };
+
+  const handleInternalTransfer = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/transfer/within', {
+        userId: accountData._id,  // Assuming you have user ID in accountData
+        fromAccountType: formData.fromAccountType,
+        toAccountType: formData.toAccountType,
+        amount: formData.amount,
+        description: formData.description
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      setMessage(response.data.message);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage(`${error.response.data.message}`);
+      } else {
+        setMessage('An unknown error occurred');
+      }
+    }
+  };
 
   const handleBankTransfer = async () => {
     try{
@@ -148,21 +174,39 @@ export default function Transfer() {
                             {flag && <p>{message}</p>}
                             <p className='transfer-section-content-header'>From:</p>
                             <span>
-                                <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
+                                <label htmlFor='fromAccountType' className='transfer-section-content-sub-header'>Account</label>
                                 <select
-                                    id='sender-account'
-                                    name='senderAccount'
-                                    //value={formData.senderAccount}
+                                    id='fromAccountType'
+                                    name='fromAccountType'
+                                    value={formData.fromAccountType}
                                     onChange={handleChange}
                                     className='sender-account-select'
                                     required
                                 >
                                     <option value="">-- Choose Account --</option>
-                                    <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                    <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                    <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                    <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                                 </select>
                             </span>
+
                             <p className='transfer-section-content-header'>To:</p>
+                            <span>
+                                <label htmlFor='toAccountType' className='transfer-section-content-sub-header'>Account</label>
+                                <select
+                                    id='toAccountType'
+                                    name='toAccountType'
+                                    value={formData.toAccountType}
+                                    onChange={handleChange}
+                                    className='receiver-account-select'
+                                    required
+                                >
+                                    <option value="">-- Choose Account --</option>
+                                    <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                    <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                </select>
+                            </span>
+
+                            <p className='transfer-section-content-header'>Transfer Options:</p>
                             <span>
                                 <label htmlFor='transfer-option' className='transfer-section-content-sub-header'>Transfer Options</label>
                                 <select
@@ -174,11 +218,13 @@ export default function Transfer() {
                                     required
                                 >
                                     <option value="">-- Choose Method --</option>
+                                    <option value="Internal Transfer">Internal Transfer</option>
                                     <option value="Bank Transfer">Bank Transfer</option>
                                     <option value="PayID">PayID</option>
                                     <option value="BPay">BPay</option>
                                 </select>
                             </span>
+                            
                             {formData.transferMethod === "Bank Transfer" && (
                                 <>
                                 <span>
