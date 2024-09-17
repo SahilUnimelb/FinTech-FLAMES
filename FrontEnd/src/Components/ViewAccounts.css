@@ -38,13 +38,10 @@
     background-color: #D9D9D9;
 }
 
-.view-content {
-    display: flex;
-}
-
 .sidebar-profile, .sidebar-savings, .sidebar-transactions {
     font-size: 28px;
     border-bottom: 1px solid rgb(146, 145, 145);
+
 }
 
 .sidebar-profile-active, .sidebar-savings-active, .sidebar-transactions-active {
@@ -52,7 +49,8 @@
     border-bottom: 1px solid rgb(146, 145, 145);
     background-color: white;
     border-left: 10px solid #0D99FF;
-}   
+    pointer-events: none;
+}
 
 .view-sidebar p {
     margin-top: 25px;
@@ -60,30 +58,30 @@
     margin-bottom: 25px;
 }
 
-.view-sidebar:hover {
+.sidebar-profile:hover, .sidebar-savings:hover, .sidebar-transactions:hover {
     cursor: pointer;
-}
-
-.view-content {
-    display: flex;
-    flex-direction: column;
+    background-color: rgb(244, 243, 243);
 }
 
 .view-content h1 {
     padding-left: 15px;
 }
+.view-content {
+    display: flex;
+    flex-direction: column;
+}
 
 .profile-container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 /* Account Details CSS */
 .view-user-profile {
-    width: 300px;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 10px;
+    margin-left: 20px;
+    margin-top: 30px;
+    flex: 1;
 }
 
 .view-user-profile h1 {
@@ -126,9 +124,8 @@
 
 /* credit card css */
 .credit-card-container {
-    perspective: 1000px;
-    margin: 5% 0 0 55%;
-    height: 180px;
+    margin-top: 30px;
+    margin-right: 20px;
 }
 
 .credit-card {
@@ -250,7 +247,7 @@
 }
 
 .transaction-table {
-    width: 68.09vw;
+    width: 69vw;
     border-collapse: collapse;
 }
 
@@ -285,7 +282,7 @@
 .transaction-table .incoming {
     color: green;
 }
-  
+
 .transaction-table .outgoing {
     color: red;
 }
