@@ -1,3 +1,4 @@
+
 .homepage {
     background: #0D99FF;
     height: 100vh;
@@ -10,12 +11,37 @@
 }
 
 .homepage-header {
-    position: sticky;
-    width: 100vw;
-    height: 60px;
-    background: #8fd3f2;
-    padding: 40px;
-    align-items: center;
+    background-color: #0D99FF;
+    display: flex;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin: 1% 0 0 5%;
+    gap: 10px;
+}
+
+.homepage-header img {
+    width: 80px;
+    height: 80px;
+}
+
+.homepage-bank-title {
+    color: white;
+    text-shadow: 1.4px 1.4px 0px rgba(23, 23, 23, 0.82);
+    font-size: 48px;
+    font-weight:900;
+    font-family: 'Century Gothic', Arial, 'Arial Unicode MS', Helvetica, Sans-Serif;
+}
+
+.homepage-bank-slogan {
+    color:white;
+    font-size: 14px;
+    position: absolute;
+    margin-top: 60px;
+    margin-left: 93px;
+    transform: rotate(0deg);
+    z-index: 99;
+    white-space: nowrap;
 }
 
 .bottom-container {
@@ -39,9 +65,9 @@
 }
 
 .homepage-content {
-    width: 80%;
+    width: 70%;
     height: 100%;
-    border-radius: 0 350px 350px 0;
+    border-radius: 150px 350px 350px 0;
     background: #8fc9f2;
     background-size: cover;
     background-position: center;
@@ -54,11 +80,22 @@
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px  1px 0 black, 1px  1px 0 black;
 }
 
+/* .homepage-content h1 {
+    color: white;
+    text-shadow: 1.4px 1.4px 0px rgba(23, 23, 23, 0.82);
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    font-family: 'Century Gothic', Arial, 'Arial Unicode MS', Helvetica, Sans-Serif;
+}
+ */
 .homepage-content h1 {
-    width: 50%;
-    color: rgb(96, 109, 155);
+    width: 60%;
+    text-shadow: 1.4px 1.4px 0px rgba(23, 23, 23, 0.82);
+    color: white;
     margin-top: 150px;
-    font-size: 350%;
+    font-size: 60px;
+    font-family: 'Century Gothic', Arial, 'Arial Unicode MS', Helvetica, Sans-Serif;
 }
 
 .homepage-content p {
@@ -68,7 +105,7 @@
 .login {
     display: inline-block;
     padding-top: 150px;
-    padding-left: 40px;
+    padding-left: 7%;
     width: 20%;
     height: 50vh;
     background: #0D99FF;
@@ -100,6 +137,7 @@
     width: 5vw;
 }
 
+/* 
 .remember-me {
     display: flex;
-}
+} */
