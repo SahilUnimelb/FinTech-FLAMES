@@ -209,7 +209,7 @@ exports.transferByPayId = async (req, res) => {
     amount = Number(amount);
     
 
-    try{
+    try {
         const sender = await User.findOne({ 'phoneNo': fromPhoneNo });
         const receiver = await User.findOne({ 'phoneNo': toPhoneNo });
 
@@ -250,6 +250,80 @@ exports.transferByPayId = async (req, res) => {
 
         res.status(200).json({ message: 'Payment Successfully Sent' });
     } catch(error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.transferWithinUser = async(req, res) => {
+    let {userId, fromAccountType, toAccountType, amount, description } = req.body;
+    
+    amount = Number(amount);
+    
+    try {
+        // Find the user by user ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Ensure the account types are either 'transaction' or 'savings'
+        if ((fromAccountType !== 'transaction' && fromAccountType !== 'savings') ||
+            (toAccountType !== 'transaction' && toAccountType !== 'savings')) {
+            return res.status(400).json({ message: 'Invalid account type' });
+        }
+
+        // Check if transferring from transaction to savings
+        if (fromAccountType === 'transaction' && user.transactionAcc.balance < amount) {
+            return res.status(400).json({ message: 'Insufficient balance in transaction account' });
+        }
+
+        if (fromAccountType === 'savings' && user.savingsAcc.balance < amount) {
+            return res.status(400).json({ message: 'Insufficient balance in savings account' });
+        }
+
+        // Perform the transfer
+        if (fromAccountType === 'transaction') {
+            user.transactionAcc.balance -= amount;
+            user.savingsAcc.balance += amount;
+        } else {
+            user.savingsAcc.balance -= amount;
+            user.transactionAcc.balance += amount;
+        }
+
+        // Record the transaction in the respective account's transaction history
+        const transactionDate = new Date();
+        const logMessage = `Transfer from ${fromAccountType} to ${toAccountType}`;
+        if (fromAccountType === 'transaction') {
+            user.transactionAcc.transactions.push({
+                amount: -amount,
+                date: transactionDate,
+                log: logMessage,
+                description: description || 'Transfer to savings account'
+            });
+            user.savingsAcc.transactions.push({
+                amount: amount,
+                date: transactionDate,
+                log: logMessage,
+                description: description || 'Transfer from transaction account'
+            });
+        } else {
+            user.savingsAcc.transactions.push({
+                amount: -amount,
+                date: transactionDate,
+                log: logMessage,
+                description: description || 'Transfer to transaction account'
+            });
+            user.transactionAcc.transactions.push({
+                amount: amount,
+                date: transactionDate,
+                log: logMessage,
+                description: description || 'Transfer from savings account'
+            });
+        }
+
+        await user.save();
+        res.status(200).json({ message: 'Transfer successful' });
+    } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
