@@ -15,7 +15,12 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     scheduleOption: "",
     date: "",
     recurring: "",
-    frequency: ""
+    fromAccountType: "",
+    toAccountType: "",
+    frequency: "",
+    senderAccount: "",
+    receiverAccount: "",
+
   })
   const [accountData] = useState(() => {
     const storedData = localStorage.getItem('accountData');
@@ -23,19 +28,15 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   });
   const [message, setMessage] = useState('');
   const flag = false;
-
   const [searchAccount, setSearchAccount] = useState('');
-
   const filteredAccounts = accounts.filter(account =>
     account.name.toLowerCase().includes(searchAccount.toLowerCase())
   );
-
   const [searchPhone, setSearchPhone] = useState('');
-
   const filteredPhones = phones.filter(phone =>
     phone.name.toLowerCase().includes(searchPhone.toLowerCase())
   );
-
+  const token = localStorage.getItem('authToken');
   function handleChange (event) {
     const {name, value} = event.target;
     setFormData(prevFormData => {
@@ -48,22 +49,46 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData)
     addContactDetails(formData);
-    if (formData.transferMethod === "Bank Transfer") {
+  
+    if (active === 'transfer') {
+        handleInternalTransfer();
+    } else if (active === 'pay' && formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
-    }
-    else if(formData.transferMethod === "PayID") {
+    } else if (active === 'pay' && formData.transferMethod === "PayID") {
         handlePayIdTransfer();
     }
     setIsSubmitted(true);
-  }
+  };
+
+  const handleInternalTransfer = async () => {
+    try {
+        
+      const response = await axios.post('http://localhost:5000/api/transactions/transfer/within', {
+        fromAccountType: formData.senderAccount,
+        toAccountType: formData.receiverAccount,
+        amount: formData.amount,
+        description: formData.description
+      }, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+      });
+  
+      setMessage(response.data.message);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage(`${error.response.data.message}`);
+      } else {
+        setMessage('An unknown error occurred');
+      }
+    }
+  };
 
   const handleBankTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/accounts/transfer', {
-            fromAccNo: accountData.accNo,
-            fromBsb: accountData.bsb,
+        const response = await axios.post('http://localhost:5000/api/transactions/transfer', {
             toAccNo: formData.accountNumber,
             toBsb: formData.bsb,
             amount: formData.amount,
@@ -71,7 +96,8 @@ export default function Transfer({accounts, phones, addContactDetails}) {
             name: formData.name
           }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             }
           });
 
@@ -88,14 +114,14 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const handlePayIdTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
-            fromPhoneNo: accountData.phoneNo,
+        const response = await axios.post('http://localhost:5000/api/transactions/payIdTransfer', {
             toPhoneNo: formData.phoneNumber,
             amount: formData.amount,
             description: formData.description
         }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -295,23 +321,8 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     <>
                         <form onSubmit={handleSubmit}>
                             {flag && <p>{message}</p>}
-                            <p className='transfer-section-content-header'>From:</p>
-                            <span>
-                                <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
-                                <select
-                                    id='sender-account'
-                                    name='senderAccount'
-                                    //value={formData.senderAccount}
-                                    onChange={handleChange}
-                                    className='sender-account-select'
-                                    required
-                                >
-                                    <option value="">-- Choose Account --</option>
-                                    <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                    <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
-                                </select>
-                            </span>
-                            <p className='transfer-section-content-header'>To:</p>
+                            
+                            <p className='transfer-section-content-header'>Transfer Options:</p>
                             <span>
                                 <label htmlFor='transfer-option' className='transfer-section-content-sub-header'>Transfer Options</label>
                                 <select
@@ -328,6 +339,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                     <option value="BPay">BPay</option>
                                 </select>
                             </span>
+                            
                             {formData.transferMethod === "Bank Transfer" && (
                                 <>
                                 <span>
@@ -557,14 +569,14 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             <select
                                 id='sender-account'
                                 name='senderAccount'
-                                //value={formData.senderAccount}
+                                value={formData.senderAccount}
                                 onChange={handleChange}
                                 className='sender-account-select'
                                 required
                             >
                                 <option value="">-- Choose Account --</option>
-                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>From:</p>
@@ -573,14 +585,14 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             <select
                                 id='receiver-account'
                                 name='receiverAccount'
-                                //value={formData.senderAccount}
+                                value={formData.receiverAccount}
                                 onChange={handleChange}
                                 className='sender-account-select'
                                 required
                             >
                                 <option value="">-- Choose Account --</option>
-                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>Payment Details:</p>

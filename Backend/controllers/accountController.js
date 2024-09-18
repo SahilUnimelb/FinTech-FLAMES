@@ -149,107 +149,78 @@ exports.getUserAccount = async (req, res) => {
 
 };
 
-// Transfer money between user transaction accounts
-exports.transferMoney = async (req, res) => {
-    let { fromAccNo, fromBsb, toAccNo, toBsb, amount, description, name } = req.body;
-
-    fromAccNo = Number(fromAccNo);  // Alternatively, parseInt(fromAccNo, 10);
-    fromBsb = Number(fromBsb);
-    toAccNo = Number(toAccNo);
-    toBsb = Number(toBsb);
-    amount = Number(amount)
+// update user email
+exports.updateUserProfile = async (req, res) => {
+    let { username, email } = req.body;
+    email = String(email);
 
     try {
-        const sender = await User.findOne({ 'AccNoBsb.accNo': fromAccNo, 'AccNoBsb.bsb': fromBsb});
-        const receiver = await User.findOne({ 'AccNoBsb.accNo': toAccNo,  'AccNoBsb.bsb': toBsb});
-
-        if (!sender || !receiver) {
-            return res.status(404).json({ message: 'Payment Failed: Account with this bsb and account number does not exist' });
+        // Find the user by username
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        if (sender.transactionAcc.balance < amount) {
-            return res.status(400).json({ message: 'Insufficient balance' });
-        }
-
-        // Perform the transfer
-        sender.transactionAcc.balance -= amount;
-        receiver.transactionAcc.balance += amount;
-
-        // Record the transaction
-        const transactionDate = new Date();
-        sender.transactionAcc.transactions.push({
-            amount: -amount,
-            date: transactionDate,
-            log: `Transfer to ${name}`,
-            description: description
-
-        });
-        receiver.transactionAcc.transactions.push({
-            amount,
-            date: transactionDate,
-            log: `Transfer from ${sender.name}` ,
-            description: description
-
-        });
-
-        await sender.save();
-        await receiver.save();
-
-        res.status(200).json({ message: 'Payment Successfully Sent' });
+        user.email = email;
+        
+        await user.save();
+        res.status(200).json({ message: 'Profile updated successfully', user });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-};
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
-exports.transferByPayId = async (req, res) => {
-    let { fromPhoneNo, toPhoneNo , amount, description } = req.body
-    
-    fromPhoneNo = Number(fromPhoneNo);
-    toPhoneNo = Number(toPhoneNo);
-    amount = Number(amount);
-    
+// forgot password
+exports.forgotPassword = async (req, res) => {
+    let { email, token } = req.body;
+    email = String(email);
 
-    try{
-        const sender = await User.findOne({ 'phoneNo': fromPhoneNo });
-        const receiver = await User.findOne({ 'phoneNo': toPhoneNo });
-
-        if (!sender) {
-            return res.status(404).json({ message: 'Sender account not found' });
-        }
-        if (!receiver){
-            return res.status(404).json({ message: `Payment Failed: Account with phone number ${toPhoneNo} does not exist` });
+    try {
+        // Find the user by username
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        if (sender.transactionAcc.balance < amount) {
-            return res.status(400).json({ message: 'Insufficient balance' });
-        }
+        token = generateToken(email);
+        sendtoken(email, token);
+      
+        res.status(200).json({ message: 'Password reset email sent' });
+  } catch (error) {
+    console.error('Error in forgot password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
-        // Perform the transfer
-        sender.transactionAcc.balance -= amount;
-        receiver.transactionAcc.balance += amount;
+// reset password
+exports.resetPassword = async (req, res) => {
+    let { username, password } = req.body;
+    const { token } = req.params;
 
-        // Record the transaction
-        const transactionDate = new Date();
-        sender.transactionAcc.transactions.push({
-            amount: -amount,
-            date: transactionDate,
-            log: `Transfer to ${receiver.name} with PayID with phone number ${receiver.phoneNo}`,
-            description: description
+   try {
+       // Find the user by the reset token and check if the token has expired
+       const user = await User.findOne({
+           resetPasswordToken: token,
+           resetPasswordExpires: { $gt: Date.now() }, // Ensure the token is not expired
+           });
+       
+       if (!user) {
+       return res.status(400).json({ message: 'Password reset token is invalid or has expired.' });
+       }
 
-        });
-        receiver.transactionAcc.transactions.push({
-            amount,
-            date: transactionDate,
-            log: `Transfer from ${sender.name} with PayID with phone number ${sender.phoneNo}` ,
-            description: description
+       // Hash the new password
+       const hashedPassword = await bcrypt.hash(password, 10);
+       
+       // Update the user's password and clear the reset token and expiration time
+       user.login[0].password = hashedPassword; // Assuming only one login entry per user
+       user.resetPasswordToken = undefined;
+       user.resetPasswordExpires = undefined;
 
-        });
-
-        await sender.save();
-        await receiver.save();
-
-        res.status(200).json({ message: 'Payment Successfully Sent' });
-    } catch(error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
+       await user.save();
+       res.status(200).json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error('Error in forgot password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
