@@ -1,35 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import addSign from '../Assets/add-sign.svg';
 import closeSign from '../Assets/close-button.svg';
 import crossSign from '../Assets/cross-icon.svg';
-
-export default function Contacts() {
-
-  const [accounts, setAccounts] = useState([
-    { id: 1, name: "Jackson Williams", bsb: "953248", accountNum: "88293680" },
-    { id: 2, name: "Jackson Johnson", bsb: "460846", accountNum: "84140165" },
-    { id: 3, name: "Jackson Smith", bsb: "793160", accountNum: "82949178" },
-    { id: 4, name: "Jackson Jones", bsb: "235972", accountNum: "88960684" },
-    { id: 5, name: "Jackson Smith", bsb: "854628", accountNum: "43667333" },
-    { id: 6, name: "Jackson Williams", bsb: "555418", accountNum: "70599594" },
-    { id: 7, name: "Jackson Jones", bsb: "993620", accountNum: "65792614"},
-    { id: 8, name: "Jackson Jones", bsb: "187142", accountNum: "85752163" },
-    { id: 9, name: "Jackson Brown", bsb: "461988", accountNum: "27744551" },
-    { id: 10, name: "Jackson Williams", bsb: "324604", accountNum: "65487411" },
-  ].sort((a, b) => a.name.localeCompare(b.name)))
-
-  const [phones, setPhones] = useState([
-    { id: 1, name: "Jackson Williams", phoneNum: "0274893621" },
-    { id: 2, name: "Jackson Johnson", phoneNum: "0412758390" },
-    { id: 3, name: "Jackson Smith", phoneNum: "0487261538" },
-    { id: 4, name: "Jackson Jones", phoneNum: "0354918276" },
-    { id: 5, name: "Jackson Brown", phoneNum: "0192837465" },
-    { id: 6, name: "Jackson White", phoneNum: "0678123456" },
-    { id: 7, name: "Jackson Taylor", phoneNum: "0743658912" },
-    { id: 8, name: "Jackson Davis", phoneNum: "0283746591" },
-    { id: 9, name: "Jackson Miller", phoneNum: "0365289174" },
-    { id: 10, name: "Jackson Wilson", phoneNum: "0456789123" }
-  ].sort((a, b) => a.name.localeCompare(b.name)))
+import './Contacts.css';
+export default function Contacts({accounts, phones, addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeAccount, removeMessage}) {
 
   const [searchAccount, setSearchAccount] = useState('');
 
@@ -42,22 +16,33 @@ export default function Contacts() {
   const filteredPhones = phones.filter(phone =>
     phone.name.toLowerCase().includes(searchPhone.toLowerCase())
   );
+
+
+  const [isAdd, setIsAdd] = useState(false);
+  const [isExist, setIsExist] = useState(false);
+
   const [active, setActive] = useState('bank');
   function onClickDiv(type) {
     setActive(type);
   }
 
-  const [isAdd, setIsAdd] = useState(false);
-  const [isExits, setIsExist] = useState(false);
-
   const [contactData, setContactData] = useState({
     contactType:"",
     name:"",
     bsb:"",
-    accountNum:"",
-    phoneNum:""
+    accountNumber:"",
+    phoneNumber:""
   });
-
+  useEffect(() => {
+    setIsExist(false)
+    setContactData({
+      contactType: contactData.contactType,
+      name: "",
+      bsb: "",
+      accountNumber: "",
+      phoneNumber: ""
+    })
+  }, [contactData.contactType])
   function handleChange (event) {
     const {name, value} = event.target;
     setContactData(
@@ -70,55 +55,19 @@ export default function Contacts() {
     );
   };
 
-  function addContactDetailsBank () {
-    const newAccount = {
-      id: Date.now(),
-      name: contactData.name,
-      bsb: contactData.bsb,
-      accountNum: contactData.accountNum,
-    }
-    setAccounts(prevAccounts => {
-      const updatedAccounts = [...prevAccounts, newAccount];
-      updatedAccounts.sort((a, b) => a.name.localeCompare(b.name));
-      return updatedAccounts;
-    });
-  }
-
-  function addContactDetailsPhone() {
-    const newPhone = {
-      id: Date.now(),
-      name: contactData.name,
-      phoneNum: contactData.phoneNum
-    }
-    setPhones(prevPhones => {
-      const updatedPhones = [...prevPhones, newPhone];
-      updatedPhones.sort((a, b) => a.name.localeCompare(b.name));
-      return updatedPhones;
-    });
-  };
-  function addContactDetails() {
-    setIsExist(false);
-    if (contactData.bsb) {
-      addContactDetailsBank();
-    }
-    else if (contactData.phoneNum) {
-      addContactDetailsPhone();
-    }
-  }
-
   function handleSubmit(event) {
     event.preventDefault();
     const accountExists = accounts.some(account =>
-    (account.bsb === contactData.bsb &&
-      account.accountNum === contactData.accountNum));
+    (account.accountNumber === contactData.accountNumber));
     const phoneExists = phones.some(phone =>
-      phone.phoneNum === contactData.phoneNum
+      phone.phoneNumber === contactData.phoneNumber
     );
     if (accountExists || phoneExists) {
       setIsExist(true)
       return;
     }
-    addContactDetails();
+    setIsExist(false);
+    addContactDetails(contactData);
     console.log(contactData);
     console.log(accounts);
     console.log(phones);
@@ -135,31 +84,9 @@ export default function Contacts() {
       contactType: "",
       name: "",
       bsb: "",
-      accountNum: "",
-      phoneNum: ""
+      accountNumber: "",
+      phoneNumber: ""
     })
-  }
-  const [selectedAccount, setSelectedAccount] = useState(null);
-  const [removeMessage, setRemoveMessage] = useState(false);
-
-  function onClickRemoveAccount(account) {
-    setSelectedAccount(account);
-    setRemoveMessage(true);
-  }
-
-  function onClickRemoveClose() {
-    setSelectedAccount(null)
-    setRemoveMessage(false)
-  }
-
-  function removeAccount(selectedAccount) {
-    if (selectedAccount.bsb) {
-      setAccounts(prevAccounts => prevAccounts.filter(account => account.id !== selectedAccount.id));
-    }
-    else if (selectedAccount.phoneNum) {
-      setPhones(prevAccounts => prevAccounts.filter(account => account.id !== selectedAccount.id));
-    }
-    setRemoveMessage(false);
   }
 
   return (
@@ -192,7 +119,7 @@ export default function Contacts() {
             <div className="search-bar">
               <input
                 type="text"
-                placeholder="Search by name"
+                placeholder="Search by Name"
                 value={searchAccount}
                 onChange={(e) => setSearchAccount(e.target.value)}
                 className="search-input"
@@ -226,7 +153,7 @@ export default function Contacts() {
             <div className="search-bar">
               <input
                 type="text"
-                placeholder="Search by name"
+                placeholder="Search by Name"
                 value={searchPhone}
                 onChange={(e) => setSearchPhone(e.target.value)}
                 className="search-input"
@@ -238,7 +165,7 @@ export default function Contacts() {
                   return <div key = {phone.id} className='contact-list'>
                     <div className='contact-information'>
                     <h3> {phone.name} </h3>
-                    <p> Phone Number: {phone.phoneNum} </p>
+                    <p> Phone Number: {phone.phoneNumber} </p>
                     </div>
                     <div className='contact-remove-sign'>
                     <img src= {crossSign} alt='' onClick={() => onClickRemoveAccount(phone)} />
@@ -359,8 +286,8 @@ export default function Contacts() {
                             type="text"
                             placeholder="Phone Number"
                             onChange={handleChange}
-                            name="phoneNum"
-                            value={contactData.phoneNum}
+                            name="phoneNumber"
+                            value={contactData.phoneNumber}
                             className="contact-form-fill-up"
                             maxLength={10}
                             pattern="\d{10}"
@@ -370,7 +297,7 @@ export default function Contacts() {
                       </span>
                       </>
                   )}
-                  {isExits && (
+                  {isExist && (
                     <>
                       <p>Contact already exists!</p>
                     </>

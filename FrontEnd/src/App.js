@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Account from './Components/Account.jsx';
+import EditProfile from './Components/EditProfile.jsx';
 import ForgotPassword from './Components/Forgot.jsx';
 import Homepage from './Components/Homepage.jsx';
 import Layout from './Components/Layout.jsx';
@@ -8,7 +9,7 @@ import ResetPassword from './Components/Reset.jsx';
 import SavingAccount from './Components/SavingAccount.jsx';
 import SignUp from './Components/SignUp.jsx';
 import TransactionAccount from './Components/TransactionAccount.jsx';
-import EditProfile from './Components/EditProfile.jsx';
+
 
 function App() {
   return (
