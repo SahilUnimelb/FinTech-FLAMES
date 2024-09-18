@@ -40,8 +40,21 @@ Content-Type: application/json
 {
   "fromPhoneNo": "7537217894",
   "toPhoneNo": "5424712610",
-  "amount": 1000,
+  "amount": 30,
   "description": ""
+}
+
+### Transfer Between Account
+POST http://localhost:5000/api/accounts/transfer/within
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY2Mjg0MDAsImV4cCI6MTcyNjYzMjAwMH0.-SFFz3CXpLKGuyyhexC8rJ61on8ttVsVC8l5K-AabUo
+
+{
+  "username": "mitchellzheng", 
+  "fromAccountType": "transaction", 
+  "toAccountType": "savings", 
+  "amount": 1000, 
+  "description": "transfer to savings" 
 }
 
 ### Login Account
@@ -56,8 +69,7 @@ Content-Type: application/json
 ### Get Account Info
 POST http://localhost:5000/api/accounts/getUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY0Njc2NDUsImV4cCI6MTcyNjQ3MTI0NX0.1Vtv7ZBiLIAELSG_wrDOCTdHay48hScnm-O2mAeaUE0
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY2Mjg0MDAsImV4cCI6MTcyNjYzMjAwMH0.-SFFz3CXpLKGuyyhexC8rJ61on8ttVsVC8l5K-AabUo
 ### Delete Account
 POST http://localhost:5000/api/admin/delete
 Content-Type: application/json

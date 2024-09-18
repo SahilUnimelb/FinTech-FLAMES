@@ -23,12 +23,13 @@ export default function Login() {
     try {
       // Send POST request to backend for login
       const response = await axios.post('http://localhost:5000/api/accounts/login', formData);
-      const { token, message } = response.data;
+      const { token, userId, message } = response.data;
       setMessage(message);
 
       // If login is successful, store the token and redirect to a different page
       if (token) {
         localStorage.setItem('authToken', token); // Store the token in localStorage
+        localStorage.setItem('userId', userId); // Store the userId in LocalStorage
         navigate('/home'); // Redirect to the home page
       }
     } catch (error) {

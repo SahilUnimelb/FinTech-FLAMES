@@ -17,7 +17,10 @@ export default function Transfer() {
     recurring: "",
     fromAccountType: "",
     toAccountType: "",
-    frequency: ""
+    frequency: "",
+    senderAccount: "",
+    receiverAccount: "",
+
   })
   const [accountData] = useState(() => {
     const storedData = localStorage.getItem('accountData');
@@ -25,7 +28,7 @@ export default function Transfer() {
   });
   const [message, setMessage] = useState('');
   const flag = false;
-
+  const token = localStorage.getItem('authToken');
 
   function handleChange (event) {
     const {name, value} = event.target;
@@ -40,28 +43,33 @@ export default function Transfer() {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    if (formData.transferMethod === "Internal Transfer") {
+    if (active === 'transfer') {
         handleInternalTransfer();
-    } else if (formData.transferMethod === "Bank Transfer") {
+        
+    } else if (active === 'pay' && formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
-    } else if (formData.transferMethod === "PayID") {
+    } else if (active === 'pay' && formData.transferMethod === "PayID") {
         handlePayIdTransfer();
     }
-  
+    console.log("FROM: ", formData.senderAccount);
+    console.log("TO: ", formData.receiverAccount);
+    console.log(formData)
+    console.log(active);
     setIsSubmitted(true);
   };
 
   const handleInternalTransfer = async () => {
     try {
+        
       const response = await axios.post('http://localhost:5000/api/accounts/transfer/within', {
-        userId: accountData._id,  // Assuming you have user ID in accountData
-        fromAccountType: formData.fromAccountType,
-        toAccountType: formData.toAccountType,
+        fromAccountType: formData.senderAccount,
+        toAccountType: formData.receiverAccount,
         amount: formData.amount,
         description: formData.description
       }, {
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
         }
       });
   
@@ -218,7 +226,6 @@ export default function Transfer() {
                                     required
                                 >
                                     <option value="">-- Choose Method --</option>
-                                    <option value="Internal Transfer">Internal Transfer</option>
                                     <option value="Bank Transfer">Bank Transfer</option>
                                     <option value="PayID">PayID</option>
                                     <option value="BPay">BPay</option>
@@ -424,14 +431,14 @@ export default function Transfer() {
                             <select
                                 id='sender-account'
                                 name='senderAccount'
-                                //value={formData.senderAccount}
+                                value={formData.senderAccount}
                                 onChange={handleChange}
                                 className='sender-account-select'
                                 required
                             >
                                 <option value="">-- Choose Account --</option>
-                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>From:</p>
@@ -440,14 +447,14 @@ export default function Transfer() {
                             <select
                                 id='receiver-account'
                                 name='receiverAccount'
-                                //value={formData.senderAccount}
+                                value={formData.receiverAccount}
                                 onChange={handleChange}
                                 className='sender-account-select'
                                 required
                             >
                                 <option value="">-- Choose Account --</option>
-                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>Payment Details:</p>

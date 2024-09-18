@@ -20,6 +20,6 @@ router.post('/transfer', transferMoney);
 router.post('/payIdTransfer', transferByPayId);
 
 // Internal transfer
-router.post('/transfer/within', authenticateToken, transferWithinUser);
+router.post('/transfer/within', authenticateToken,transferWithinUser);
 
 module.exports = router;
