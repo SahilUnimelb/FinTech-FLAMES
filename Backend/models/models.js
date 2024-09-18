@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema({
   cardDetails: cardDetailSchema, // Embedding card inside the user
   roles: {type: String, required: true, default: "user"},
   transactions: [transactionSchema], 
-  is2FAEnabled: {type: Boolean, default: true},
+  is2FAEnabled: {type: Boolean, default: false},
   isDeleted: { type: Boolean, default: false }
 });
 
@@ -122,6 +122,45 @@ async function generateBsb() {
 
   return bsb;
 };
+
+//generating token for password reset
+async function generateToken(username) {
+  const user = await User.findOne({ username });
+  if (!user) {
+    console.log('User not found');
+    return;
+  }
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+  await user.save();
+  return resetToken;
+}
+
+// send the token for reset password
+async function sendToken(username, token) {
+  const user = await User.findOne({ username });
+  if (!user) {
+    console.log('User not found');
+    return;
+  }
+  const transporter = nodemailer.createTransport({ 
+    service: 'Gmail', // Email service, e.g., 'Gmail', 'Outlook', etc.
+    auth: {
+    user: 'fintechofficialreset@gmail.com', // Your email address
+    pass: 'Official@2024', // Your email password or app-specific password
+      }, 
+  });
+
+  const mailOptions = {
+    to: user.email,
+    subject: 'Password Reset Request',
+    text: `Your OTP is ${token}, Follow this link to reset your password: http://localhost/reset/${token}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
 
 
 async function updateLastLoggedIn(email) {
