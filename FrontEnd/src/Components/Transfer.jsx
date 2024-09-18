@@ -45,16 +45,11 @@ export default function Transfer() {
   
     if (active === 'transfer') {
         handleInternalTransfer();
-        
     } else if (active === 'pay' && formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
     } else if (active === 'pay' && formData.transferMethod === "PayID") {
         handlePayIdTransfer();
     }
-    console.log("FROM: ", formData.senderAccount);
-    console.log("TO: ", formData.receiverAccount);
-    console.log(formData)
-    console.log(active);
     setIsSubmitted(true);
   };
 
@@ -86,8 +81,6 @@ export default function Transfer() {
   const handleBankTransfer = async () => {
     try{
         const response = await axios.post('http://localhost:5000/api/accounts/transfer', {
-            fromAccNo: accountData.accNo,
-            fromBsb: accountData.bsb,
             toAccNo: formData.accountNumber,
             toBsb: formData.bsb,
             amount: formData.amount,
@@ -95,7 +88,8 @@ export default function Transfer() {
             name: formData.name
           }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             }
           });
 
@@ -113,13 +107,13 @@ export default function Transfer() {
   const handlePayIdTransfer = async () => {
     try{
         const response = await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
-            fromPhoneNo: accountData.phoneNo,
             toPhoneNo: formData.phoneNumber,
             amount: formData.amount,
             description: formData.description
         }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -180,40 +174,7 @@ export default function Transfer() {
                     <>
                         <form onSubmit={handleSubmit}>
                             {flag && <p>{message}</p>}
-                            <p className='transfer-section-content-header'>From:</p>
-                            <span>
-                                <label htmlFor='fromAccountType' className='transfer-section-content-sub-header'>Account</label>
-                                <select
-                                    id='fromAccountType'
-                                    name='fromAccountType'
-                                    value={formData.fromAccountType}
-                                    onChange={handleChange}
-                                    className='sender-account-select'
-                                    required
-                                >
-                                    <option value="">-- Choose Account --</option>
-                                    <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                    <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
-                                </select>
-                            </span>
-
-                            <p className='transfer-section-content-header'>To:</p>
-                            <span>
-                                <label htmlFor='toAccountType' className='transfer-section-content-sub-header'>Account</label>
-                                <select
-                                    id='toAccountType'
-                                    name='toAccountType'
-                                    value={formData.toAccountType}
-                                    onChange={handleChange}
-                                    className='receiver-account-select'
-                                    required
-                                >
-                                    <option value="">-- Choose Account --</option>
-                                    <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                    <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
-                                </select>
-                            </span>
-
+                            
                             <p className='transfer-section-content-header'>Transfer Options:</p>
                             <span>
                                 <label htmlFor='transfer-option' className='transfer-section-content-sub-header'>Transfer Options</label>

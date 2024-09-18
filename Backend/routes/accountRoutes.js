@@ -14,12 +14,12 @@ router.post('/login', login);
 router.post('/getUser', authenticateToken, getUserAccount);
 
 // Transfer money
-router.post('/transfer', transferMoney);
+router.post('/transfer', authenticateToken, transferMoney);
 
 // Transfer money PayId
-router.post('/payIdTransfer', transferByPayId);
+router.post('/payIdTransfer', authenticateToken, transferByPayId);
 
 // Internal transfer
-router.post('/transfer/within', authenticateToken,transferWithinUser);
+router.post('/transfer/within', authenticateToken, transferWithinUser);
 
 module.exports = router;

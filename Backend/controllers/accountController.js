@@ -151,24 +151,24 @@ exports.getUserAccount = async (req, res) => {
 
 // Transfer money between user transaction accounts
 exports.transferMoney = async (req, res) => {
-    let { fromAccNo, fromBsb, toAccNo, toBsb, amount, description, name } = req.body;
+    let { toAccNo, toBsb, amount, description, name } = req.body;
 
-    fromAccNo = Number(fromAccNo);  // Alternatively, parseInt(fromAccNo, 10);
-    fromBsb = Number(fromBsb);
     toAccNo = Number(toAccNo);
     toBsb = Number(toBsb);
     amount = Number(amount)
 
     try {
-        const sender = await User.findOne({ 'AccNoBsb.accNo': fromAccNo, 'AccNoBsb.bsb': fromBsb});
+        const sender = await User.findById(req.userId);
         const receiver = await User.findOne({ 'AccNoBsb.accNo': toAccNo,  'AccNoBsb.bsb': toBsb});
 
         if (!sender || !receiver) {
             return res.status(404).json({ message: 'Payment Failed: Account with this bsb and account number does not exist' });
         }
-
         if (sender.transactionAcc.balance < amount) {
             return res.status(400).json({ message: 'Insufficient balance' });
+        }
+        if ((sender.AccNoBsb.bsb === receiver.AccNoBsb.bsb) && (sender.AccNoBsb.accNo === receiver.AccNoBsb.accNo)) {
+            return res.status(404).json({ message: 'Receiver cannot be yourself' });
         }
 
         // Perform the transfer
@@ -180,7 +180,7 @@ exports.transferMoney = async (req, res) => {
         sender.transactionAcc.transactions.push({
             amount: -amount,
             date: transactionDate,
-            log: `Transfer to ${name}`,
+            log: `Transfer to ${receiver.name}`,
             description: description
 
         });
@@ -202,15 +202,14 @@ exports.transferMoney = async (req, res) => {
 };
 
 exports.transferByPayId = async (req, res) => {
-    let { fromPhoneNo, toPhoneNo , amount, description } = req.body
-    
-    fromPhoneNo = Number(fromPhoneNo);
+    let { toPhoneNo , amount, description } = req.body
+
     toPhoneNo = Number(toPhoneNo);
     amount = Number(amount);
     
 
     try {
-        const sender = await User.findOne({ 'phoneNo': fromPhoneNo });
+        const sender = await User.findById(req.userId);
         const receiver = await User.findOne({ 'phoneNo': toPhoneNo });
 
         if (!sender) {
@@ -219,7 +218,9 @@ exports.transferByPayId = async (req, res) => {
         if (!receiver){
             return res.status(404).json({ message: `Payment Failed: Account with phone number ${toPhoneNo} does not exist` });
         }
-
+        if (receiver.phoneNo === sender.phoneNo){
+            return res.status(404).json({ message: 'Receiver cannot be yourself' });
+        }
         if (sender.transactionAcc.balance < amount) {
             return res.status(400).json({ message: 'Insufficient balance' });
         }
@@ -262,21 +263,18 @@ exports.transferWithinUser = async(req, res) => {
     try {
         // Find the user by username
         const user = await User.findById(req.userId);
+
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
         // Ensure the account types are either 'transaction' or 'savings'
-        if ((fromAccountType !== 'transaction' && fromAccountType !== 'savings') ||
-            (toAccountType !== 'transaction' && toAccountType !== 'savings')) {
+        if (fromAccountType === toAccountType) {
             return res.status(400).json({ message: 'Invalid account type' });
         }
-
         // Check if transferring from transaction to savings
         if (fromAccountType === 'transaction' && user.transactionAcc.balance < amount) {
             return res.status(400).json({ message: 'Insufficient balance in transaction account' });
         }
-
         if (fromAccountType === 'savings' && user.savingsAcc.balance < amount) {
             return res.status(400).json({ message: 'Insufficient balance in savings account' });
         }
