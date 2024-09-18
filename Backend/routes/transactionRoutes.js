@@ -1,13 +1,16 @@
 const express = require('express');
-
-const { getTransactions, schedulePayments } = require('../controllers/transactionController');
+const { transferMoney, transferByPayId, transferWithinUser } = require('../controllers/transactionController');
+const { authenticateToken } = require('../middleWare/auth')
 
 const router = express.Router();
 
-// Get transactions
-router.get('/:accountNumber', getTransactions);
+// Transfer money
+router.post('/transfer', authenticateToken, transferMoney);
 
-// Schedule payments
-router.post('/schedule', schedulePayments);
+// Transfer money PayId
+router.post('/payIdTransfer', authenticateToken, transferByPayId);
+
+// Internal transfer
+router.post('/transfer/within', authenticateToken, transferWithinUser);
 
 module.exports = router;

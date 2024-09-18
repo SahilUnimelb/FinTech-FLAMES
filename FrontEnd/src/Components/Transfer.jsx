@@ -56,7 +56,7 @@ export default function Transfer() {
   const handleInternalTransfer = async () => {
     try {
         
-      const response = await axios.post('http://localhost:5000/api/accounts/transfer/within', {
+      const response = await axios.post('http://localhost:5000/api/transactions/transfer/within', {
         fromAccountType: formData.senderAccount,
         toAccountType: formData.receiverAccount,
         amount: formData.amount,
@@ -80,7 +80,7 @@ export default function Transfer() {
 
   const handleBankTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/accounts/transfer', {
+        const response = await axios.post('http://localhost:5000/api/transactions/transfer', {
             toAccNo: formData.accountNumber,
             toBsb: formData.bsb,
             amount: formData.amount,
@@ -106,7 +106,7 @@ export default function Transfer() {
 
   const handlePayIdTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/accounts/payIdTransfer', {
+        const response = await axios.post('http://localhost:5000/api/transactions/payIdTransfer', {
             toPhoneNo: formData.phoneNumber,
             amount: formData.amount,
             description: formData.description
