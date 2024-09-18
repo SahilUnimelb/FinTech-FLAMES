@@ -156,7 +156,7 @@ exports.updateUserProfile = async (req, res) => {
 
     try {
         // Find the user by username
-        const user = await User.findOne({ 'login.username': username });
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -173,20 +173,52 @@ exports.updateUserProfile = async (req, res) => {
 
 // forgot password
 exports.forgotPassword = async (req, res) => {
-    let { username, token } = req.body;
+    let { email, token } = req.body;
     email = String(email);
 
     try {
         // Find the user by username
-        const user = await User.findOne({ 'login.username': username });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        token = generateToken();
-        sendtoken(token);
+        token = generateToken(email);
+        sendtoken(email, token);
       
         res.status(200).json({ message: 'Password reset email sent' });
+  } catch (error) {
+    console.error('Error in forgot password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+// reset password
+exports.resetPassword = async (req, res) => {
+    let { username, password } = req.body;
+    const { token } = req.params;
+
+   try {
+       // Find the user by the reset token and check if the token has expired
+       const user = await User.findOne({
+           resetPasswordToken: token,
+           resetPasswordExpires: { $gt: Date.now() }, // Ensure the token is not expired
+           });
+       
+       if (!user) {
+       return res.status(400).json({ message: 'Password reset token is invalid or has expired.' });
+       }
+
+       // Hash the new password
+       const hashedPassword = await bcrypt.hash(password, 10);
+       
+       // Update the user's password and clear the reset token and expiration time
+       user.login[0].password = hashedPassword; // Assuming only one login entry per user
+       user.resetPasswordToken = undefined;
+       user.resetPasswordExpires = undefined;
+
+       await user.save();
+       res.status(200).json({ message: 'Password reset successful' });
   } catch (error) {
     console.error('Error in forgot password:', error);
     res.status(500).json({ message: 'Internal server error' });
