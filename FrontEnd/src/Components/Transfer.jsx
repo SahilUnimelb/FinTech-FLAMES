@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import closeSign from '../Assets/close-button.svg';
 import ScheduledBillsTable from './ScheduledBillsTable';
 
-export default function Transfer() {
+export default function Transfer({accounts, phones, addContactDetails}) {
   const [formData, setFormData] = useState({
     transferMethod: "",
     amount: "",
@@ -24,6 +24,17 @@ export default function Transfer() {
   const [message, setMessage] = useState('');
   const flag = false;
 
+  const [searchAccount, setSearchAccount] = useState('');
+
+  const filteredAccounts = accounts.filter(account =>
+    account.name.toLowerCase().includes(searchAccount.toLowerCase())
+  );
+
+  const [searchPhone, setSearchPhone] = useState('');
+
+  const filteredPhones = phones.filter(phone =>
+    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
+  );
 
   function handleChange (event) {
     const {name, value} = event.target;
@@ -37,15 +48,14 @@ export default function Transfer() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(formData)
+    addContactDetails(formData);
     if (formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
     }
     else if(formData.transferMethod === "PayID") {
         handlePayIdTransfer();
     }
-
-
     setIsSubmitted(true);
   }
 
@@ -113,6 +123,145 @@ export default function Transfer() {
   function onClickDiv(type) {
     setActive(type);
   }
+
+  const [openBankContact, setOpenBankContact] = useState(false);
+
+  function onClickBankContact() {
+    setSearchAccount('');
+    setOpenBankContact(true);
+  }
+
+  function onClickClose () {
+    setOpenBankContact(false);
+    setOpenPhoneContact(false);
+    setSearchAccount('');
+    setSearchPhone('');
+  }
+
+  const [openPhoneContact, setOpenPhoneContact] = useState(false);
+
+  function onClickPhoneContact() {
+    setSearchPhone('');
+    setOpenPhoneContact(true);
+  }
+  function fillUpFormBank (account) {
+    setFormData(prevFormData => ({
+        ...prevFormData,
+        name: account.name,
+        bsb: account.bsb,
+        accountNumber: account.accountNumber
+      }));
+      setOpenBankContact(false);
+  }
+
+  function fillUpFormPhone(phone) {
+    setFormData(prevFormData => ({
+        ...prevFormData,
+        name: phone.name,
+        phoneNumber: phone.phoneNumber
+      }));
+      setOpenPhoneContact(false);
+  }
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        name: "",
+        bsb: "",
+        accountNumber:"",
+        phoneNumber:""
+    })
+    )
+  }, [formData.transferMethod])
+
+  const ContactListBank = () => {
+    return (
+        <div className='transfer-contact-list-overlay'>
+          <div className='transfer-contact-list-content'>
+            <div className='transfer-contact-list-content-header'>
+                <p>Contact List</p>
+                <img src={closeSign} alt='' onClick={onClickClose}/>
+            </div>
+            <div className='transfer-contact-search'>
+            <input
+                type="text"
+                placeholder="Search by name"
+                value={searchAccount}
+                onChange={(e) => setSearchAccount(e.target.value)}
+                className="search-input"
+                autoFocus
+              />
+            </div>
+            <div className='transfer-contact-list'>
+            <div className='transfer-contact-list-header'>
+                <p>Name</p>
+                <p>BSB</p>
+                <p>Account Number</p>
+            </div>
+
+            <div className='transfer-contact-list-body'>
+                {filteredAccounts.map((account) => {
+                return (
+                    <div key={account.id}
+                    className='transfer-contact-list-individual'
+                    onClick = {() => {fillUpFormBank(account)}} >
+                    <p> {account.name} </p>
+                    <p> {account.bsb} </p>
+                    <p> {account.accountNumber} </p>
+                    </div>
+                )
+                })}
+            </div>
+            </div>
+
+          </div>
+
+        </div>
+    )
+  }
+
+  const ContactListPhone = () => {
+    return (
+        <div className='transfer-contact-list-overlay'>
+          <div className='transfer-contact-list-content'>
+            <div className='transfer-contact-list-content-header'>
+                <p>Contact List</p>
+                <img src={closeSign} alt='' onClick={onClickClose}/>
+            </div>
+            <div className='transfer-contact-search'>
+            <input
+                type="text"
+                placeholder="Search by Name"
+                value={searchPhone}
+                onChange={(e) => setSearchPhone(e.target.value)}
+                className="search-input"
+                autoFocus
+              />
+            </div>
+            <div className='transfer-contact-list'>
+            <div className='transfer-contact-list-header'>
+                <p>Name</p>
+                <p>Phone Number</p>
+            </div>
+
+            <div className='transfer-contact-list-body'>
+                {filteredPhones.map((phone) => {
+                return (
+                    <div key={phone.id}
+                    className='transfer-contact-list-individual'
+                    onClick = {() => {fillUpFormPhone(phone)}} >
+                    <p> {phone.name} </p>
+                    <p> {phone.phoneNumber} </p>
+                    </div>
+                )
+                })}
+            </div>
+            </div>
+          </div>
+        </div>
+    )
+  }
+
   return (
     <div className='transfer'>
         <div className='transfer-header'>
@@ -225,10 +374,32 @@ export default function Transfer() {
                                             required
                                         />
                                 </span>
+                                <div className='transfer-section-contact-button-wrapper'>
+                                    <button onClick={onClickBankContact}>Choose From Contacts</button>
+                                </div>
                                 </>
                             )}
+
+                            <>
+                            {openBankContact && (
+                                <ContactListBank/>
+                            )}
+                            </>
+
                             {formData.transferMethod === "PayID" && (
                                 <>
+                                <span>
+                                    <p className='transfer-section-content-sub-header'>Name</p>
+                                        <input
+                                            type="name"
+                                            placeholder="Name"
+                                            onChange={handleChange}
+                                            name="name"
+                                            value={formData.name}
+                                            className="transfer-receiver-details"
+                                            required
+                                        />
+                                </span>
                                 <span>
                                     <p className='transfer-section-content-sub-header'>Phone Number</p>
                                         <input
@@ -244,8 +415,16 @@ export default function Transfer() {
                                             required
                                         />
                                 </span>
+                                <div className='transfer-section-contact-button-wrapper'>
+                                    <button onClick={onClickPhoneContact}>Choose From Contacts</button>
+                                </div>
                                 </>
                             )}
+                            <>
+                            {openPhoneContact && (
+                                <ContactListPhone/>
+                            )}
+                            </>
                             <p className='transfer-section-content-header'>Payment Details:</p>
                             <span>
                                 <p className='transfer-section-content-sub-header'>Amount</p>
@@ -297,7 +476,7 @@ export default function Transfer() {
                                     name="date"
                                     value={formData.date}
                                     onChange={handleChange}
-                                    min={new Date().toISOString().split("T")[0]} // Sets the minimum date to today
+                                    min={new Date().toISOString().split("T")[0]}
                                     className="transfer-date-input"
                                     required={!!formData.scheduleOption}
                                     />
