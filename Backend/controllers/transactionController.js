@@ -177,7 +177,7 @@ exports.transferWithinUser = async(req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
-
+/* already in account controller
 // update user email
 exports.updateUserProfile = async (req, res) => {
     let { username, email } = req.body;
@@ -221,3 +221,4 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+*/
