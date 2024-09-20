@@ -57,7 +57,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     if (!accountExists && !phoneExists) {
         addContactDetails(formData);
     }
-
+    console.log(formData);
     if (active === 'transfer') {
         handleInternalTransfer();
     } else if (active === 'pay' && formData.transferMethod === "Bank Transfer") {
@@ -590,14 +590,14 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             <select
                                 id='sender-account'
                                 name='senderAccount'
-                                //value={formData.senderAccount}
+                                value={formData.senderAccount}
                                 onChange={handleChange}
                                 className='sender-account-select'
                                 required
                             >
                                 <option value="">-- Choose Account --</option>
-                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>From:</p>
@@ -606,14 +606,14 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             <select
                                 id='receiver-account'
                                 name='receiverAccount'
-                                //value={formData.senderAccount}
+                                value={formData.receiverAccount}
                                 onChange={handleChange}
                                 className='sender-account-select'
                                 required
                             >
                                 <option value="">-- Choose Account --</option>
-                                <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>Payment Details:</p>
@@ -626,7 +626,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                         placeholder="Amount"
                                         onChange={handleChange}
                                         name="amount"
-                                        //value={formData.amount}
+                                        value={formData.amount}
                                         className="transfer-amount-input"
                                         step="0.01"
                                         min="0"
@@ -640,7 +640,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 placeholder="Description (Optional)"
                                 onChange={handleChange}
                                 name="description"
-                                //value={formData.description}
+                                value={formData.description}
                                 className="transfer-description-textarea"
                             />
                         </span>
