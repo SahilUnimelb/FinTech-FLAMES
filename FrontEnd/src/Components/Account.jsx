@@ -81,7 +81,7 @@ export default function Account({category}) {
 
   function removeAccount(selectedAccount) {
 
-    if (selectedAccount.bsb) {
+    if (selectedAccount.accountNumber) {
       setAccounts(prevAccounts => prevAccounts.filter(account => account.id !== selectedAccount.id));
     }
     else if (selectedAccount.phoneNumber) {

@@ -125,14 +125,15 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
                 className="search-input"
               />
             </div>
+            <div className='contact-list-body'>
             {filteredAccounts.length> 0 && (
               <>
               {filteredAccounts.map((account) =>{
-                return <div key = {account.id} className='contact-list'>
+                return <div key = {account.id} className='contact-list-individual'>
                   <div className='contact-information'>
                     <h3> {account.name} </h3>
                     <p> BSB: {account.bsb} </p>
-                    <p> Account Number: {account.accountNum}</p>
+                    <p> Account Number: {account.accountNumber}</p>
                   </div>
                   <div className='contact-remove-sign'>
                     <img src= {crossSign} alt='' onClick={() => onClickRemoveAccount(account)} />
@@ -146,6 +147,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
               No Contacts!
               </>
             )}
+            </div>
             </>
           )}
           {active === "phone" && (
@@ -159,10 +161,11 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
                 className="search-input"
               />
             </div>
+            <div className='contact-list-body'>
             {filteredPhones.length> 0 && (
               <>
               {filteredPhones.map((phone) => {
-                  return <div key = {phone.id} className='contact-list'>
+                  return <div key = {phone.id} className='contact-list-individual'>
                     <div className='contact-information'>
                     <h3> {phone.name} </h3>
                     <p> Phone Number: {phone.phoneNumber} </p>
@@ -179,6 +182,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
               No Contacts!
               </>
             )}
+            </div>
             </>
           )}
           {removeMessage && (
@@ -255,8 +259,8 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
                             type="text"
                             placeholder="Account Number"
                             onChange={handleChange}
-                            name="accountNum"
-                            value={contactData.accountNum}
+                            name="accountNumber"
+                            value={contactData.accountNumber}
                             className="contact-form-fill-up"
                             maxLength="8"
                             pattern="\d{8}"
