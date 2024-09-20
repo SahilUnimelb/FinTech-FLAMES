@@ -49,7 +49,14 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    addContactDetails(formData);
+    const accountExists = accounts.some(account =>
+    (account.accountNumber === formData.accountNumber));
+    const phoneExists = phones.some(phone =>
+        phone.phoneNumber === formData.phoneNumber
+    );
+    if (!accountExists && !phoneExists) {
+        addContactDetails(formData);
+    }
 
     if (active === 'transfer') {
         handleInternalTransfer();
@@ -401,7 +408,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                         />
                                 </span>
                                 <div className='transfer-section-contact-button-wrapper'>
-                                    <button onClick={onClickBankContact}>Choose From Contacts</button>
+                                    <button  type='button' onClick={onClickBankContact}>Choose From Contacts</button>
                                 </div>
                                 </>
                             )}

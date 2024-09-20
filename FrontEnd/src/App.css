@@ -3,14 +3,24 @@
   display: flex;
   justify-content: space-around;
   background-color: rgb(235, 235, 235);
-  /* box-shadow: 0 2px 3px -2px; */
+  box-shadow: 0 2px 3px -2px;
   padding: 16px;
 }
 .navbar-link {
   text-decoration: none;
   color: black;
+  display: inline-block;
 }
-
+/**
+.navbar-link:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+.navbar-link:focus {
+  cursor: pointer;
+  pointer-events: none;
+}
+  */
 .navbar-section li hr {
   border: none;
   width: 80%;
@@ -309,7 +319,7 @@
 }
 .transfer-section {
   width: 90vw;
-  height: 115vh;
+  min-height: 109vh;
   background-color: rgb(235, 235, 235);
   display: flex;
   margin-top: 0;
@@ -482,6 +492,7 @@
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 .transfer-section-button-wrapper button {
@@ -546,10 +557,6 @@
   transform: scale(1.6);
 }
 
-.transfer-contact-list-container {
-  height: 400px;
-  overflow-y: auto;
-}
 .transfer-contact-list {
   position: relative;
   width: 100%;
