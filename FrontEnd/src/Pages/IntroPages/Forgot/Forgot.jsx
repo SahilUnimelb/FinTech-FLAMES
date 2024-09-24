@@ -1,7 +1,7 @@
 import React from 'react';
-import './Forgot.css';
-import logo from '../Assets/logo.png';
 import { Link } from 'react-router-dom';
+import logo from '../../../Assets/logo.png';
+import './Forgot.css';
 
 export default function ForgotPassword() {
     return(
@@ -12,7 +12,7 @@ export default function ForgotPassword() {
                 </div>
                 <h1>Forgotten your password?</h1>
                 <div className="forgot-text">
-                    <p>Please enter below the email address associated with your account, 
+                    <p>Please enter below the email address associated with your account,
                         and we will send you a link to reset your password.</p>
                 </div>
                 <div className="email-address">

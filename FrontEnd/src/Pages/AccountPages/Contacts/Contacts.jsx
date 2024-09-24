@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import addSign from '../Assets/add-sign.svg';
-import closeSign from '../Assets/close-button.svg';
-import crossSign from '../Assets/cross-icon.svg';
+import addSign from '../../../Assets/add-sign.svg';
+import closeSign from '../../../Assets/close-button.svg';
+import crossSign from '../../../Assets/cross-icon.svg';
 import './Contacts.css';
 export default function Contacts({accounts, phones, addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeAccount, removeMessage}) {
 

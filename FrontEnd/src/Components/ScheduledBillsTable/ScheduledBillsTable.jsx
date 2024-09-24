@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import BillHistory from './BillHistory';
+import BillHistory from '../../Pages/AccountPages/BillHistory/BillHistory';
+import './ScheduledBillsTable.css';
 export default function ScheduledBillsTable() {
 
     const data = [

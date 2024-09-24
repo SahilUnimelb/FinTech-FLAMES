@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Contacts from './Contacts';
-import Home from './Home';
-import Settings from './Settings';
-import Transfer from './Transfer';
-import ViewAccounts from './ViewAccounts';
+import Contacts from '../Contacts/Contacts';
+import Home from '../Home/Home';
+import Settings from '../Settings/Settings';
+import Transfer from '../Transfer/Transfer';
+import ViewAccounts from '../ViewAccounts/ViewAccounts';
 export default function Account({category}) {
   const [accounts, setAccounts] = useState([
     { id: 1, name: "Jackson Williams", bsb: "953248", accountNumber: "88293680" },

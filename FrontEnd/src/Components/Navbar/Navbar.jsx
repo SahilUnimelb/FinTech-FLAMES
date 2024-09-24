@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../Assets/logo.png';
-import logoff from '../Assets/logoff-icon.png';
+import logo from '../../Assets/logo.png';
+import logoff from '../../Assets/logoff-icon.png';
+import './Navbar.css';
 export default function Navbar() {
   const [page, setPage] = useState(localStorage.getItem('activePage') || 'home');
 

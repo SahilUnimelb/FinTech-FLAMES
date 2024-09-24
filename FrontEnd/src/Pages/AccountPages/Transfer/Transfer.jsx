@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import closeSign from '../Assets/close-button.svg';
-import ScheduledBillsTable from './ScheduledBillsTable';
-
+import closeSign from '../../../Assets/close-button.svg';
+import ScheduledBillsTable from '../../../Components/ScheduledBillsTable/ScheduledBillsTable';
+import './Transfer.css';
 export default function Transfer({accounts, phones, addContactDetails}) {
   const [formData, setFormData] = useState({
     transferMethod: "",

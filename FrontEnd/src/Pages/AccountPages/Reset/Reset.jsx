@@ -1,6 +1,6 @@
 import React from 'react';
+import logo from '../../../Assets/logo.png';
 import './Reset.css';
-import logo from '../Assets/logo.png';
 
 export default function ResetPassword() {
     return (

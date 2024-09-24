@@ -64,7 +64,7 @@ export default function Home() {
             <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : ''}</p>
             <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : ''}</p>
             <p className='home-box-left-view-p'>
-            <Link to="/savingaccount">View Account History</Link>
+            <Link to="/view">View Account History</Link>
           </p>
           </div>
           <div className='home-box-right'>
@@ -78,7 +78,7 @@ export default function Home() {
           <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : ''}</p>
           <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : ''}</p>
           <p className='home-box-left-view-p'>
-            <Link to="/transactionaccount">View Account History</Link>
+            <Link to="/view">View Account History</Link>
           </p>
           </div>
           <div className='home-box-right'>
