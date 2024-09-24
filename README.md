@@ -74,4 +74,22 @@ Run NodeJs for the frontend in the terminal
 ```
 npm start
 ```
-Mitchell/Fischer for Backend and Database
+## Backend
+Open up a terminal and ensure it is located in the Backend directory
+```
+cd FinTech-FLAMES/Backend
+```
+Run NodeJs for the backend in the terminal
+```
+node server.js
+```
+## Database
+Run MongoDB:
+```
+mongod --port 27017 --dbpath "C:\MongoDB\data\db"
+```
+Optional if the above command does not work:
+```
+mkdir C:\data\db
+```
+Then run the first command again
