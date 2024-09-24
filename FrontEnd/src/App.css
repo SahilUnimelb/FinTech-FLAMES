@@ -736,6 +736,7 @@
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
+  border-bottom: 2px solid rgba(193, 193, 193, 0.592);
 }
 .styled-table {
   width: 100%;
@@ -754,6 +755,9 @@
   background-color: #1a3b4a;
   color: white;
   height: 50px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .styled-table tr:nth-child(even) {
@@ -768,6 +772,7 @@
   color: #333;
   font-size: 16px;
   height: 25px;
+  z-index: 0;
 }
 
 .styled-table th {
