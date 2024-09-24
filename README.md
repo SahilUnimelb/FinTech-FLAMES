@@ -49,6 +49,11 @@ Run the backend
 ```
 node server.js
 ```
+Trouble shooting purpose only: If the above command doesn't work, run:
+```
+npm install bcrypt
+```
+and then the first command again
 ## Database
 Run MongoDB:
 ```
