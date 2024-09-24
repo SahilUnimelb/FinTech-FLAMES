@@ -89,7 +89,7 @@ export default function Homepage() {
 
 
           <div className="forgot-pass-container">
-            <p classname="forgot-password">Forgot password? <span><Link to = "/forgot-password" className='homepage-forgot-link'>Click here.</Link></span></p>
+            <p className="forgot-password">Forgot password? <span><Link to = "/forgot-password" className='homepage-forgot-link'>Click here.</Link></span></p>
           </div>
         </div>
       </div>
