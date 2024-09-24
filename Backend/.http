@@ -1,0 +1,90 @@
+### Create Account 1
+POST http://localhost:5000/api/accounts/create
+Content-Type: application/json
+
+{
+  "name": "Mitchell Zheng",
+  "email": "mitchell@example.com",
+  "username": "mitchellzheng",
+  "password": "password123"
+}
+
+### Create Account 2
+POST http://localhost:5000/api/accounts/create
+Content-Type: application/json
+
+{
+  "name": "Fischer Zhang",
+  "email": "fischer@example.com",
+  "username": "fischerzhang",
+  "password": "password1234"
+}
+
+### Transfer Money
+POST http://localhost:5000/api/accounts/transfer
+Content-Type: application/json
+
+{
+  "fromAccNo": "96134747",
+  "fromBsb": "286339",
+  "toAccNo": "27618500",
+  "toBsb": "536193",
+  "amount": 1000,
+  "description": ""
+}
+
+### Transfer Money PayID
+POST http://localhost:5000/api/accounts/payIdTransfer
+Content-Type: application/json
+
+{
+  "fromPhoneNo": "7537217894",
+  "toPhoneNo": "5424712610",
+  "amount": 30,
+  "description": ""
+}
+
+### Transfer Between Account
+POST http://localhost:5000/api/accounts/transfer/within
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY2Mjg0MDAsImV4cCI6MTcyNjYzMjAwMH0.-SFFz3CXpLKGuyyhexC8rJ61on8ttVsVC8l5K-AabUo
+
+{
+  "username": "mitchellzheng", 
+  "fromAccountType": "transaction", 
+  "toAccountType": "savings", 
+  "amount": 1000, 
+  "description": "transfer to savings" 
+}
+
+### Login Account
+POST http://localhost:5000/api/accounts/login
+Content-Type: application/json
+
+{
+  "username": "mitchellzheng",
+  "password": "password123"
+}
+
+### Get Account Info
+POST http://localhost:5000/api/accounts/getUser
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY2Mjg0MDAsImV4cCI6MTcyNjYzMjAwMH0.-SFFz3CXpLKGuyyhexC8rJ61on8ttVsVC8l5K-AabUo
+### Delete Account
+POST http://localhost:5000/api/admin/delete
+Content-Type: application/json
+
+{
+  "username": "mitchellzheng"
+}
+
+
+
+### Admin - set user balance
+POST http://localhost:5000/api/admin/setBalance
+Content-Type: application/json
+
+{
+  "accNumber": "27618500",
+  "newBalance": 30000
+}
