@@ -65,5 +65,13 @@ mkdir -p ~/data/db
 ```
 Then run the first command again
 # Windows
-## Please FILL
-## Andre for Frontend, Mitchell/Fischer for Backend and Datavase
+## Frontend
+Open up a terminal and ensure it is located in the Frontend directory
+```
+cd FinTech-FLAMES/Frontend
+```
+Run NodeJs for the frontend in the terminal
+```
+npm start
+```
+Mitchell/Fischer for Backend and Database
