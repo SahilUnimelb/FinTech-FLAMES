@@ -37,6 +37,10 @@ export default function Settings() {
           <p>Password Management:</p>
           <button className="reset-button" onClick={handleResetPassword}>Reset Password</button>
         </div>
+        <div className="reset-password-setting">
+          <p>Delete Account</p>
+          <button className="reset-button" onClick={handleResetPassword}>Delete Account</button>
+        </div>
       </div>
     </div>
   );
