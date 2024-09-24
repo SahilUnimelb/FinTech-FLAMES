@@ -21,7 +21,7 @@ function App() {
           <Route path = '/contacts' element = {<Layout> <Account category = "contacts"/> </Layout>}/>
           <Route path = '/transfer' element = {<Layout> <Account category = "transfer"/> </Layout>}/>
           <Route path = '/settings' element = {<Layout> <Account category = "settings"/> </Layout>}/>
-          <Route path = '/forgotpassword' element = {<ForgotPassword/>}/>
+          <Route path = '/forgot-password' element = {<ForgotPassword/>}/>
           <Route path = '/resetpassword' element = {<ResetPassword/>}/>
           <Route path = '/editprofile' element = {<Layout> <EditProfile/> </Layout>}/>
         </Routes>
