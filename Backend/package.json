@@ -10,4 +10,7 @@
     "nodemailer": "^6.9.15",
     "speakeasy": "^2.0.0"
   }
+  "scripts": {
+  "start": "node server.js"
+  }
 }
