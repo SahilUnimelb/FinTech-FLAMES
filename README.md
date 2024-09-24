@@ -24,7 +24,7 @@ npm install react-router-dom
 Download MongoDB from the official website.
 [Download Here](https://www.mongodb.com/docs/manual/administration/install-community/)
 
-The install and run as a service
+Then install and run as a service
 [Install Here](https://brandonblankenstein.medium.com/install-and-run-mongodb-on-mac-1604ae750e57)
 
 # Start the app
