@@ -10,11 +10,23 @@ Open the terminal and run the following command:
 ```
 npm install
 ```
+## Install Npm 
+On the terminal run the following command:
+```
+npm install express --save
+```
 ## Install React Router
 For this project the router dependency needs to be installed. On the terminal run the following command:
 ```
 npm install react-router-dom
 ```
+## Install MongoDB
+Download MongoDB from the official website.
+[Download Here](https://www.mongodb.com/docs/manual/administration/install-community/)
+
+The install and run as a service
+[Install Here](https://brandonblankenstein.medium.com/install-and-run-mongodb-on-mac-1604ae750e57)
+
 # Start the app
 To start the app do the following depending on the machine:
 # MacOS
