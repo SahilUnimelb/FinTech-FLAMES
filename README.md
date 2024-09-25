@@ -94,7 +94,7 @@ Open up a terminal and ensure it is located in the Frontend directory
 ```
 cd FinTech-FLAMES/Frontend
 ```
-Run NodeJs for the frontend in the terminal
+Run the frontend
 ```
 npm start
 ```
