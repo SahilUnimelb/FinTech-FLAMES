@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/FinTech-FLAMES/static/css/main.a23aa1c3.css",
+    "main.js": "/FinTech-FLAMES/static/js/main.c010e192.js",
+    "static/js/453.f4af5bce.chunk.js": "/FinTech-FLAMES/static/js/453.f4af5bce.chunk.js",
+    "static/media/logo.png": "/FinTech-FLAMES/static/media/logo.d1847bf4553dcf3745bd.png",
+    "index.html": "/FinTech-FLAMES/index.html",
+    "static/media/close-button.svg": "/FinTech-FLAMES/static/media/close-button.479d9cccd002179799e63fcc9653e1ad.svg",
+    "static/media/add-sign.svg": "/FinTech-FLAMES/static/media/add-sign.3b8fda9de7d65e6e0951df5856596a6e.svg",
+    "static/media/cross-icon.svg": "/FinTech-FLAMES/static/media/cross-icon.09d4534bf8c8ba33635cba0bbaca1cc2.svg",
+    "main.a23aa1c3.css.map": "/FinTech-FLAMES/static/css/main.a23aa1c3.css.map",
+    "main.c010e192.js.map": "/FinTech-FLAMES/static/js/main.c010e192.js.map",
+    "453.f4af5bce.chunk.js.map": "/FinTech-FLAMES/static/js/453.f4af5bce.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a23aa1c3.css",
+    "static/js/main.c010e192.js"
+  ]
+}
