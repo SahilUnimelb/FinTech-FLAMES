@@ -27,9 +27,8 @@ Download MongoDB from the official website.
 Then install and run as a service
 [Install Here](https://brandonblankenstein.medium.com/install-and-run-mongodb-on-mac-1604ae750e57)
 
-## Install these Dependencies (Troubleshooting purposes)
-The above instructions should have installed all the dependencies listed below. If not
-then install them using these commands on terminal:
+## Additional Dependencies to install
+If these dependencies are not installed on the machine, install them using these commands on terminal:
 
 1. Json Web Token
 ```
@@ -42,6 +41,14 @@ npm install mongoose
 3. Cors
 ```
 npm install cors
+```
+3. Nodemailer
+```
+npm install nodemailer
+```
+3. Speakeasy
+```
+npm install speakeasy
 ```
 # Start the app
 To start the app do the following depending on the machine:
