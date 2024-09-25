@@ -1,5 +1,5 @@
 # FinTech-FLAMES
-This is the main branch of FinTech-Flames Learn-To-Bank simulation website \n
+This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 Link to the website: https://learn-to-bank-frontend.onrender.com/
 # Installation
 To begin, please follow the steps below for installing Npm and Node and setting up the server and database:
