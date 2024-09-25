@@ -31,7 +31,7 @@ Then install and run as a service
 The above instructions should have installed all the dependencies listed below. If not
 then install them using these commands on terminal:
 
-1.Json Web Token
+1. Json Web Token
 ```
 npm install jsonwebtoken
 ```
