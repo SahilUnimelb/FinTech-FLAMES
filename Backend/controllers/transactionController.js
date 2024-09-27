@@ -177,6 +177,52 @@ exports.transferWithinUser = async(req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
+
+// schedule payments
+exports.schedulePayment = async (req, res) => {
+    const { fromAccountType, toAccNo, toBsb, amount, description, scheduledDate, frequency, totalRuns } = req.body;
+
+    // Validate frequency and totalRuns
+    const validFrequencies = ['none', 'weekly', 'monthly'];
+    if (!validFrequencies.includes(frequency)) {
+        return res.status(400).json({ message: 'Invalid frequency value' });
+    }
+
+    if (frequency !== 'none' && (!totalRuns || typeof totalRuns !== 'number' || totalRuns < 1)) {
+        return res.status(400).json({ message: 'Invalid totalRuns value for recurring payments' });
+    }
+
+    try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Save the scheduled payment
+        user.scheduledPayments.push({
+            fromAccountType,
+            toAccNo: Number(toAccNo),
+            toBsb: Number(toBsb),
+            amount: Number(amount),
+            description,
+            scheduledDate: new Date(scheduledDate),
+            frequency: frequency || 'none',
+            totalRuns: frequency === 'none' ? 1 : totalRuns,
+            runsCompleted: 0,
+            isActive: true,
+            isProcessed: false
+        });
+
+        await user.save();
+        res.status(200).json({ message: 'Payment scheduled successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+
+
 /* already in account controller
 // update user email
 exports.updateUserProfile = async (req, res) => {
