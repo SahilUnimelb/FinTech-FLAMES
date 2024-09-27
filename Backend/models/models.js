@@ -46,7 +46,16 @@ const accountDetailSchema = new mongoose.Schema({
   transactions: [transactionSchema] // Embedding transactions inside the account instance
 })
 
-
+// Define Scheduled payments
+const scheduledPaymentSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  startDate: { type: Date, required: true },
+  frequency: { type: String, enum: ['weekly', 'monthly'], required: true },
+  repeatCount: { type: Number, required: true }, // Number of times the payment should be made
+  completedCount: { type: Number, default: 0 }, // Track how many payments have been made
+  lastPaymentDate: { type: Date }, // Track when the last payment was made
+  targetAccNo: { type: Number, required: true }, // The account to which the payment will be sent
+});
 
 // Define a schema for User
 const UserSchema = new mongoose.Schema({
@@ -58,6 +67,7 @@ const UserSchema = new mongoose.Schema({
   transactionAcc: accountDetailSchema, // Embedding transaction account object inside the user
   savingsAcc: accountDetailSchema, // Embedding savings account object inside the user
   lastLogedInAt: {type: Date, default: Date.now },
+  scheduledPayments: [scheduledPaymentSchema], // Embedding scheduled payments
   cardDetails: cardDetailSchema, // Embedding card inside the user
   roles: {type: String, required: true, default: "user"},
   transactions: [transactionSchema], 
