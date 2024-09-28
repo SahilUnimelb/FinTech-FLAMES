@@ -1,5 +1,5 @@
 const express = require('express');
-const { createAccount, login, getUserAccount, addContact, getBankContacts, getPayIdContacts } = require('../controllers/accountController');
+const { createAccount, login, getUserAccount, addContact, getBankContacts, getPayIdContacts, removeBankContact, removePayIdContact } = require('../controllers/accountController');
 const { authenticateToken } = require('../middleWare/auth')
 
 const router = express.Router();
@@ -21,5 +21,11 @@ router.post('/getBankContacts', authenticateToken, getBankContacts);
 
 // Get PayId Contacts
 router.post('/getPayIdContacts', authenticateToken, getPayIdContacts);
+
+// Remove Bank Contact
+router.post('/removeBankContact', authenticateToken, removeBankContact);
+
+// Remove PayId Contact
+router.post('/removePayIdContact', authenticateToken, removePayIdContact);
 
 module.exports = router;

@@ -299,3 +299,69 @@ exports.getPayIdContacts = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.removeBankContact = async (req, res) => {
+    let { bsb, accNo } = req.body;
+
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if the contact exists before attempting to remove it
+        const contactExists = user.bankContacts.some(contact => contact.bsb === Number(bsb) && contact.accNo === Number(accNo));
+        if (!contactExists) {
+            return res.status(404).json({ message: 'Contact you want to remove does not exist' });
+        }
+
+        // Pull the contact with the matching bsb and accNo from the bankContacts array
+        await User.findByIdAndUpdate(
+            req.userId,
+            {
+                $pull: { 
+                    bankContacts: { bsb: Number(bsb), accNo: Number(accNo) }
+                }
+            },
+            { new: true }
+        );
+
+        res.status(200).json({ message: 'Bank contact removed successfully' });
+    } catch (error) {
+        console.error('Server error during remove bank contact operation:', error.message);
+        res.status(500).json({ message: 'Server error - remove bank contact' });
+    }
+};
+
+exports.removePayIdContact = async (req, res) => {
+    let { phoneNo } = req.body;
+
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if the PayID contact exists before attempting to remove it
+        const contactExists = user.payIdContacts.some(contact => contact.phoneNo === Number(phoneNo));
+        if (!contactExists) {
+            return res.status(404).json({ message: 'Contact you want to remove does not exist' });
+        }
+
+        // Pull the contact with the matching phoneNo from the payIdContacts array
+        await User.findByIdAndUpdate(
+            req.userId,
+            {
+                $pull: { 
+                    payIdContacts: { phoneNo: Number(phoneNo) }
+                }
+            },
+            { new: true }
+        );
+
+        res.status(200).json({ message: 'PayId contact removed successfully' });
+    } catch (error) {
+        console.error('Server error during remove PayID contact operation:', error.message);
+        res.status(500).json({ message: 'Server error - remove PayID contact' });
+    }
+};

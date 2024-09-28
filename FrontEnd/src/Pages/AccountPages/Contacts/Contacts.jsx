@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
 import addSign from '../../../Assets/add-sign.svg';
 import closeSign from '../../../Assets/close-button.svg';
 import crossSign from '../../../Assets/cross-icon.svg';
 import './Contacts.css';
-export default function Contacts({accounts, phones, addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeAccount, removeMessage}) {
+export default function Contacts({addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeMessage}) {
 
   const [searchAccount, setSearchAccount] = useState('');
-
-  const filteredAccounts = accounts.filter(account =>
-    account.name.toLowerCase().includes(searchAccount.toLowerCase())
-  );
-
   const [searchPhone, setSearchPhone] = useState('');
+  const [message, setMessage] = useState('');
 
-  const filteredPhones = phones.filter(phone =>
-    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
-  );
-
+  const [bankContacts, setBankContacts] = useState([]);
+  const [payIdContacts, setPayIdContacts] = useState([]);
 
   const [isAdd, setIsAdd] = useState(false);
-  const [isExist, setIsExist] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [active, setActive] = useState('bank');
-  function onClickDiv(type) {
-    setActive(type);
-  }
-
   const [contactData, setContactData] = useState({
     contactType:"",
     name:"",
@@ -33,18 +24,12 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
     accountNumber:"",
     phoneNumber:""
   });
-  useEffect(() => {
-    setIsExist(false)
-    setContactData({
-      contactType: contactData.contactType,
-      name: "",
-      bsb: "",
-      accountNumber: "",
-      phoneNumber: ""
-    })
-  }, [contactData.contactType])
+
+  const token = localStorage.getItem('authToken');
+
   function handleChange (event) {
     const {name, value} = event.target;
+    setIsSubmitted(false);
     setContactData(
       prevContactData => {
         return {
@@ -57,26 +42,28 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
 
   function handleSubmit(event) {
     event.preventDefault();
-    const accountExists = accounts.some(account =>
-    (account.accountNumber === contactData.accountNumber));
-    const phoneExists = phones.some(phone =>
-      phone.phoneNumber === contactData.phoneNumber
-    );
-    if (accountExists || phoneExists) {
-      setIsExist(true)
-      return;
-    }
-    setIsExist(false);
+    addContact();
+    setIsSubmitted(true);
+    /*const accountExists = bankContacts.some(account => account.accountNumber === contactData.accountNumber);
+    const phoneExists = payIdContacts.some(phone => phone.phoneNumber === contactData.phoneNumber);
+    */
     addContactDetails(contactData);
-    console.log(contactData);
-    console.log(accounts);
-    console.log(phones);
     emptyForm();
   }
 
   function onClickClose () {
     setIsAdd(false);
     emptyForm();
+  }
+
+  function removeAccount(selectedAccount) {
+    if (active === 'bank') {
+      removeBankContact(selectedAccount);
+      getBankContacts();
+    } else if (active === 'phone') {
+      removePayIdContact(selectedAccount);
+      getPayIdContacts();
+    }
   }
 
   function emptyForm() {
@@ -89,6 +76,123 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
     })
   }
 
+  function onClickDiv(type) {
+    setActive(type);
+
+    if (type === 'bank') {
+      getBankContacts();
+    } else if (type === 'phone') {
+      getPayIdContacts();
+    }
+  }
+
+  const filteredAccounts = bankContacts.filter(account =>
+    account.name.toLowerCase().includes(searchAccount.toLowerCase())
+  );
+
+  const filteredPhones = payIdContacts.filter(phone =>
+    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
+  );
+
+  const getBankContacts = useCallback(async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/getBankContacts', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setBankContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching bank contacts:', error);
+    }
+  }, [token]); // Add token as a dependency if it's used inside the function
+  
+  const getPayIdContacts = useCallback(async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/getPayIdContacts', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setPayIdContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching PayID contacts:', error);
+    }
+  }, [token]);
+
+  const addContact = async () => {
+    try {
+      let contactPackage;
+
+      if (contactData.contactType === 'Bank') {
+        contactPackage = {
+          name: contactData.name,
+          bsb: contactData.bsb,
+          accNo: contactData.accountNumber
+        }
+      } else {
+        contactPackage = {
+          name: contactData.name,
+          phoneNo: contactData.phoneNumber
+        }
+      }
+      const response = await axios.post('http://localhost:5000/api/accounts/addContact', contactPackage, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setMessage(response.data.message);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage(`${error.response.data.message}`);
+      } else {
+        setMessage('Error Adding Contact:', error);
+      }
+    };
+  }
+
+  const removeBankContact = async (selectedAccount) => {
+    try{
+      let contactPackage = {
+        bsb: selectedAccount.bsb,
+        accNo: selectedAccount.accNo
+      }
+      await axios.post('http://localhost:5000/api/accounts/removeBankContact', contactPackage, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removePayIdContact = async (selectedAccount) => {
+    try{
+      let contactPackage = {
+        phoneNo: selectedAccount.phoneNo
+      }
+      await axios.post('http://localhost:5000/api/accounts/removePayIdContact', contactPackage, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  useEffect(() => {
+    getBankContacts();
+    getPayIdContacts();
+  }, [getBankContacts, getPayIdContacts]);
+  
   return (
     <div className="contact">
       <div className="contact-header">
@@ -99,7 +203,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
             alt=''
             onClick={() => {
             setIsAdd(true);
-            setIsExist(false);
+            setIsSubmitted(false);
             }}
           />
         </div>
@@ -126,27 +230,22 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
               />
             </div>
             <div className='contact-list-body'>
-            {filteredAccounts.length> 0 && (
-              <>
-              {filteredAccounts.map((account) =>{
-                return <div key = {account.id} className='contact-list-individual'>
-                  <div className='contact-information'>
-                    <h3> {account.name} </h3>
-                    <p> BSB: {account.bsb} </p>
-                    <p> Account Number: {account.accountNumber}</p>
+              {filteredAccounts.length > 0 ? (
+                filteredAccounts.map((account) => (
+                  <div key={account.id} className='contact-list-individual'> {/* Ensure 'account.id' is unique */}
+                    <div className='contact-information'>
+                      <h3>{account.name}</h3>
+                      <p>BSB: {account.bsb}</p>
+                      <p>Account Number: {account.accNo}</p>
+                    </div>
+                    <div className='contact-remove-sign'>
+                      <img src={crossSign} alt='' onClick={() => onClickRemoveAccount(account)} />
+                    </div>
                   </div>
-                  <div className='contact-remove-sign'>
-                    <img src= {crossSign} alt='' onClick={() => onClickRemoveAccount(account)} />
-                  </div>
-                </div>
-              })}
-              </>
-            )}
-            {filteredAccounts.length === 0 && (
-              <>
-              No Contacts!
-              </>
-            )}
+                ))
+              ) : (
+                <p>No Contacts!</p>
+              )}
             </div>
             </>
           )}
@@ -162,26 +261,21 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
               />
             </div>
             <div className='contact-list-body'>
-            {filteredPhones.length> 0 && (
-              <>
-              {filteredPhones.map((phone) => {
-                  return <div key = {phone.id} className='contact-list-individual'>
+              {filteredPhones.length > 0 ? (
+                filteredPhones.map((phone) => (
+                  <div key={phone.id} className='contact-list-individual'> {/* Ensure 'phone.id' is unique */}
                     <div className='contact-information'>
-                    <h3> {phone.name} </h3>
-                    <p> Phone Number: {phone.phoneNumber} </p>
+                      <h3>{phone.name}</h3>
+                      <p>Phone Number: {phone.phoneNo}</p>
                     </div>
                     <div className='contact-remove-sign'>
-                    <img src= {crossSign} alt='' onClick={() => onClickRemoveAccount(phone)} />
+                      <img src={crossSign} alt='' onClick={() => onClickRemoveAccount(phone)} />
                     </div>
                   </div>
-              })}
-              </>
-            )}
-            {filteredPhones.length === 0 && (
-              <>
-              No Contacts!
-              </>
-            )}
+                ))
+              ) : (
+                <p>No Contacts!</p>
+              )}
             </div>
             </>
           )}
@@ -301,9 +395,9 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
                       </span>
                       </>
                   )}
-                  {isExist && (
+                  {isSubmitted && (
                     <>
-                      <p>Contact already exists!</p>
+                      <p>{message}</p>
                     </>
                   )}
                 <button type='submit'>Save</button>

@@ -49,14 +49,14 @@ const accountDetailSchema = new mongoose.Schema({
 // Define bank contacts schema
 const bankContactSchema = new mongoose.Schema({
   name: {type: String, required: true},
-  bsb: {type: Number, required: true, unique: true},
-  accNo: {type: Number, required: true, unique: true}
+  bsb: {type: Number, required: true},
+  accNo: {type: Number, required: true}
 });
 
 // Define payid contacts schema
 const payIdContactSchema = new mongoose.Schema({
   name: {type: String, required: true},
-  phoneNo: {type: Number, required: true, unique: true}
+  phoneNo: {type: Number, required: true}
 });
 
 
