@@ -20,43 +20,6 @@ Content-Type: application/json
   "password": "password1234"
 }
 
-### Transfer Money
-POST http://localhost:5000/api/accounts/transfer
-Content-Type: application/json
-
-{
-  "fromAccNo": "96134747",
-  "fromBsb": "286339",
-  "toAccNo": "27618500",
-  "toBsb": "536193",
-  "amount": 1000,
-  "description": ""
-}
-
-### Transfer Money PayID
-POST http://localhost:5000/api/accounts/payIdTransfer
-Content-Type: application/json
-
-{
-  "fromPhoneNo": "7537217894",
-  "toPhoneNo": "5424712610",
-  "amount": 30,
-  "description": ""
-}
-
-### Transfer Between Account
-POST http://localhost:5000/api/accounts/transfer/within
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY2Mjg0MDAsImV4cCI6MTcyNjYzMjAwMH0.-SFFz3CXpLKGuyyhexC8rJ61on8ttVsVC8l5K-AabUo
-
-{
-  "username": "mitchellzheng", 
-  "fromAccountType": "transaction", 
-  "toAccountType": "savings", 
-  "amount": 1000, 
-  "description": "transfer to savings" 
-}
-
 ### Login Account
 POST http://localhost:5000/api/accounts/login
 Content-Type: application/json
@@ -66,10 +29,47 @@ Content-Type: application/json
   "password": "password123"
 }
 
+### Transfer Money
+POST http://localhost:5000/api/transactions/transfer
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
+{
+  "toAccNo": "27618500",
+  "toBsb": "536193",
+  "amount": 1000,
+  "description": ""
+}
+
+### Transfer Money PayID
+POST http://localhost:5000/api/transactions/payIdTransfer
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
+{
+  "toPhoneNo": "5424712610",
+  "amount": 30,
+  "description": ""
+}
+
+### Transfer Between Account
+POST http://localhost:5000/api/transactions/transfer/within
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
+{
+  "username": "mitchellzheng", 
+  "fromAccountType": "transaction", 
+  "toAccountType": "savings", 
+  "amount": 1000, 
+  "description": "transfer to savings" 
+}
+
 ### Get Account Info
 POST http://localhost:5000/api/accounts/getUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1M2RjNDY2MWY3NTNkMmMxNGVjNjIiLCJpYXQiOjE3MjY2Mjg0MDAsImV4cCI6MTcyNjYzMjAwMH0.-SFFz3CXpLKGuyyhexC8rJ61on8ttVsVC8l5K-AabUo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
 ### Delete Account
 POST http://localhost:5000/api/admin/delete
 Content-Type: application/json
@@ -77,8 +77,6 @@ Content-Type: application/json
 {
   "username": "mitchellzheng"
 }
-
-
 
 ### Admin - set user balance
 POST http://localhost:5000/api/admin/setBalance
@@ -88,3 +86,34 @@ Content-Type: application/json
   "accNumber": "27618500",
   "newBalance": 30000
 }
+
+### Add contact - Bsb & Account Number
+POST http://localhost:5000/api/accounts/addContact
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
+{
+  "name": "Fischer Zhang",
+  "bsb": "486739",
+  "accNo": "69892000"
+}
+
+### Add contact - PayId
+POST http://localhost:5000/api/accounts/addContact
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
+{
+  "name": "Fischer Zhang",
+  "phoneNo": "2042435196"
+}
+
+### Get contact - Bank
+POST http://localhost:5000/api/accounts/getBankContacts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc
+
+### Get contact - PayId
+POST http://localhost:5000/api/accounts/getPayIdContacts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc0OTI5NTAsImV4cCI6MTcyNzQ5NjU1MH0.OXAR7zUfWEIBJnRkztKk-h5cen4f_bgGpsLa64wYmGc

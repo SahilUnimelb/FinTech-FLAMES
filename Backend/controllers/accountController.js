@@ -169,7 +169,7 @@ exports.updateUserProfile = async (req, res) => {
     console.error('Error updating profile:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
 
 // forgot password
 exports.forgotPassword = async (req, res) => {
@@ -191,7 +191,7 @@ exports.forgotPassword = async (req, res) => {
     console.error('Error in forgot password:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
 
 // reset password
 exports.resetPassword = async (req, res) => {
@@ -223,4 +223,79 @@ exports.resetPassword = async (req, res) => {
     console.error('Error in forgot password:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
+
+exports.addContact = async (req, res) => {
+    let { name, bsb, accNo, phoneNo } = req.body;
+
+    bsb = bsb ? Number(bsb) : undefined;
+    accNo = accNo ? Number(accNo) : undefined;
+    phoneNo = phoneNo ? Number(phoneNo) : undefined;
+
+    try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (bsb && accNo) {
+            const existingBankContact = user.bankContacts.find(contact => contact.bsb === bsb && contact.accNo === accNo);
+            if (existingBankContact) {
+                return res.status(404).json({ message: 'A contact with these bank details already exists' });
+            }
+
+            const contact = await User.findOne({ 'AccNoBsb.accNo': accNo,  'AccNoBsb.bsb': bsb});
+            if (!contact) {
+                return res.status(404).json({ message: 'A User with these details does not exist' });
+            }
+            user.bankContacts.push({ name, bsb, accNo });
+        } else if (phoneNo) {
+            const existingPayIdContact = user.payIdContacts.find(contact => contact.phoneNo === phoneNo);
+            if (existingPayIdContact) {
+                return res.status(404).json({ message: 'A contact with this phone number already exists' });
+            }
+            
+            const contact = await User.findOne({ 'phoneNo': phoneNo });
+            if (!contact) {
+                return res.status(404).json({ message: 'A User with this phone number does not exist' });
+            }
+            user.payIdContacts.push({ name, phoneNo });
+        } else {
+            return res.status(400).json({ message: 'Invalid contact details provided' });
+        }
+
+        await user.save();
+        res.status(200).json({ message: 'Contact Added Successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.getBankContacts = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user.bankContacts);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.getPayIdContacts = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user.payIdContacts);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
