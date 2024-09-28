@@ -184,7 +184,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
       console.error('Error fetching PayID contacts:', error);
     }
   };
-  
+
   const filteredAccounts = bankContacts.filter(account =>
     account.name.toLowerCase().includes(searchAccount.toLowerCase())
   );
@@ -275,7 +275,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     onClick = {() => {fillUpFormBank(account)}} >
                     <p> {account.name} </p>
                     <p> {account.bsb} </p>
-                    <p> {account.accountNumber} </p>
+                    <p> {account.accNo} </p>
                     </div>
                 )
                 })}
@@ -319,7 +319,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     className='transfer-contact-list-individual'
                     onClick = {() => {fillUpFormPhone(phone)}} >
                     <p> {phone.name} </p>
-                    <p> {phone.phoneNumber} </p>
+                    <p> {phone.phoneNo} </p>
                     </div>
                 )
                 })}
