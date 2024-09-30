@@ -4,7 +4,7 @@ import addSign from '../../../Assets/add-sign.svg';
 import closeSign from '../../../Assets/close-button.svg';
 import crossSign from '../../../Assets/cross-icon.svg';
 import './Contacts.css';
-export default function Contacts({addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeMessage}) {
+export default function Contacts({accounts, phones, addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeMessage}) {
 
   const [searchAccount, setSearchAccount] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
@@ -44,9 +44,26 @@ export default function Contacts({addContactDetails, selectedAccount, onClickRem
     event.preventDefault();
     addContact();
     setIsSubmitted(true);
-    /*const accountExists = bankContacts.some(account => account.accountNumber === contactData.accountNumber);
-    const phoneExists = payIdContacts.some(phone => phone.phoneNumber === contactData.phoneNumber);
-    */
+    if (contactData.contactType === "Bank") {
+      setBankContacts((prevContacts) => [
+        ...prevContacts,
+        {
+          id: new Date().getTime(), // Generate a temporary unique id
+          name: contactData.name,
+          bsb: contactData.bsb,
+          accNo: contactData.accountNumber,
+        },
+      ]);
+    } else if (contactData.contactType === "Phone") {
+      setPayIdContacts((prevContacts) => [
+        ...prevContacts,
+        {
+          id: new Date().getTime(), // Generate a temporary unique id
+          name: contactData.name,
+          phoneNo: contactData.phoneNumber,
+        },
+      ]);
+    }
     addContactDetails(contactData);
     emptyForm();
   }
@@ -59,10 +76,14 @@ export default function Contacts({addContactDetails, selectedAccount, onClickRem
   function removeAccount(selectedAccount) {
     if (active === 'bank') {
       removeBankContact(selectedAccount);
-      getBankContacts();
+      setBankContacts((prevContacts) =>
+        prevContacts.filter((account) => account.accNo !== selectedAccount.accNo)
+      );
     } else if (active === 'phone') {
       removePayIdContact(selectedAccount);
-      getPayIdContacts();
+      setPayIdContacts((prevContacts) =>
+        prevContacts.filter((phone) => phone.phoneNo !== selectedAccount.phoneNo)
+      );
     }
   }
 
