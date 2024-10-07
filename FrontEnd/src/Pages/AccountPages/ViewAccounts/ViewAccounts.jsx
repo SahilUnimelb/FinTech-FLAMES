@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import './ViewAccounts.css';
 
 export default function ViewAccounts() {
-  const [active, setActive] = useState('profile');
+  const options = ['Profile', 'Savings Account', 'Transactions Account']
+  const [active, setActive] = useState('Profile');
   const [flipped, setFlipped] = useState(false);
   const [message, setMessage] = useState('');
   const [accountData, setAccountData] = useState(() => {
@@ -108,6 +110,7 @@ if the formatting needs changing. */
     while (rows.length < 20) {
       rows.push({ date: '', description: '', amount: '' });
     }
+
     return (
       <div className="scrollable-container">
         <table className="transaction-table">
@@ -135,23 +138,27 @@ if the formatting needs changing. */
   return (
     <div className="view">
       <div className="view-header">
+        <Dropdown active = {active} setActive = {setActive} options = {options} />
         <p>View Account</p>
+        <div className='mobile-view'>
+          ({active})
+        </div>
       </div>
       <div className="view-container">
         <div className="view-sidebar">
-          <div className={`sidebar-profile ${active === "profile" ? "sidebar-profile-active" : ""}`} onClick={() => onClickDiv("profile")}>
+          <div className={`sidebar-profile ${active === "Profile" ? "sidebar-profile-active" : ""}`} onClick={() => onClickDiv("Profile")}>
             <p>Profile</p>
           </div>
-          <div className={`sidebar-savings ${active === "savings" ? "sidebar-savings-active" : ""}`} onClick={() => onClickDiv("savings")}>
+          <div className={`sidebar-savings ${active === "Savings Account" ? "sidebar-savings-active" : ""}`} onClick={() => onClickDiv("Savings Account")}>
             <p>Savings Account</p>
           </div>
-          <div className={`sidebar-transactions ${active === "transactions" ? "sidebar-transactions-active" : ""}`} onClick={() => onClickDiv("transactions")}>
+          <div className={`sidebar-transactions ${active === "Transactions Account" ? "sidebar-transactions-active" : ""}`} onClick={() => onClickDiv("Transactions Account")}>
             <p>Transactions Account</p>
           </div>
         </div>
         <div className="view-content">
           <div className="view-balance">
-            {active === "profile" && (
+            {active === "Profile" && (
               <div className="profile-container">
                 <div className="view-user-profile">
                   {flag && (
@@ -202,31 +209,20 @@ if the formatting needs changing. */
                 </div>
               </div>
             )}
-            {active === "savings" && (
-              <>
-                <div className='header'>
-                  <h1>Balance: ${accountData.savingAccDetails.balance}</h1>
-                </div>
-              </>
-            )}
-            {active === "transactions" && (
-              <>
-                <div className='header'>
-                <h1>Balance: ${accountData.transAccDetails.balance}</h1>
-                </div>
-              </>
-            )}
+
           </div>
           <div className="history">
-            {active === "savings" && (
+            {active === "Savings Account" && (
               <>
-                <h1>Transaction History</h1>
+                <h1>Balance: ${accountData.savingAccDetails.balance}</h1>
+                <h1>Saving History</h1>
                 <TransactionTable transactions={savingsHistory} />
                 <button className="print-pdf">Export as PDF</button>
               </>
             )}
-            {active === "transactions" && (
+            {active === "Transactions Account" && (
               <>
+                <h1>Balance: ${accountData.transAccDetails.balance}</h1>
                 <h1>Transaction History</h1>
                 <TransactionTable transactions={transactionsHistory} />
                 <button className="print-pdf">Export as PDF</button>

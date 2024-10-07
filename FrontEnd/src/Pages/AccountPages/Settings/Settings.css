@@ -103,3 +103,38 @@
 .reset-button:hover {
     background-color: #0b7dda;
 }
+@media(max-width:1280px) {
+
+}
+@media(max-width:1024px) {
+    .settings-header p {
+        font-size: 36px;
+    }
+}
+@media(max-width:800px) {
+    .settings-header {
+        margin-top: 42px;
+    }
+    .instructions-toggle p ,.reset-password-setting p {
+        font-size: 30px;
+    }
+    .reset-button {
+        margin-left: 30px;
+        font-size: 22px;
+    }
+}
+@media(max-width:620px) {
+    .instructions-toggle p ,.reset-password-setting p {
+        font-size: 22px;
+    }
+    .reset-button {
+        margin-left: 20px;
+        font-size: 16px;
+    }
+}
+@media(max-width:400px) {
+    .settings-header p {
+        font-size: 25px;
+    }
+
+}
