@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
 import addSign from '../../../Assets/add-sign.svg';
 import closeSign from '../../../Assets/close-button.svg';
 import crossSign from '../../../Assets/cross-icon.svg';
+import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import './Contacts.css';
 export default function Contacts({accounts, phones, addContactDetails, selectedAccount, onClickRemoveAccount, onClickRemoveClose, removeMessage}) {
-
+  const options = ["Bank Account", "Phone"]
   const [searchAccount, setSearchAccount] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
   const [message, setMessage] = useState('');
@@ -16,7 +17,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
   const [isAdd, setIsAdd] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [active, setActive] = useState('bank');
+  const [active, setActive] = useState('Bank Account');
   const [contactData, setContactData] = useState({
     contactType:"",
     name:"",
@@ -74,12 +75,12 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
   }
 
   function removeAccount(selectedAccount) {
-    if (active === 'bank') {
+    if (active === 'Bank Account') {
       removeBankContact(selectedAccount);
       setBankContacts((prevContacts) =>
         prevContacts.filter((account) => account.accNo !== selectedAccount.accNo)
       );
-    } else if (active === 'phone') {
+    } else if (active === 'Phone') {
       removePayIdContact(selectedAccount);
       setPayIdContacts((prevContacts) =>
         prevContacts.filter((phone) => phone.phoneNo !== selectedAccount.phoneNo)
@@ -100,9 +101,9 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
   function onClickDiv(type) {
     setActive(type);
 
-    if (type === 'bank') {
+    if (type === 'Bank Account') {
       getBankContacts();
-    } else if (type === 'phone') {
+    } else if (type === 'Phone') {
       getPayIdContacts();
     }
   }
@@ -128,7 +129,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
       console.error('Error fetching bank contacts:', error);
     }
   }, [token]); // Add token as a dependency if it's used inside the function
-  
+
   const getPayIdContacts = useCallback(async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/accounts/getPayIdContacts', {}, {
@@ -187,7 +188,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
           Authorization: `Bearer ${token}`
         }
       })
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -208,16 +209,20 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     getBankContacts();
     getPayIdContacts();
   }, [getBankContacts, getPayIdContacts]);
-  
+
   return (
     <div className="contact">
       <div className="contact-header">
+      <Dropdown active = {active} setActive = {setActive} options = {options} />
         <p className='contact-header-left'>Contact List</p>
+        <div className='mobile-view'>
+          ({active})
+        </div>
         <div className="hover-div">
         <img
             src={addSign}
@@ -231,15 +236,15 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
       </div>
       <div className="contact-container">
         <div className="contact-sidebar">
-          <div className={`sidebar-bank ${active === "bank" ? "sidebar-bank-active" : ""}`} onClick={() => onClickDiv("bank")}>
+          <div className={`sidebar-bank ${active === "Bank Account" ? "sidebar-bank-active" : ""}`} onClick={() => onClickDiv("Bank Account")}>
             <p>Bank account</p>
           </div>
-          <div className={`sidebar-phone ${active === "phone" ? "sidebar-phone-active" : ""}`} onClick={() => onClickDiv("phone")}>
+          <div className={`sidebar-phone ${active === "Phone" ? "sidebar-phone-active" : ""}`} onClick={() => onClickDiv("Phone")}>
             <p>Phone</p>
           </div>
         </div>
         <div className="contact-content">
-          {active === "bank" && (
+          {active === "Bank Account" && (
             <>
             <div className="search-bar">
               <input
@@ -270,7 +275,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
             </div>
             </>
           )}
-          {active === "phone" && (
+          {active === "Phone" && (
             <>
             <div className="search-bar">
               <input
