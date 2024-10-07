@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 import logoff from '../../Assets/logoff-icon.png';
 import './Navbar.css';
 export default function Navbar() {
   const [page, setPage] = useState(localStorage.getItem('activePage') || 'home');
+  const navigate = useNavigate();
 
   const onClickPage = (currPage) => {
     setPage(currPage);
@@ -24,6 +25,12 @@ export default function Navbar() {
     }
     return null;
   }
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  }
+
   return (
     // Div for the Navbar
     <div className='navbar'>
@@ -41,7 +48,7 @@ export default function Navbar() {
         </ul>
         <div className='navbar-logoff'>
 
-            <button>
+            <button onClick={handleLogout}>
                 <img src = {logoff} alt = ""/>
                 Log off
             </button>
