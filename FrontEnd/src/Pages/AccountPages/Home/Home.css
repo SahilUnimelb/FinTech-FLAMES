@@ -18,7 +18,7 @@
   }
   .home-greeting-message {
     position: relative;
-    left: 140px;
+    left: 140px
   }
 
   .home-greeting-message p {
@@ -76,4 +76,86 @@
     font-size: 24px;
     bottom: 0;
     margin-bottom: 8px;
+  }
+  @media(max-width:1280px) {
+    .home-greeting-message p {
+      font-size: 32px;
+    }
+    .home-greeting-message {
+      left: 120px;
+    }
+    .home-box h1 {
+      font-size: 29px;
+    }
+    .home-box-left-info-p{
+      font-size: 23px;
+    }
+    .home-box-left-view-p {
+      font-size: 20px;
+    }
+    .home-box-right h2 {
+      font-size: 27px;
+    }
+  }
+  @media(max-width:1024px) {
+    .home-greeting-message p {
+      font-size: 29px;
+    }
+    .home-greeting-message {
+      left: 50px;
+    }
+    .home-box h1 {
+      font-size: 23px;
+    }
+    .home-box-left-info-p{
+      font-size: 20px;
+    }
+    .home-box-left-view-p {
+      font-size: 17px;
+    }
+    .home-box-right h2 {
+      font-size: 20px;
+    }
+  }
+  @media(max-width:800px) {
+    .home-greeting-message p {
+      font-size: 25px;
+    }
+    .home-greeting-message {
+      left: -30px;
+      margin-top: 10px;
+    }
+    .home-box h1 {
+      font-size: 20px;
+    }
+    .home-box-left-info-p{
+      font-size: 17px;
+    }
+    .home-box-left-view-p {
+      font-size: 15px;
+    }
+    .home-box-right h2 {
+      font-size: 18px;
+    }
+  }
+  @media(max-width:500px) {
+    .home-greeting-message p {
+      font-size: 20px;
+    }
+    .home-greeting-message {
+      left: -90px;
+      margin-top: 10px;
+    }
+    .home-box h1 {
+      font-size: 18px;
+    }
+    .home-box-left-info-p{
+      font-size: 15px;
+    }
+    .home-box-left-view-p {
+      font-size: 13px;
+    }
+    .home-box-right h2 {
+      font-size: 16px;
+    }
   }

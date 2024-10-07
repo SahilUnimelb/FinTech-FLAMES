@@ -45,3 +45,19 @@
   .styled-table th {
     font-size: 18px;
   }
+  @media(max-width:660px) {
+    .styled-table th{
+      font-size: 16px;
+    }
+    .styled-table td {
+      font-size: 14px;
+    }
+  }
+  @media(max-width:400px) {
+    .styled-table th{
+      font-size: 12px;
+    }
+    .styled-table td {
+      font-size: 10px;
+    }
+  }
