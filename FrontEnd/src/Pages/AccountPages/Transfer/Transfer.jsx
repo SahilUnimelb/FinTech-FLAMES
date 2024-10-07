@@ -31,13 +31,9 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   const [message, setMessage] = useState('');
   const flag = false;
   const [searchAccount, setSearchAccount] = useState('');
-  const filteredAccounts = accounts.filter(account =>
-    account.name.toLowerCase().includes(searchAccount.toLowerCase())
-  );
+  
   const [searchPhone, setSearchPhone] = useState('');
-  const filteredPhones = phones.filter(phone =>
-    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
-  );
+  
   const token = localStorage.getItem('authToken');
   function handleChange (event) {
     const {name, value} = event.target;
@@ -48,6 +44,8 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         }
     })
   }
+  const [bankContacts, setBankContacts] = useState([]);
+  const [payIdContacts, setPayIdContacts] = useState([]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -161,7 +159,43 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const [openBankContact, setOpenBankContact] = useState(false);
 
+  const getBankContacts = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/getBankContacts', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setBankContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching bank contacts:', error);
+    }
+  }; // Add token as a dependency if it's used inside the function
+  
+  const getPayIdContacts = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/getPayIdContacts', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setPayIdContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching PayID contacts:', error);
+    }
+  };
+
+  const filteredAccounts = bankContacts.filter(account =>
+    account.name.toLowerCase().includes(searchAccount.toLowerCase())
+  );
+  const filteredPhones = payIdContacts.filter(phone =>
+    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
+  );
+
   function onClickBankContact() {
+    getBankContacts();
     setSearchAccount('');
     setOpenBankContact(true);
   }
@@ -176,6 +210,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   const [openPhoneContact, setOpenPhoneContact] = useState(false);
 
   function onClickPhoneContact() {
+    getPayIdContacts();
     setSearchPhone('');
     setOpenPhoneContact(true);
   }
@@ -242,7 +277,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     onClick = {() => {fillUpFormBank(account)}} >
                     <p> {account.name} </p>
                     <p> {account.bsb} </p>
-                    <p> {account.accountNumber} </p>
+                    <p> {account.accNo} </p>
                     </div>
                 )
                 })}
@@ -286,7 +321,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     className='transfer-contact-list-individual'
                     onClick = {() => {fillUpFormPhone(phone)}} >
                     <p> {phone.name} </p>
-                    <p> {phone.phoneNumber} </p>
+                    <p> {phone.phoneNo} </p>
                     </div>
                 )
                 })}

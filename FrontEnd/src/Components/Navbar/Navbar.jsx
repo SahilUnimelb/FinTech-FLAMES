@@ -1,4 +1,6 @@
+
 import React, { useEffect, useRef, useState } from 'react';
+
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 import logoff from '../../Assets/logoff-icon.png';
@@ -7,7 +9,9 @@ import './Navbar.css';
 export default function Navbar() {
   const [page, setPage] = useState(localStorage.getItem('activePage') || 'home');
   const navigate = useNavigate();
+
   const section = useRef();
+
   const onClickPage = (currPage) => {
     setPage(currPage);
     localStorage.setItem('activePage', currPage);
@@ -36,6 +40,7 @@ export default function Navbar() {
     section.current.classList.toggle('navbar-section-visible')
     e.target.classList.toggle('open')
   }
+
   return (
     // Div for the Navbar
     <div className='navbar'>
