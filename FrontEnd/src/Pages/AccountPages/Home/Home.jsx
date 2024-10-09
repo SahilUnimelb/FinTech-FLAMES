@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-export default function Home() {
+export default function Home({onClickDiv}) {
   const [accountData, setAccountData] = useState(() => {
     const storedData = localStorage.getItem('accountData');
     return storedData ? JSON.parse(storedData) : null;
@@ -65,7 +65,7 @@ export default function Home() {
             <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : ''}</p>
             <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : ''}</p>
             <p className='home-box-left-view-p'>
-            <Link to="/view">View Account History</Link>
+            <Link to="/view" onClick={() => onClickDiv("Savings Account")}>View Account History</Link>
           </p>
           </div>
           <div className='home-box-right'>
@@ -79,7 +79,7 @@ export default function Home() {
           <p className='home-box-left-info-p'>BSB: {accountData ? accountData.bsb : ''}</p>
           <p className='home-box-left-info-p'>Account Number: {accountData ? accountData.accNo : ''}</p>
           <p className='home-box-left-view-p'>
-            <Link to="/view">View Account History</Link>
+            <Link to="/view" onClick={() => onClickDiv("Transactions Account")}>View Account History</Link>
           </p>
           </div>
           <div className='home-box-right'>
