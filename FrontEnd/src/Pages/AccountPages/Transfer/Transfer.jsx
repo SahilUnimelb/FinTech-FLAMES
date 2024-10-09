@@ -1,10 +1,13 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import closeSign from '../../../Assets/close-button.svg';
 import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import ScheduledBillsTable from '../../../Components/ScheduledBillsTable/ScheduledBillsTable';
 import './Transfer.css';
+import { InstructionsContext } from '../../../InstructionsContext';
+
 export default function Transfer({accounts, phones, addContactDetails}) {
+  const { instructionsMode } = useContext(InstructionsContext);
   const [formData, setFormData] = useState({
     transferMethod: "",
     amount: "",
@@ -370,12 +373,18 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                         <form onSubmit={handleSubmit}>
                             {flag && <p>{message}</p>}
                             <p className='transfer-section-content-header'>From:</p>
+                            <div>
+                                {instructionsMode && (
+                                    <div className="instructions-div">
+                                    <p>Select the Account from which you want to make the transfer from.</p>
+                                    </div>
+                                )}
+                            </div>
                             <span>
                                 <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
                                 <select
                                     id='sender-account'
                                     name='senderAccount'
-                                    //value={formData.senderAccount}
                                     onChange={handleChange}
                                     className='sender-account-select'
                                     required
@@ -386,6 +395,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 </select>
                             </span>
                             <p className='transfer-section-content-header'>To:</p>
+                            <div>
+                                {instructionsMode && (
+                                    <div className="instructions-div">
+                                    <p>Select the method for which you wish to transfer the funds.</p>
+                                    </div>
+                                )}
+                            </div>
                             <span>
                                 <label htmlFor='transfer-option' className='transfer-section-content-sub-header'>Transfer Options</label>
                                 <select
@@ -404,6 +420,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             </span>
                             {formData.transferMethod === "Bank Transfer" && (
                                 <>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>Input the name of the receiver.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <span>
                                     <p className='transfer-section-content-sub-header'>Name</p>
                                         <input
@@ -416,6 +439,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                             required
                                         />
                                 </span>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>Bank transfer is the basic form of funds transferring that requires the receiver's BSB and Account numbers to complete the transaction.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <span>
                                     <p className='transfer-section-content-sub-header'>BSB</p>
                                         <input
@@ -448,20 +478,32 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                             required
                                         />
                                 </span>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>If you are sending to a past receiver, their details are already saved in your contact list.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className='transfer-section-contact-button-wrapper'>
                                     <button  type='button' onClick={onClickBankContact}>Choose From Contacts</button>
                                 </div>
                                 </>
                             )}
-
                             <>
                             {openBankContact && (
                                 <ContactListBank/>
                             )}
                             </>
-
                             {formData.transferMethod === "PayID" && (
                                 <>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>Input the name of the receiver.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <span>
                                     <p className='transfer-section-content-sub-header'>Name</p>
                                         <input
@@ -474,6 +516,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                             required
                                         />
                                 </span>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>PayID uses the phone number of the receiver to transfer funds.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <span>
                                     <p className='transfer-section-content-sub-header'>Phone Number</p>
                                         <input
@@ -489,6 +538,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                             required
                                         />
                                 </span>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>If you are sending to a past receiver, their details are already saved in your contact list.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className='transfer-section-contact-button-wrapper'>
                                     <button onClick={onClickPhoneContact}>Choose From Contacts</button>
                                 </div>
@@ -500,6 +556,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             )}
                             </>
                             <p className='transfer-section-content-header'>Payment Details:</p>
+                            <div>
+                                {instructionsMode && (
+                                    <div className="instructions-div">
+                                    <p>Enter the amount of funds you wish to transfer</p>
+                                    </div>
+                                )}
+                            </div>
                             <span>
                                 <p className='transfer-section-content-sub-header'>Amount</p>
                                 <div className='transfer-amount-wrapper'>
@@ -518,6 +581,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 </div>
                             </span>
                             <span>
+                            <div>
+                                {instructionsMode && (
+                                    <div className="instructions-div">
+                                    <p>You may include a small description to give some context for the transaction.</p>
+                                    </div>
+                                )}
+                            </div>
                             <p className='transfer-section-content-sub-header'>Description (Optional)</p>
                                 <textarea
                                     placeholder="Description (Optional)"
@@ -529,31 +599,45 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             </span>
                             {active === 'Scheduled Payments' && (
                                 <>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>Scheduled payments are either single occurances or multiple occurances over a period of time.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <span>
-                                <label htmlFor='schedule-option' className='transfer-section-content-sub-header'>Schedule Options</label>
-                                <select
-                                    id='schedule-option'
-                                    name='scheduleOption'
-                                    value={formData.scheduleOption}
-                                    onChange={handleChange}
-                                    className='transfer-schedule-select'
-                                >
-                                    <option value="">-- Choose Option --</option>
-                                    <option value="Once">Once</option>
-                                    <option value="Recurring">Recurring</option>
-                                </select>
+                                    <label htmlFor='schedule-option' className='transfer-section-content-sub-header'>Schedule Options</label>
+                                    <select
+                                        id='schedule-option'
+                                        name='scheduleOption'
+                                        value={formData.scheduleOption}
+                                        onChange={handleChange}
+                                        className='transfer-schedule-select'
+                                    >
+                                        <option value="">-- Choose Option --</option>
+                                        <option value="Once">Once</option>
+                                        <option value="Recurring">Recurring</option>
+                                    </select>
                                 </span>
+                                <div>
+                                    {instructionsMode && (
+                                        <div className="instructions-div">
+                                        <p>Select the start date for the payments, how many times you wish to repeat this transaction, and how often do you want this transaction to occur.</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <span>
-                                <p className='transfer-section-content-sub-header'>Start Date</p>
-                                <input
-                                    type="date"
-                                    name="date"
-                                    value={formData.date}
-                                    onChange={handleChange}
-                                    min={new Date().toISOString().split("T")[0]}
-                                    className="transfer-date-input"
-                                    required={!!formData.scheduleOption}
-                                    />
+                                    <p className='transfer-section-content-sub-header'>Start Date</p>
+                                    <input
+                                        type="date"
+                                        name="date"
+                                        value={formData.date}
+                                        onChange={handleChange}
+                                        min={new Date().toISOString().split("T")[0]}
+                                        className="transfer-date-input"
+                                        required={!!formData.scheduleOption}
+                                        />
                                 </span>
                                 <span>
                                 <label htmlFor='recurring-option' className='transfer-section-content-sub-header'>Schedule Options</label>
@@ -598,6 +682,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 </span>
                                 </>
                             )}
+                            <div>
+                                {instructionsMode && (
+                                    <div className="instructions-div">
+                                    <p>Once you are satisfied with your payment details, click "Pay" to finalise the payment.</p>
+                                    </div>
+                                )}
+                            </div>
                             <div className='transfer-section-button-wrapper'>
                                 <button type='submit'>Pay</button>
                             </div>
@@ -626,6 +717,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                 <div className='transfer-section-content'>
                     <form onSubmit={handleSubmit}>
                         <p className='transfer-section-content-header'>From:</p>
+                        <div>
+                            {instructionsMode && (
+                                <div className="instructions-div">
+                                <p>This is where you transfer funds from one of your own accounts to another. Choose which of your accounts to transfer funds out of.</p>
+                                </div>
+                            )}
+                        </div>
                         <span>
                             <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
                             <select
@@ -641,9 +739,16 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                             </select>
                         </span>
-                        <p className='transfer-section-content-header'>From:</p>
+                        <p className='transfer-section-content-header'>To:</p>
+                        <div>
+                            {instructionsMode && (
+                                <div className="instructions-div">
+                                <p>Choose which of your account to receive the funds.</p>
+                                </div>
+                            )}
+                        </div>
                         <span>
-                            <label htmlFor='receiver-account' className='transfer-section-content-sub-header'>To</label>
+                            <label htmlFor='receiver-account' className='transfer-section-content-sub-header'>Account</label>
                             <select
                                 id='receiver-account'
                                 name='receiverAccount'
@@ -658,6 +763,13 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                             </select>
                         </span>
                         <p className='transfer-section-content-header'>Payment Details:</p>
+                        <div>
+                            {instructionsMode && (
+                                <div className="instructions-div">
+                                <p>Enter the amount of funds you wish to transfer</p>
+                                </div>
+                            )}
+                        </div>
                         <span>
                             <p className='transfer-section-content-sub-header'>Amount</p>
                             <div className='transfer-amount-wrapper'>
@@ -675,16 +787,30 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                     />
                             </div>
                         </span>
+                        <div>
+                            {instructionsMode && (
+                                <div className="instructions-div">
+                                <p>You may include a small description to give some context for the transaction.</p>
+                                </div>
+                            )}
+                        </div>
                         <span>
-                        <p className='transfer-section-content-sub-header'>Description (Optional)</p>
-                            <textarea
-                                placeholder="Description (Optional)"
-                                onChange={handleChange}
-                                name="description"
-                                value={formData.description}
-                                className="transfer-description-textarea"
-                            />
+                            <p className='transfer-section-content-sub-header'>Description (Optional)</p>
+                                <textarea
+                                    placeholder="Description (Optional)"
+                                    onChange={handleChange}
+                                    name="description"
+                                    value={formData.description}
+                                    className="transfer-description-textarea"
+                                />
                         </span>
+                        <div>
+                            {instructionsMode && (
+                                <div className="instructions-div">
+                                <p>Once you are satisfied with your payment details, click "Pay" to finalise the payment.</p>
+                                </div>
+                            )}
+                        </div>
                         <div className='transfer-section-button-wrapper'>
                             <button type='submit'>Pay</button>
                         </div>

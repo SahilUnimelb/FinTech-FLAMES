@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import './Settings.css';
-
+import { InstructionsContext } from '../../../InstructionsContext';
 
 
 export default function Settings() {
-
-  const [instructionsMode, setInstructionsMode] = useState(false);
+  const { instructionsMode, setInstructionsMode } = useContext(InstructionsContext);
 
   const handleToggle = () => {
     setInstructionsMode(!instructionsMode);
