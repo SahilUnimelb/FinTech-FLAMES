@@ -86,6 +86,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
         prevContacts.filter((phone) => phone.phoneNo !== selectedAccount.phoneNo)
       );
     }
+    onClickRemoveClose();
   }
 
   function emptyForm() {
