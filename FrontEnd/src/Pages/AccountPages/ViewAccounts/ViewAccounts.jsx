@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import './ViewAccounts.css';
 
-export default function ViewAccounts() {
+export default function ViewAccounts({active, setActive, onClickDiv}) {
   const options = ['Profile', 'Savings Account', 'Transactions Account']
-  const [active, setActive] = useState('Profile');
+
   const [flipped, setFlipped] = useState(false);
   const [message, setMessage] = useState('');
   const [accountData, setAccountData] = useState(() => {
@@ -100,10 +100,6 @@ if the formatting needs changing. */
   const flipCard = () => {
     setFlipped(!flipped);
   };
-
-  function onClickDiv(type) {
-    setActive(type);
-  }
 
 
   // Group the filtered transactions by month

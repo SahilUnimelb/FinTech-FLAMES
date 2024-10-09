@@ -1,12 +1,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 import logoff from '../../Assets/logoff-icon.png';
 import navToggle from '../../Assets/navbar-toggle.png';
 import './Navbar.css';
 export default function Navbar() {
+  const location = useLocation();
   const [page, setPage] = useState(localStorage.getItem('activePage') || 'home');
   const navigate = useNavigate();
 
@@ -18,11 +19,13 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const storedPage = localStorage.getItem('activePage');
-    if (storedPage) {
-      setPage(storedPage);
-    }
-  }, []);
+    const path = location.pathname.replace('/', '');
+    setPage(path || 'home'); // Default to 'home' if path is empty
+
+    // Optionally persist the page in localStorage for future sessions
+    localStorage.setItem('activePage', path || 'home');
+  }, [location]);
+
 
   const setHrTag = (currPage) => {
     if (page === currPage) {
