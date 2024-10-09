@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { compareDesc, format, parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from '../../../Components/Dropdown/Dropdown';
@@ -114,11 +114,7 @@ if the formatting needs changing. */
     const [searchQuery, setSearchQuery] = useState('');
   const groupTransactionsByMonth = (transactions) => {
     // Sort transactions by date in descending order
-    const sortedTransactions = [...transactions].sort((a, b) => {
-      const dateA = parse(a.date, 'dd/MM/yyyy', new Date());
-      const dateB = parse(b.date, 'dd/MM/yyyy', new Date());
-      return compareDesc(dateA, dateB);
-    });
+    const sortedTransactions = [...transactions].reverse();
 
     // Group transactions by month and year
     return sortedTransactions.reduce((groups, transaction) => {
