@@ -61,6 +61,21 @@
     border: none;
     border-radius: 15px;
 }
+.forgot-agree span{
+    color: #1a3b4a;
+    font-weight: 600;
+  }
+.forgot-agree {
+    display: flex;
+    align-items: center;
+    padding: 10px 0px 10px 0px;
+    color: #000000;
+  }
+.forgot-signup-link {
+
+    color: #1a3b4a;
+    font-weight: 600;
+}
 @media(max-width:750px) {
     .forgot-container {
         width: 520px;

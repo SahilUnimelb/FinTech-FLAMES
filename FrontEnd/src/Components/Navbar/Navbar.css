@@ -12,6 +12,10 @@
   color: black;
   display: inline-block;
 }
+.navbar-link:hover{
+  color:#0375c7;
+  transition: color 0.3s ease-in-out;
+}
 /**
 .navbar-link:hover {
   transform: translateY(-5px);
