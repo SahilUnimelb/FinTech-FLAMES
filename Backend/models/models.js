@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 const crypto = require('crypto'); // For generating secure tokens
 const nodemailer = require('nodemailer'); // For sending emails
+const cron = require('node-cron'); // for updating every fixed period
 
 // set up express.json() middleware to parse JSON bodies
 app.use(express.json());
@@ -46,6 +47,17 @@ const accountDetailSchema = new mongoose.Schema({
   transactions: [transactionSchema] // Embedding transactions inside the account instance
 })
 
+// Define Scheduled payments
+const scheduledPaymentSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  startDate: { type: Date, required: true },
+  frequency: { type: String, enum: ['weekly', 'monthly'], required: true },
+  repeatCount: { type: Number, required: true }, // Number of times the payment should be made
+  completedCount: { type: Number, default: 0 }, // Track how many payments have been made
+  lastPaymentDate: { type: Date }, // Track when the last payment was made
+  targetAccNo: { type: Number, required: true }, // The account to which the payment will be sent
+});
+
 // Define bank contacts schema
 const bankContactSchema = new mongoose.Schema({
   name: {type: String, required: true},
@@ -59,7 +71,6 @@ const payIdContactSchema = new mongoose.Schema({
   phoneNo: {type: Number, required: true}
 });
 
-
 // Define a schema for User
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -70,6 +81,7 @@ const UserSchema = new mongoose.Schema({
   transactionAcc: accountDetailSchema, // Embedding transaction account object inside the user
   savingsAcc: accountDetailSchema, // Embedding savings account object inside the user
   lastLogedInAt: {type: Date, default: Date.now },
+  scheduledPayments: [scheduledPaymentSchema], // Embedding scheduled payments
   cardDetails: cardDetailSchema, // Embedding card inside the user
   roles: {type: String, required: true, default: "user"},
   transactions: [transactionSchema], 
@@ -514,3 +526,92 @@ async function resetPassword(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
+// Utility function to add time based on frequency
+const addFrequency = (date, frequency) => {
+    const newDate = new Date(date);
+    if (frequency === 'weekly') {
+        newDate.setDate(newDate.getDate() + 7);
+    } else if (frequency === 'monthly') {
+        newDate.setMonth(newDate.getMonth() + 1);
+    }
+    return newDate;
+};
+
+// Schedule the cron job to run every minute
+cron.schedule('* * * * *', async () => {
+    console.log('Checking for scheduled payments...');
+
+    try {
+        const currentTime = new Date();
+
+        // Find all users with active scheduled payments due
+        const users = await User.find({
+            scheduledPayments: {
+                $elemMatch: {
+                    scheduledDate: { $lte: currentTime },
+                    isProcessed: false,
+                    isActive: true
+                }
+            }
+        });
+
+        for (const user of users) {
+            for (const payment of user.scheduledPayments) {
+                if (payment.isProcessed || !payment.isActive) continue;
+                if (payment.scheduledDate > currentTime) continue;
+
+                // Perform the transfer
+                const receiver = await User.findOne({ 'AccNoBsb.accNo': payment.toAccNo, 'AccNoBsb.bsb': payment.toBsb });
+
+                if (receiver) {
+                    const fromAccount = user[payment.fromAccountType + 'Acc'];
+
+                    if (fromAccount.balance >= payment.amount) {
+                        fromAccount.balance -= payment.amount;
+                        receiver.transactionAcc.balance += payment.amount;
+
+                        // Record the transaction
+                        const transactionDate = new Date();
+                        fromAccount.transactions.push({
+                            amount: -payment.amount,
+                            date: transactionDate,
+                            log: `Scheduled transfer to ${receiver.name}`,
+                            description: payment.description,
+                        });
+
+                        receiver.transactionAcc.transactions.push({
+                            amount: payment.amount,
+                            date: transactionDate,
+                            log: `Scheduled transfer from ${user.name}`,
+                            description: payment.description,
+                        });
+
+                        // Update scheduled payment
+                        payment.runsCompleted += 1;
+
+                        if (payment.frequency === 'none' || payment.runsCompleted >= payment.totalRuns) {
+                            payment.isProcessed = true;
+                            payment.isActive = false;
+                        } else {
+                            // Schedule the next payment
+                            payment.scheduledDate = addFrequency(payment.scheduledDate, payment.frequency);
+                        }
+
+                        await user.save();
+                        await receiver.save();
+                    } else {
+                        console.log(`User ${user._id} has insufficient balance for scheduled payment.`);
+                        // Optionally, notify the user or take other actions
+                    }
+                } else {
+                    console.log(`Receiver not found for scheduled payment: AccNo ${payment.toAccNo}, BSB ${payment.toBsb}`);
+                    // Optionally, notify the user or take other actions
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error processing scheduled payments:', error.message);
+    }
+});
