@@ -8,6 +8,7 @@ const cors = require('cors');
 const accountRoutes = require('./routes/accountRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 // const billRoutes = require('.routes/adminRoutes');
 // const { ScheduleRecurringPayments } = require('.utils/scheduler');
 
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 app.use('/api/accounts', accountRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 // app.use('/api/bills', billRoutes);
 
 // Connect to MongoDB
