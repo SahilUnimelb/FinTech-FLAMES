@@ -21,6 +21,8 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     frequency: "",
     senderAccount: "",
     receiverAccount: "",
+    totalRuns: "",
+    scheduledDate: "",
 
   })
   const options = ["Pay or Transfer", "Scheduled Payments", "View Scheduled Bills", "Transfer Funds"]
@@ -64,8 +66,38 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         handleBankTransfer();
     } else if (active === 'Pay or Transfer' && formData.transferMethod === "PayID") {
         handlePayIdTransfer();
+    } else if (active === 'Scheduled Payments') {
+        await handleScheduledTransfer();
     }
     setIsSubmitted(true);
+  };
+  
+  const handleScheduledTransfer = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/transactions/schedulePayment', {
+        fromAccountType: formData.fromAccountType,
+        toAccNo: formData.accountNumber,
+        toBsb: formData.bsb,
+        amount: formData.amount,
+        description: formData.description,
+        scheduledDate: formData.scheduledDate || formData.date,
+        frequency: formData.frequency,
+        totalRuns: formData.totalRuns
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setMessage(response.data.message);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage(`${error.response.data.message}`);
+      } else {
+        setMessage('An unknown error occurred');
+      }
+    }
   };
 
   const handleInternalTransfer = async () => {
@@ -374,15 +406,16 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 <label htmlFor='sender-account' className='transfer-section-content-sub-header'>Account</label>
                                 <select
                                     id='sender-account'
-                                    name='senderAccount'
+                                    name='fromAccountType'
+                                    value={formData.fromAccountType}
                                     //value={formData.senderAccount}
                                     onChange={handleChange}
                                     className='sender-account-select'
                                     required
                                 >
                                     <option value="">-- Choose Account --</option>
-                                    <option value="">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
-                                    <option value="">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
+                                    <option value="transaction">Transaction Account: {accountData ? "$" + accountData.transAccDetails.balance : 'Null Balance'}</option>
+                                    <option value="savings">Savings Account: {accountData ? "$" + accountData.savingAccDetails.balance : 'Null Balance'}</option>
                                 </select>
                             </span>
                             <p className='transfer-section-content-header'>To:</p>
@@ -547,55 +580,48 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                 <p className='transfer-section-content-sub-header'>Start Date</p>
                                 <input
                                     type="date"
-                                    name="date"
-                                    value={formData.date}
+                                    name="scheduledDate"
+                                    value={formData.scheduledDate}
                                     onChange={handleChange}
                                     min={new Date().toISOString().split("T")[0]}
                                     className="transfer-date-input"
                                     required={!!formData.scheduleOption}
                                     />
                                 </span>
-                                <span>
-                                <label htmlFor='recurring-option' className='transfer-section-content-sub-header'>Schedule Options</label>
-                                <select
-                                    id='recurring-option'
-                                    name='recurring'
-                                    value={formData.recurring}
-                                    onChange={handleChange}
-                                    className='transfer-recurring-select'
-                                    required={!!formData.scheduleOption}
-                                >
-                                    <option value="">-- Choose Option --</option>
-                                    <option value="Never">Never</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                                </span>
-                                <span>
-                                <label htmlFor='frequency-option' className='transfer-section-content-sub-header'>Frequency</label>
-                                <select
-                                    id='frequency-option'
-                                    name='frequency'
-                                    value={formData.frequency}
-                                    onChange={handleChange}
-                                    className='transfer-frequency-select'
-                                >
-                                    <option value="">-- Choose Option --</option>
-                                    <option value="Weekly">Weekly</option>
-                                    <option value="Monthly">Monthly</option>
-                                    <option value="Yearly">Yearly</option>
-                                </select>
-                                </span>
+                                {formData.scheduleOption === 'Recurring' && (
+                                        <>
+                                            <span>
+                                                <label htmlFor='frequency-option' className='transfer-section-content-sub-header'>Frequency</label>
+                                                <select
+                                                    id='frequency-option'
+                                                    name='frequency'
+                                                    value={formData.frequency}
+                                                    onChange={handleChange}
+                                                    className='transfer-frequency-select'
+                                                    required
+                                                >
+                                                    <option value="">-- Choose Frequency --</option>
+                                                    <option value="weekly">Weekly</option>
+                                                    <option value="monthly">Monthly</option>
+                                                    <option value="yearly">Yearly</option>
+                                                </select>
+                                            </span>
+                                            {/* Total Runs */}
+                                            <span>
+                                                <label htmlFor='total-runs' className='transfer-section-content-sub-header'>Total Runs</label>
+                                                <input
+                                                    type="number"
+                                                    id="total-runs"
+                                                    name="totalRuns"
+                                                    value={formData.totalRuns}
+                                                    onChange={handleChange}
+                                                    className='transfer-total-runs-input'
+                                                    min="1"
+                                                    required
+                                                />
+                                            </span>
+                                        </>
+                                    )}
                                 </>
                             )}
                             <div className='transfer-section-button-wrapper'>
