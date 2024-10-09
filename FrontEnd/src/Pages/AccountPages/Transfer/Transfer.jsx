@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import closeSign from '../../../Assets/close-button.svg';
+import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import ScheduledBillsTable from '../../../Components/ScheduledBillsTable/ScheduledBillsTable';
 import './Transfer.css';
 export default function Transfer({accounts, phones, addContactDetails}) {
@@ -22,6 +23,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     receiverAccount: "",
 
   })
+  const options = ["Pay or Transfer", "Scheduled Payments", "View Scheduled Bills", "Transfer Funds"]
   const [accountData] = useState(() => {
     const storedData = localStorage.getItem('accountData');
     return storedData ? JSON.parse(storedData) : null;
@@ -29,13 +31,9 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   const [message, setMessage] = useState('');
   const flag = false;
   const [searchAccount, setSearchAccount] = useState('');
-  const filteredAccounts = accounts.filter(account =>
-    account.name.toLowerCase().includes(searchAccount.toLowerCase())
-  );
+  
   const [searchPhone, setSearchPhone] = useState('');
-  const filteredPhones = phones.filter(phone =>
-    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
-  );
+  
   const token = localStorage.getItem('authToken');
   function handleChange (event) {
     const {name, value} = event.target;
@@ -46,6 +44,8 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         }
     })
   }
+  const [bankContacts, setBankContacts] = useState([]);
+  const [payIdContacts, setPayIdContacts] = useState([]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -58,11 +58,11 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         addContactDetails(formData);
     }
     console.log(formData);
-    if (active === 'transfer') {
+    if (active === 'Transfer Funds') {
         handleInternalTransfer();
-    } else if (active === 'pay' && formData.transferMethod === "Bank Transfer") {
+    } else if (active === 'Pay or Transfer' && formData.transferMethod === "Bank Transfer") {
         handleBankTransfer();
-    } else if (active === 'pay' && formData.transferMethod === "PayID") {
+    } else if (active === 'Pay or Transfer' && formData.transferMethod === "PayID") {
         handlePayIdTransfer();
     }
     setIsSubmitted(true);
@@ -147,7 +147,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     setIsSubmitted(false);
   };
 
-  const [active, setActive] = useState(localStorage.getItem('active') || 'pay');
+  const [active, setActive] = useState(localStorage.getItem('active') || 'Pay or Transfer');
 
   useEffect(() => {
     localStorage.setItem('active', active);
@@ -159,7 +159,43 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const [openBankContact, setOpenBankContact] = useState(false);
 
+  const getBankContacts = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/getBankContacts', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setBankContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching bank contacts:', error);
+    }
+  }; // Add token as a dependency if it's used inside the function
+  
+  const getPayIdContacts = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/accounts/getPayIdContacts', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setPayIdContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching PayID contacts:', error);
+    }
+  };
+
+  const filteredAccounts = bankContacts.filter(account =>
+    account.name.toLowerCase().includes(searchAccount.toLowerCase())
+  );
+  const filteredPhones = payIdContacts.filter(phone =>
+    phone.name.toLowerCase().includes(searchPhone.toLowerCase())
+  );
+
   function onClickBankContact() {
+    getBankContacts();
     setSearchAccount('');
     setOpenBankContact(true);
   }
@@ -174,6 +210,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   const [openPhoneContact, setOpenPhoneContact] = useState(false);
 
   function onClickPhoneContact() {
+    getPayIdContacts();
     setSearchPhone('');
     setOpenPhoneContact(true);
   }
@@ -240,7 +277,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     onClick = {() => {fillUpFormBank(account)}} >
                     <p> {account.name} </p>
                     <p> {account.bsb} </p>
-                    <p> {account.accountNumber} </p>
+                    <p> {account.accNo} </p>
                     </div>
                 )
                 })}
@@ -284,7 +321,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                     className='transfer-contact-list-individual'
                     onClick = {() => {fillUpFormPhone(phone)}} >
                     <p> {phone.name} </p>
-                    <p> {phone.phoneNumber} </p>
+                    <p> {phone.phoneNo} </p>
                     </div>
                 )
                 })}
@@ -298,33 +335,37 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   return (
     <div className='transfer'>
         <div className='transfer-header'>
+                <Dropdown active = {active} setActive = {setActive} options = {options} />
                 <p>Move Money</p>
+                <div className='mobile-view'>
+                    ({active})
+                </div>
         </div>
         <div className='transfer-section'>
             <div className='transfer-section-sidebar'>
-                <div className={`transfer-section-sidebar-first-elem ${active === 'pay' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
-                     onClick = {() => {onClickDiv('pay')}}
+                <div className={`transfer-section-sidebar-first-elem ${active === 'Pay or Transfer' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
+                     onClick = {() => {onClickDiv('Pay or Transfer')}}
                 >
                     <p >Pay or Transfer</p>
                 </div>
-                <div className={`transfer-section-sidebar-second-elem ${active === 'schedule' ? 'transfer-section-sidebar-second-elem-active' : ''}`}
-                     onClick = {() => {onClickDiv('schedule')}}
+                <div className={`transfer-section-sidebar-second-elem ${active === 'Scheduled Payments' ? 'transfer-section-sidebar-second-elem-active' : ''}`}
+                     onClick = {() => {onClickDiv('Scheduled Payments')}}
                 >
                     <p >Scheduled Payments</p>
                 </div>
-                <div className={`transfer-section-sidebar-third-elem ${active === 'view' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
-                     onClick = {() => {onClickDiv('view')}}
+                <div className={`transfer-section-sidebar-third-elem ${active === 'View Scheduled Bills' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
+                     onClick = {() => {onClickDiv('View Scheduled Bills')}}
                 >
                     <p >View Scheduled Bills</p>
                 </div>
-                <div className={`transfer-section-sidebar-first-elem ${active === 'transfer' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
-                     onClick = {() => {onClickDiv('transfer')}}
+                <div className={`transfer-section-sidebar-first-elem ${active === 'Transfer Funds' ? 'transfer-section-sidebar-first-elem-active' : ''}`}
+                     onClick = {() => {onClickDiv('Transfer Funds')}}
                 >
                     <p >Transfer Funds</p>
                 </div>
             </div>
             <div className='transfer-section-content'>
-                {(active === 'pay' || active === 'schedule') &&(
+                {(active === 'Pay or Transfer' || active === 'Scheduled Payments') &&(
                     <>
                         <form onSubmit={handleSubmit}>
                             {flag && <p>{message}</p>}
@@ -486,7 +527,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                                     className="transfer-description-textarea"
                                 />
                             </span>
-                            {active === 'schedule' && (
+                            {active === 'Scheduled Payments' && (
                                 <>
                                 <span>
                                 <label htmlFor='schedule-option' className='transfer-section-content-sub-header'>Schedule Options</label>
@@ -575,12 +616,12 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                 </div>
                 </div>
             )}
-            {active === 'view' && (
+            {active === 'View Scheduled Bills' && (
                 <>
                 <ScheduledBillsTable/>
                 </>
             )}
-            {active === 'transfer' && (
+            {active === 'Transfer Funds' && (
                 <>
                 <div className='transfer-section-content'>
                     <form onSubmit={handleSubmit}>

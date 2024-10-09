@@ -7,6 +7,9 @@
     flex-direction: column;
     align-items: center;
   }
+  .mobile-view {
+    display: none;
+  }
   .transfer-header {
     background-color: #0D99FF;
     width: 90vw;
@@ -330,7 +333,7 @@
     text-align: right;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 660px) {
     .transfer-contact-list-header,
     .transfer-contact-list-individual {
       flex-direction: column;
@@ -427,4 +430,170 @@
 
   .modal-content button:hover {
     background-color: #142d39
+  }
+  @media(max-width:1280px) {
+    .transfer-section-sidebar-first-elem,
+    .transfer-section-sidebar-second-elem,
+    .transfer-section-sidebar-third-elem  {
+      font-size: 22px;
+    }
+  }
+  @media(max-width:1024px) {
+    .transfer-section-sidebar-first-elem,
+    .transfer-section-sidebar-second-elem,
+    .transfer-section-sidebar-third-elem  {
+      font-size: 18px;
+    }
+    .transfer-header p {
+      font-size: 36px;
+    }
+  }
+  @media(max-width:950px) {
+    .transfer-section-content-header {
+      margin-left: 25px;
+    }
+    .transfer-section-content span {
+      margin-left: 25px;
+    }
+    .currency-symbol {
+      left: 15px;
+    }
+  }
+  @media(max-width:830px) {
+    .sender-account-select, .transfer-method-select,
+  .transfer-description-textarea, .transfer-amount-input,
+  .transfer-schedule-select,
+  .transfer-date-input, .transfer-recurring-select,
+  .transfer-frequency-select {
+    margin-left: 10px;
+  }
+  .transfer-receiver-details {
+    margin-left: 10px;
+  }
+  .currency-symbol {
+    left: -25px;
+  }
+  }
+  @media(max-width:800px) {
+    .transfer-header {
+      margin-top: 42px;
+    }
+    .transfer-section-sidebar  {
+      display: none;
+    }
+    .transfer-section-content-header {
+      margin-left: 50px;
+    }
+    .transfer-section-content span {
+      margin-left: 50px;
+    }
+    .sender-account-select, .transfer-method-select,
+  .transfer-description-textarea, .transfer-amount-input,
+  .transfer-schedule-select,
+  .transfer-date-input, .transfer-recurring-select,
+  .transfer-frequency-select {
+
+    margin-left: 50px;
+
+  }
+  .transfer-receiver-details {
+    margin-left: 50px;
+  }
+  .currency-symbol {
+    left: -10px;
+  }
+  }
+  @media(max-width:500px) {
+    .mobile-view {
+      display: flex;
+      color: white;
+      font-weight: 600;
+      font-size: 25px;
+      align-items: center;
+  }
+  }
+  @media(max-width:660px) {
+
+    .sender-account-select, .transfer-method-select,
+  .transfer-description-textarea, .transfer-amount-input,
+  .transfer-schedule-select,
+  .transfer-date-input, .transfer-recurring-select,
+  .transfer-frequency-select {
+
+    margin-left: 10px;
+
+  }
+  .transfer-receiver-details {
+    margin-left: 10px;
+  }
+  .currency-symbol {
+    left: -50px;
+  }
+  .transfer-contact-list-content {
+    min-width: 91vw;
+  }
+  }
+  @media(max-width:600px) {
+
+    .transfer-section-content-header {
+      margin-left: 20px;
+    }
+    .transfer-section-content span {
+      margin-left: 20px;
+    }
+    .currency-symbol {
+      left: -20px;
+    }
+  }
+  @media(max-width:550px) {
+    .transfer-section-content-header {
+      font-size: 27px;
+    }
+    .transfer-section-content-sub-header {
+      font-size: 18px;
+    }
+  }
+  @media(max-width:514px) {
+    .sender-account-select, .transfer-method-select,
+  .transfer-description-textarea, .transfer-amount-input,
+  .transfer-schedule-select,
+  .transfer-date-input, .transfer-recurring-select,
+  .transfer-frequency-select {
+
+    margin-left: 2px;
+
+  }
+  .transfer-receiver-details {
+    margin-left: 2px;
+  }
+  .currency-symbol {
+    left: -20px;
+  }
+  .transfer-section-content-header {
+    margin-left: 10px;
+  }
+  .transfer-section-content span {
+    margin-left: 10px;
+  }
+  .transfer-section-content-header {
+    font-size: 24px;
+  }
+  .transfer-section-content-sub-header {
+    font-size: 17px;
+  }
+  }
+  @media(max-width:400px) {
+    .sender-account-select, .transfer-method-select,
+  .transfer-description-textarea, .transfer-amount-input,
+  .transfer-schedule-select,
+  .transfer-date-input, .transfer-recurring-select,
+  .transfer-frequency-select {
+    width: 200px;
+  }
+  .transfer-receiver-details {
+    width: 200px;
+  }
+  .transfer-header p {
+    font-size: 25px;
+  }
   }

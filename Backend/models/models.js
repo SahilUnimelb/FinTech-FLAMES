@@ -58,6 +58,19 @@ const scheduledPaymentSchema = new mongoose.Schema({
   targetAccNo: { type: Number, required: true }, // The account to which the payment will be sent
 });
 
+// Define bank contacts schema
+const bankContactSchema = new mongoose.Schema({
+  name: {type: String, required: true},
+  bsb: {type: Number, required: true},
+  accNo: {type: Number, required: true}
+});
+
+// Define payid contacts schema
+const payIdContactSchema = new mongoose.Schema({
+  name: {type: String, required: true},
+  phoneNo: {type: Number, required: true}
+});
+
 // Define a schema for User
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -72,6 +85,8 @@ const UserSchema = new mongoose.Schema({
   cardDetails: cardDetailSchema, // Embedding card inside the user
   roles: {type: String, required: true, default: "user"},
   transactions: [transactionSchema], 
+  bankContacts: [bankContactSchema],
+  payIdContacts: [payIdContactSchema],
   is2FAEnabled: {type: Boolean, default: false},
   isDeleted: { type: Boolean, default: false }
 });
