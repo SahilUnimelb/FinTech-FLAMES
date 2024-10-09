@@ -9,6 +9,7 @@
 .mobile-view {
     display: none;
 }
+
 .view-header {
     background-color: #0D99FF;
     width: 90vw;
@@ -258,7 +259,26 @@
     padding: 12px;
     text-align: left;
 }
+.month-header td {
+    background-color: #acacac;
+    color:black;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
 
+}
+.search-container {
+    margin-bottom: 20px;
+  }
+
+.search-input {
+    width: 100%;
+    max-width: 450px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 35px;
+}
 .transaction-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -407,7 +427,9 @@
     .view-user-profile {
         margin-left: 0px;
         margin-top: 30px;
-
+    }
+    .search-input {
+        max-width: 300px;
     }
 
 }
@@ -442,6 +464,9 @@
     .view-user-profile {
         margin-left: -80px;
         margin-top: 30px;
+    }
+    .search-input {
+        max-width: 250px;
     }
 
 }
@@ -485,5 +510,8 @@
     }
     .card-bsb, .card-account-number, .card-cvv {
         font-size: 12px;
+    }
+    .search-input {
+        max-width: 200px;
     }
 }
