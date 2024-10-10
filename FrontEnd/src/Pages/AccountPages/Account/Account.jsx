@@ -90,10 +90,13 @@ export default function Account({category}) {
     setRemoveMessage(false);
 
   }
-
+  const [active, setActive] = useState('Profile');
+  function onClickDiv(type) {
+    setActive(type);
+  }
   const setCategory = (category) => {
     if (category === 'home') {
-      return <Home/>
+      return <Home onClickDiv={onClickDiv}/>
     }
     else if (category === 'transfer') {
       return (<Transfer
@@ -103,7 +106,7 @@ export default function Account({category}) {
               />)
     }
     else if (category === 'view') {
-      return <ViewAccounts/>
+      return <ViewAccounts active={active} setActive={setActive} onClickDiv={onClickDiv}/>
     }
     else if (category === 'contacts') {
       return (<Contacts

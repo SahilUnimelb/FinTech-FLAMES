@@ -19,7 +19,8 @@ export default function ForgotPassword() {
                     <input type= "email-address" placeholder='Email  Address'/>
                 </div>
                 <button>Confirm</button>
-                <p>Don't have an account? <span><Link to = "/signup" className='forgot-signup-link'>Click here.</Link></span></p>
+                <p className='forgot-agree'>Don't have an account? <span><Link to = "/signup" className='forgot-signup-link'>Click here.</Link></span></p>
+                <p className='forgot-agree'>Back to<span><Link to = "/" className='forgot-signup-link'> Home.</Link></span></p>
             </div>
         </div>
     )

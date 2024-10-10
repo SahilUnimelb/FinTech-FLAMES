@@ -1,5 +1,5 @@
 const express = require('express');
-const { transferMoney, transferByPayId, transferWithinUser } = require('../controllers/transactionController');
+const { transferMoney, transferByPayId, transferWithinUser, schedulePayment, getScheduledPayments } = require('../controllers/transactionController');
 const { authenticateToken } = require('../middleWare/auth')
 
 const router = express.Router();

@@ -53,6 +53,15 @@
     border: none;
     border-radius: 15px;
 }
+.confirm-accounts {
+    display: flex;
+    justify-content: center;
+}
+.edit-account-link {
+    color: #1a3b4a;
+    font-weight: 600;
+    font-size: 22px;
+}
 @media(max-width:1024px) {
     .edit-profile {
         height: 100vh;

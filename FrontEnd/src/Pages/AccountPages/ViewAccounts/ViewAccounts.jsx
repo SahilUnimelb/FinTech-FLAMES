@@ -1,12 +1,13 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { format, parse } from 'date-fns';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import './ViewAccounts.css';
 
-export default function ViewAccounts() {
+export default function ViewAccounts({active, setActive, onClickDiv}) {
   const options = ['Profile', 'Savings Account', 'Transactions Account']
-  const [active, setActive] = useState('Profile');
+
   const [flipped, setFlipped] = useState(false);
   const [message, setMessage] = useState('');
   const [accountData, setAccountData] = useState(() => {
@@ -100,9 +101,9 @@ if the formatting needs changing. */
     setFlipped(!flipped);
   };
 
-  function onClickDiv(type) {
-    setActive(type);
-  }
+
+  // Group the filtered transactions by month
+
 
   const TransactionTable = ({ transactions }) => {
     const rows = [...transactions];
@@ -110,8 +111,75 @@ if the formatting needs changing. */
     while (rows.length < 20) {
       rows.push({ date: '', description: '', amount: '' });
     }
+    const [searchQuery, setSearchQuery] = useState('');
+  const groupTransactionsByMonth = (transactions) => {
+    // Sort transactions by date in descending order
+    const sortedTransactions = [...transactions].reverse();
 
+    // Group transactions by month and year
+    return sortedTransactions.reduce((groups, transaction) => {
+      const parsedDate = parse(transaction.date, 'dd/MM/yyyy', new Date());
+      const monthYear = format(parsedDate, 'MMMM yyyy');
+
+      if (!groups[monthYear]) {
+        groups[monthYear] = [];
+      }
+
+      groups[monthYear].push(transaction);
+
+      return groups;
+    }, {});
+  };
+
+  // Function to filter transactions based on search query
+  const filteredTransactions = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return transactions;
+    }
+
+    const query = searchQuery.trim().toLowerCase();
+
+    // Check if the query matches a month name
+    const isMonthSearch = transactions.some((txn) => {
+      const parsedDate = parse(txn.date, 'dd/MM/yyyy', new Date());
+      const monthName = format(parsedDate, 'MMMM').toLowerCase();
+      return monthName === query;
+    });
+
+    if (isMonthSearch) {
+      return transactions.filter((txn) => {
+        const parsedDate = parse(txn.date, 'dd/MM/yyyy', new Date());
+        const monthName = format(parsedDate, 'MMMM').toLowerCase();
+        return monthName === query;
+      });
+    }
+
+    // Check if the query matches a date format (DD/MM/YYYY)
+    const isDateSearch = /^\d{2}\/\d{2}\/\d{4}$/.test(query);
+    if (isDateSearch) {
+      return transactions.filter((txn) => txn.date === query);
+    }
+
+    // If the query doesn't match month or date, return all transactions
+    return transactions;
+  }, [searchQuery, transactions]);
+    const groupedTransactions = useMemo(() => {
+      return groupTransactionsByMonth(filteredTransactions);
+    }, [filteredTransactions]);
     return (
+      <div className="transaction-table-container">
+      {/* Search Input Field */}
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search by month (e.g., September) or date (e.g., 20/09/2024)"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
+      </div>
+
+      {/* Transaction Table */}
       <div className="scrollable-container">
         <table className="transaction-table">
           <thead>
@@ -122,16 +190,40 @@ if the formatting needs changing. */
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction, index) => (
-              <tr key={index}>
-                <td className="transact-date">{transaction.date}</td>
-                <td className="transact-desc">{transaction.description}</td>
-                <td className={`transact-amount ${transaction.amount.startsWith('-') ? 'outgoing' : 'incoming'}`}>{transaction.amount}</td>
+            {Object.keys(groupedTransactions).length === 0 ? (
+              <tr>
+                <td colSpan="3" className="no-results">
+                  No transactions found.
+                </td>
               </tr>
-            ))}
+            ) : (
+              Object.keys(groupedTransactions).map((monthYear) => (
+                <React.Fragment key={monthYear}>
+                  {/* Month Header */}
+                  <tr className="month-header">
+                    <td colSpan="3">{monthYear}</td>
+                  </tr>
+                  {/* Transactions for the Month */}
+                  {groupedTransactions[monthYear].map((transaction, index) => (
+                    <tr key={index}>
+                      <td className="transact-date">{transaction.date}</td>
+                      <td className="transact-desc">{transaction.description}</td>
+                      <td
+                        className={`transact-amount ${
+                          transaction.amount.startsWith('-') ? 'outgoing' : 'incoming'
+                        }`}
+                      >
+                        {transaction.amount}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
+              ))
+            )}
           </tbody>
         </table>
       </div>
+    </div>
     );
   };
 
