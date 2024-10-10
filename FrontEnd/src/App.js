@@ -8,6 +8,7 @@ import ForgotPassword from './Pages/IntroPages/Forgot/Forgot.jsx';
 import Homepage from './Pages/IntroPages/HomePage/Homepage.jsx';
 import SignUp from './Pages/IntroPages/SignUp/SignUp.jsx';
 import OneTimePin from './Pages/IntroPages/Forgot/OneTimePin.jsx';
+import AdminPanel from './Pages/AccountPages/AdminPanel/AdminPanel.jsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path = '/resetpassword' element = {<ResetPassword/>}/>
           <Route path = '/otp' element = {<OneTimePin/>}/>
           <Route path = '/editprofile' element = {<Layout> <EditProfile/> </Layout>}/>
+          <Route path = '/adminpanel' element = {<Layout> <AdminPanel/> </Layout>}/>
         </Routes>
       </BrowserRouter>
     </div>
