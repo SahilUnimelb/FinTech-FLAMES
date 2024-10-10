@@ -27,11 +27,6 @@ export default function Chatbot() {
 
             const response = await axios.post('http://localhost:5000/api/chatbot', {
                 message: inputValue
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: token ? `Bearer ${token}` : undefined
-                }
             });
 
     
