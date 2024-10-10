@@ -1,4 +1,4 @@
-// data/qa.json
+//data qa.json
 {
   "how to transfer money": "To transfer money, navigate to your account dashboard, select 'Transfer Funds,' enter the recipient's account details, and confirm the transaction.",
   "how to schedule a payment": "To schedule a payment, go to the 'Scheduled Payments' section, choose the payment type, set the frequency and number of occurrences, and save.",
