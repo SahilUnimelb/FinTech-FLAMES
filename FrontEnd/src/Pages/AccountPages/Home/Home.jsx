@@ -1,14 +1,23 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
 export default function Home({onClickDiv}) {
-  const [accountData] = useState(() => {
-    const storedData = localStorage.getItem('accountData');
-    return storedData ? JSON.parse(storedData) : null;
-  });
+  const [accountData, setAccountData] = useState(null)
   const flag = false;
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const storedData = localStorage.getItem('accountData');
+      if (storedData) {
+        setAccountData(JSON.parse(storedData)); // Update accountData with localStorage data
+        clearInterval(intervalId); // Stop the interval once the data is found
+      }
+    }, 5); // Check every second (1000ms)
+
+    // Cleanup interval if the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   const getDay = (date) => {
     const dayIndex = date.getDay();
