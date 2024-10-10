@@ -64,3 +64,88 @@
     border: none;
     border-radius: 15px;
 }
+@media(max-width:750px) {
+    .otp-container {
+        width: 520px;
+    }
+
+    .otp-text {
+        font-size: 16px;
+    }
+    .otp-container input {
+        height: 60px;
+        width: 500px;
+        font-size: 16px;
+    }
+    .otp-container button {
+        height: 60px;
+    }
+}
+@media(max-width:650px) {
+    .otp-container {
+        width: 440px;
+    }
+
+    .otp-text {
+        font-size: 16px;
+    }
+    .otp-container input {
+        height: 60px;
+        width: 420px;
+        font-size: 16px;
+    }
+    .otp-container button {
+        height: 60px;
+    }
+}
+@media(max-width:600px) {
+    .otp-container {
+        width: 380px;
+    }
+
+    .otp-text {
+        font-size: 14px;
+    }
+    .otp-container input {
+        height: 60px;
+        width: 360px;
+        font-size: 14px;
+    }
+    .otp-container button {
+        height: 60px;
+    }
+}
+@media(max-width:520px) {
+    .otp-container {
+        width: 300px;
+    }
+
+    .otp-text {
+        font-size: 14px;
+    }
+    .otp-container input {
+        height: 60px;
+        width: 280px;
+        font-size: 14px;
+    }
+    .otp-container button {
+        height: 60px;
+    }
+}
+@media(max-width:440px) {
+    .otp-container {
+        width: 220px;
+    }
+
+    .otp-text {
+        font-size: 14px;
+    }
+    .otp-container input {
+        height: 40px;
+        width: 200px;
+        font-size: 14px;
+    }
+    .otp-container button {
+        height: 40px;
+    }
+}
