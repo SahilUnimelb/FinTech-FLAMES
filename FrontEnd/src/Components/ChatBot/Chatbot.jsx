@@ -51,6 +51,16 @@ export default function Chatbot() {
             const botMessage = { text: botReply, sender: 'bot' };
             setMessages(prevMessages => [...prevMessages, botMessage]);
 
+            // Check if the response contains a message
+            if (response.data && response.data.message) {
+                const botMessage = { text: response.data.message, sender: 'bot' };
+                setMessages(prevMessages => [...prevMessages, botMessage]);
+            } else {
+                // If there's no reply, send a default message
+                const botMessage = { text: 'No reply.', sender: 'bot' };
+                setMessages(prevMessages => [...prevMessages, botMessage]);
+            }
+
         } catch (error) {
             console.error('Error communicating with chatbot:', error);
             // Handle errors and provide feedback to the user
