@@ -30,6 +30,33 @@ exports.deleteAccount = async (req, res) => {
     }
 };
 
+// Reactivate a soft deleted account
+exports.reactivateAccount = async (req, res) => {
+    const { username } = req.body;
+
+    try {
+        const user = await User.findOne({ 'login.username': username });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Account not found' });
+        }
+
+        // If user is softdeleted, reactivate it
+        if (user.isDeleted){
+            user.isDeleted = false;
+            await user.save();
+            res.status(200).json({ message: `Account with user ${username} reactivated successfully` });
+        }
+        // Otherwise actually delete user from database
+        else {
+            return res.status(404).json({ message: 'Account is already active' });
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 // Modify transactions
 exports.modifyTransactions = async (req, res) => {
     const { accountNumber, transactionId, amount, description } = req.body;
@@ -83,6 +110,32 @@ exports.setUserBalance = async (req, res) => {
         await receiver.save();
         res.status(200).json({ message: `Succesfully set user ${receiver.login.username} balance to ${newBalance}` });
 
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.getUsers = async (req, res) => {
+
+    try {
+        const users = await User.find({ _id: { $ne: req.userId } })
+        .select('name login.username email AccNoBsb.accNo AccNoBsb.bsb transactionAcc.balance savingsAcc.balance isDeleted');
+
+        // Map through the users and assign an artificial id based on order
+        const formattedUsers = users.map((user, index) => ({
+            id: index + 1,  // Artificial id based on the order in the result
+            name: user.name,
+            username: user.login.username,
+            email: user.email,
+            accNo: user.AccNoBsb.accNo,
+            bsb: user.AccNoBsb.bsb,
+            transactionBalance: user.transactionAcc.balance,
+            savingsBalance: user.savingsAcc?.balance,  // Handle case if savingsAcc might not exist
+            isDeleted: user.isDeleted
+        }));
+
+        // Send the formatted user data as a response
+        res.status(200).json(formattedUsers);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

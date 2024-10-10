@@ -32,7 +32,7 @@ Content-Type: application/json
 ### Transfer Money
 POST http://localhost:5000/api/transactions/transfer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
   "toAccNo": "27618500",
@@ -44,7 +44,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3N
 ### Transfer Money PayID
 POST http://localhost:5000/api/transactions/payIdTransfer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
   "toPhoneNo": "5424712610",
@@ -55,7 +55,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3N
 ### Transfer Between Account
 POST http://localhost:5000/api/transactions/transfer/within
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
   "username": "mitchellzheng", 
@@ -68,7 +68,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3N
 ### Get Account Info
 POST http://localhost:5000/api/accounts/getUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 ### Delete Account
 POST http://localhost:5000/api/admin/delete
@@ -78,61 +78,86 @@ Content-Type: application/json
   "username": "mitchellzheng"
 }
 
+### Admin - Create Account
+POST http://localhost:5000/api/accounts/create
+Content-Type: application/json
+
+{
+  "name": "John Admin",
+  "email": "admin@example.com",
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Admin - Login Account
+POST http://localhost:5000/api/accounts/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Admin - get Database
+POST http://localhost:5000/api/admin/getDatabase
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzA3ODhlMDE2MmU5OTliYTJiYmQ2ZGEiLCJpYXQiOjE3Mjg1NDcxMTgsImV4cCI6MTcyODU1MDcxOH0.FAm6kQQ5iDK-MtbP_qSSsK32MxBx1Jk0FO2S57o9ltE
+
 ### Admin - set user balance
 POST http://localhost:5000/api/admin/setBalance
 Content-Type: application/json
 
 {
-  "accNumber": "27618500",
-  "newBalance": 30000
+  "accNumber": "82085951",
+  "newBalance": 50000
 }
 
 ### Add contact - Bsb & Account Number
 POST http://localhost:5000/api/accounts/addContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
   "name": "Fischer Zhang",
-  "bsb": "486739",
-  "accNo": "69892000"
+  "bsb": "897716",
+  "accNo": "53089132"
 }
 
 ### Add contact - PayId
 POST http://localhost:5000/api/accounts/addContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
   "name": "Fischer Zhang",
-  "phoneNo": "2042435196"
+  "phoneNo": "8408944303"
 }
 
 ### Remove contact - Bsb & Account Number
 POST http://localhost:5000/api/accounts/removeBankContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
-  "bsb": "486739",
-  "accNo": "69892000"
+  "bsb": "897716",
+  "accNo": "53089132"
 }
 
 ### Remove contact - PayId
 POST http://localhost:5000/api/accounts/removePayIdContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 {
-  "phoneNo": "2042435196"
+  "phoneNo": "8408944303"
 }
 
 ### Get contact - Bank
 POST http://localhost:5000/api/accounts/getBankContacts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
 
 ### Get contact - PayId
 POST http://localhost:5000/api/accounts/getPayIdContacts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3NzFiMDcxNmZiZWZiZGIwNmJlZWYiLCJpYXQiOjE3Mjc1MTE5NjQsImV4cCI6MTcyNzUxNTU2NH0.QjnsBNbAaXyxKXjsFBZWH6rrqOwJkGXecEfMwNk_Q60
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
