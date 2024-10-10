@@ -137,7 +137,167 @@
     width: 5vw;
 }
 
-/* 
-.remember-me {
-    display: flex;
-} */
+@media(max-width:1280px) {
+    .homepage-content h1, .homepage-content p {
+        margin-left: 180px;
+    }
+    .homepage-header img {
+        width: 60px;
+        height: 60px;
+    }
+    .homepage-bank-title {
+        font-size: 35px;
+    }
+    .homepage-bank-slogan {
+        margin-top: 45px;
+        margin-left: 72px;
+        font-size: 12px;
+    }
+}
+@media(max-width:1024px) {
+    .homepage-content h1, .homepage-content p {
+        margin-left: 100px;
+    }
+    .homepage-content h1 {
+        font-size: 45px;
+    }
+    .homepage-content p {
+        font-size: 15px;
+    }
+    .login {
+        margin-right: 50px;
+    }
+    .homepage-bank-title {
+        font-size: 25px;
+      }
+      .homepage-bank-slogan {
+        margin-top: 30px;
+        margin-left: 60px;
+        font-size: 12px;
+    }
+    .homepage-logo img {
+        width: 48px;
+        height: 48px;
+      }
+}
+@media(max-width:800px) {
+    .homepage-content {
+        background: none;
+        margin-top: -100px;
+        width: 900px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-left: 230px;
+
+    }
+    .homepage-content h1 {
+        font-size: 40px;
+        text-align: center;
+    }
+    .homepage-content p {
+        font-size: 13px;
+        text-align: center;
+        margin-left: -170px;
+    }
+    .bottom-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+    }
+    .login {
+        padding-top: 0px;
+        margin-top: -50px;
+    }
+    .login h1 {
+        font-size: 35px;
+    }
+    .signup-button {
+        position: absolute;
+    }
+    .forgot-pass-container {
+        width: 500px;
+    }
+    .login-button {
+        margin-left: 31px;
+    }
+    .homepage-header img {
+        width: 48px;
+        height: 48px;
+      }
+}
+@media(max-width:700px) {
+    .homepage-content {
+        margin-left:200px;
+    }
+}
+@media(max-width:650px) {
+    .homepage-content {
+        margin-left:170px;
+    }
+    .homepage-content h1 {
+        font-size: 40px;
+        text-align: center;
+    }
+    .homepage-content p {
+        font-size: 13px;
+        text-align: center;
+        margin-left: -170px;
+    }
+    .login {
+        margin-left: -40px;
+    }
+    .signup-button {
+        margin-left: -20px;
+    }
+}
+@media(max-width:600px) {
+    .homepage-content {
+        margin-left: 30px;
+    }
+    .homepage-content h1 {
+        font-size: 30px;
+        margin-left: 200px;
+        width: 90vw;
+        text-align: center;
+    }
+    .homepage-content p {
+        font-size: 13px;
+        margin-left: 200px;
+        width: 90vw;
+        text-align: center;
+
+    }
+}
+@media(max-width:550px) {
+    .homepage-content {
+        margin-left: 30px;
+    }
+    .homepage-content h1 {
+        font-size: 25px;
+        margin-left: 220px;
+        width: 90vw;
+    }
+    .homepage-content p {
+        font-size: 12px;
+        margin-left: 220px;
+        width: 90vw;
+
+    }
+}
+@media(max-width:500px) {
+    .bottom-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .homepage-content{
+        display: none;
+    }
+    .login {
+        padding-top: 0px;
+        margin-top: 50px;
+        margin-left: -90px;
+    }
+}
