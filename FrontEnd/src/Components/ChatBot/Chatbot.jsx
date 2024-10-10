@@ -68,11 +68,11 @@ export default function Chatbot() {
                 setError(error.response.data.message);
                 const botMessage = { text: `Error: ${error.response.data.message}`, sender: 'bot' };
                 setMessages(prevMessages => [...prevMessages, botMessage]);
-            } else {
+            } /*else {
                 setError('An unknown error occurred.');
                 const botMessage = { text: 'An unknown error occurred. Please try again later.', sender: 'bot' };
                 setMessages(prevMessages => [...prevMessages, botMessage]);
-            }
+            }*/
         } finally {
             setLoading(false); // Hide loading indicator
         }
