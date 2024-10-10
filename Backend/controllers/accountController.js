@@ -1,6 +1,6 @@
 // controllers/accountController.js
 const { User, generateRandomCardNumber, generateRandomCVV, generateAccNo, generateBsb, generatePhoneNo } = require('../models/models');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // Account Registration / Creation
