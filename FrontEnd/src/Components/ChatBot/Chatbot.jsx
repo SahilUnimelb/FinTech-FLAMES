@@ -47,6 +47,11 @@ export default function Chatbot() {
             // Extract the bot's response from the backend
             const botReply = response.data.responseMessage;
 
+            
+            // Log the response to inspect it
+            console.log('Response from backend:', response.data);
+
+            
             // Append the bot's reply to the chat
             const botMessage = { text: botReply, sender: 'bot' };
             setMessages(prevMessages => [...prevMessages, botMessage]);
