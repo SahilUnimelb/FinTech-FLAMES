@@ -51,16 +51,6 @@ export default function Chatbot() {
             const botMessage = { text: botReply, sender: 'bot' };
             setMessages(prevMessages => [...prevMessages, botMessage]);
 
-            // Check if the response contains a message
-            if (response.data && response.data.message) {
-                const botMessage = { text: response.data.message, sender: 'bot' };
-                setMessages(prevMessages => [...prevMessages, botMessage]);
-            } else {
-                // If there's no reply, send a default message
-                const botMessage = { text: 'No reply.', sender: 'bot' };
-                setMessages(prevMessages => [...prevMessages, botMessage]);
-            }
-
         } catch (error) {
             console.error('Error communicating with chatbot:', error);
             // Handle errors and provide feedback to the user
@@ -68,11 +58,11 @@ export default function Chatbot() {
                 setError(error.response.data.message);
                 const botMessage = { text: `Error: ${error.response.data.message}`, sender: 'bot' };
                 setMessages(prevMessages => [...prevMessages, botMessage]);
-            } /*else {
+            } else {
                 setError('An unknown error occurred.');
                 const botMessage = { text: 'An unknown error occurred. Please try again later.', sender: 'bot' };
                 setMessages(prevMessages => [...prevMessages, botMessage]);
-            }*/
+            }
         } finally {
             setLoading(false); // Hide loading indicator
         }
