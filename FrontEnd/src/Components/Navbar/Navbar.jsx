@@ -23,8 +23,7 @@ export default function Navbar() {
 
     // Optionally persist the page in localStorage for future sessions
     localStorage.setItem('activePage', path || 'home');
-  }, [location]);
-
+    
     const storedPage = localStorage.getItem('activePage');
     if (storedPage) {
       setPage(storedPage);
@@ -33,7 +32,7 @@ export default function Navbar() {
     // Check if the user has admin properties
     const adminStatus = JSON.parse(localStorage.getItem('isAdmin')) || false;
     setIsAdmin(adminStatus);
-  }, []);
+  }, [location]);
 
   const setHrTag = (currPage) => {
     if (page === currPage) {
