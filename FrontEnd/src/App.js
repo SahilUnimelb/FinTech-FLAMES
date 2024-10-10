@@ -29,7 +29,7 @@ function App() {
             <Route path = "/resetpassword" element = {<ResetPassword />} />
             <Route path = '/otp' element = {<OneTimePin/>}/>
             <Route path = "/editprofile" element = {<Layout> <EditProfile /> </Layout>} />
-            <Route path = '/admin' element = {<Layout> <AdminPanel/> </Layout>} />
+            <Route path = '/adminpanel' element = {<Layout> <AdminPanel/> </Layout>} />
           </Routes>
         </BrowserRouter>
       </div>

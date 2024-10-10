@@ -1,39 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './AdminAccountTable.css';
 
 export default function AdminAccountTable() {
-    const data = [
-        { id: 1, name: 'placeholder', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 2, name: 'andre', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 3, name: 'labib', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 4, name: 'fischer', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 5, name: 'john', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 6, name: 'Sahil', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 7, name: 'Sahil 2', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 8, name: 'Mitchell', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 9, name: 'Labib', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 10, name: 'Andre', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 11, name: 'Susan', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 12, name: 'Simone', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 13, name: 'tristan', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 14, name: 'hira', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 15, name: 'placeholder 2', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 16, name: 'place holder', username: 'place holder username', email: 'place holder email', edit: 'Edit'},
-        { id: 17, name: 'placeholder3', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 18, name: 'placeholder', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 19, name: 'placeholder', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 20, name: 'placeholder', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'},
-        { id: 21, name: 'placeholder', username: 'placeholder username', email: 'placeholder email', edit: 'Edit'}
-    ];
-    
     const [view, setView] = useState(false);
-    const [currId, setCurrId] = useState(-1);
+    const [currUser, setCurrUser] = useState(-1);
     const [searchTerm, setSearchTerm] = useState('');
     const [fundAmount, setFundAmount] = useState('');
+    const [data, setData] = useState([]);
+    const token = localStorage.getItem('authToken');
 
-    function onClickLink(id) {
-        setCurrId(id);
+    const getDatabase = useCallback(async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/admin/getDatabase', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const formattedResponse = response.data.map((user, index) => ({
+                id: index + 1,  // Create an artificial id
+                name: user.name || 'placeholder',  // Fallback in case of missing data
+                username: user.username || 'placeholder username',
+                email: user.email || 'placeholder email',
+                transBalance: user.transactionBalance,
+                accNo: user.accNo,
+                isActive: user.isDeleted ? 'Account Soft Deleted' : 'Active',
+                edit: 'Edit'  // Static 'Edit' string for all rows
+            }));
+
+            setData(formattedResponse);  // Replace hardcoded data with the response data
+
+        } catch (error) {
+            console.error('Error fetching users: ', error);
+        }
+    }, [token]);
+
+    useEffect(() => {
+        getDatabase();
+    }, [getDatabase]);
+
+    const applyBalanceChange = async() => {
+        try {
+            await axios.post('http://localhost:5000/api/admin/setBalance', {
+                accNumber: currUser.accNo,  // Use the current user's accNo in the request
+                newBalance: fundAmount
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            getDatabase();
+            setView(false);
+        } catch (error) {
+            console.error('Error applying balance change', error);
+        }
+    };
+
+    const applyAccountDeactivation = async() => {
+        try {
+            await axios.post('http://localhost:5000/api/admin/delete', {
+                username: currUser.username
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            getDatabase();
+            setView(false);
+        } catch (error) {
+            console.error('Error applying balance change', error);
+        }
+    }
+
+    const applyAccountReactivation = async() => {
+        try {
+            await axios.post('http://localhost:5000/api/admin/reactivate', {
+                username: currUser.username
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            getDatabase();
+            setView(false);
+        } catch (error) {
+            console.error('Error applying balance change', error);
+        }
+    }
+
+    function onClickLink(user) {
+        setCurrUser(user);
         setView(true);
     }
 
@@ -80,6 +139,8 @@ export default function AdminAccountTable() {
                                 <th>Name</th>
                                 <th>Username</th>
                                 <th>Email</th>
+                                <th>Transaction Balance</th>
+                                <th>Status</th>
                                 <th>Edit Account</th>
                             </tr>
                         </thead>
@@ -89,8 +150,10 @@ export default function AdminAccountTable() {
                                     <td>{row.name}</td>
                                     <td>{row.username}</td>
                                     <td>{row.email}</td>
+                                    <td>{row.transBalance}</td>
+                                    <td>{row.isActive}</td>
                                     <td>
-                                        <Link onClick={() => onClickLink(row.id)}>
+                                        <Link onClick={() => onClickLink(row)}>
                                             {row.edit}
                                         </Link>
                                     </td>
@@ -111,12 +174,17 @@ export default function AdminAccountTable() {
                                 value={fundAmount}
                                 onChange={handleFundAmountChange}
                                 onBlur={handleBlur}
-                                min="-9999"
+                                min="0"
                             />
-                            <button className="edit-confirm">Confirm</button>
+                            <button className="edit-confirm" onClick={applyBalanceChange}>Confirm</button>
                         </div>
                         <div className="purge-account">
-                            <button className="purge-account">Delete Account</button>
+                            <button className="purge-account" onClick={applyAccountDeactivation}>
+                                {data.find(user => user.accNo === currUser.accNo)?.isActive !== 'Active' ? 'Delete Account' : 'Deactivate Account'}
+                            </button>
+                            {data.find(user => user.accNo === currUser.accNo)?.isActive !== 'Active' && (
+                                <button className="purge-account" onClick={applyAccountReactivation}>Reactivate Account</button>
+                            )}
                         </div>
                         <button className='edit-return-button' onClick={() => setView(false)}>Back</button>
                     </div>

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 import logoff from '../../Assets/logoff-icon.png';
@@ -11,16 +12,36 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const section = useRef();
+  const token = localStorage.getItem('authToken');
+  const [accountData, setAccountData] = useState(() => {
+    const storedData = localStorage.getItem('accountData');
+    return storedData ? JSON.parse(storedData) : null;
+  });
 
   const onClickPage = (currPage) => {
     setPage(currPage);
     localStorage.setItem('activePage', currPage);
   };
 
+  const getAccountData = useCallback(async () => {
+    try {
+      // Make a request to get the user account details
+      const response = await axios.post('http://localhost:5000/api/accounts/getUser', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+        },
+      });
+
+      setAccountData(response.data); // Set the account data received from backend
+      localStorage.setItem('accountData', JSON.stringify(response.data));
+    } catch (error) {
+      console.error('Error fetching account details:', error);
+    }
+  }, [token]);
+
   useEffect(() => {
     const path = location.pathname.replace('/', '');
     setPage(path || 'home'); // Default to 'home' if path is empty
-
     // Optionally persist the page in localStorage for future sessions
     localStorage.setItem('activePage', path || 'home');
     
@@ -28,11 +49,19 @@ export default function Navbar() {
     if (storedPage) {
       setPage(storedPage);
     }
-
     // Check if the user has admin properties
-    const adminStatus = JSON.parse(localStorage.getItem('isAdmin')) || false;
-    setIsAdmin(adminStatus);
-  }, [location]);
+    if (accountData && accountData.role === 'admin') {
+      setIsAdmin(true);
+    }
+    else {
+      setIsAdmin(false);
+    }
+    
+  }, [location, accountData]);
+
+  useEffect(() => {
+    getAccountData();
+}, [getAccountData]);
 
   const setHrTag = (currPage) => {
     if (page === currPage) {
@@ -49,12 +78,6 @@ export default function Navbar() {
   const dropdown = (e) => {
     section.current.classList.toggle('navbar-section-visible');
     e.target.classList.toggle('open');
-  }
-
-  const toggleAdmin = () => {
-    const newAdminStatus = !isAdmin;
-    setIsAdmin(newAdminStatus);
-    localStorage.setItem('isAdmin', newAdminStatus);
   }
 
   return (
@@ -78,16 +101,6 @@ export default function Navbar() {
                 <img src={logoff} alt=""/>
                 Log off
             </button>
-        </div>
-        <div className='admin-toggle'>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isAdmin}
-                    onChange={toggleAdmin}
-                />
-                Enable Admin Mode
-            </label>
         </div>
     </div>
   )
