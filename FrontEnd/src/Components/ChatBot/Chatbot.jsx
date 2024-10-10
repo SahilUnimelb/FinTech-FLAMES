@@ -1,74 +1,58 @@
-// src/components/Chatbot.jsx
-
 import React, { useState } from 'react';
-import axios from 'axios'; // Ensure Axios is installed: npm install axios
-import './Chatbot.css'; // Ensure your CSS styles are properly set
+import axios from 'axios';
+import './Chatbot.css';
 
 export default function Chatbot() {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
-    const [loading, setLoading] = useState(false); // For handling loading state
-    const [error, setError] = useState(null); // For handling errors
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    // Function to toggle the chat window visibility
     const toggleChatWindow = () => {
         setIsChatOpen(!isChatOpen);
     };
 
-    // Function to handle sending messages
     const handleSendMessage = async () => {
-        if (inputValue.trim() === '') return; // Do not send empty messages
+        if (inputValue.trim() === '') return;
 
-        // Append the user's message to the chat
         const userMessage = { text: inputValue, sender: 'user' };
         setMessages(prevMessages => [...prevMessages, userMessage]);
-        setInputValue(''); // Clear the input field
-        setError(null); // Reset any previous errors
-
-        // Optional: Show loading indicator
+        setInputValue('');
+        setError(null);
         setLoading(true);
 
         try {
-            // Retrieve the JWT token from localStorage or your preferred storage
-            const token = localStorage.getItem('token'); // Adjust based on your authentication setup
+            const token = localStorage.getItem('token');
 
-            // Send the user's message to the backend
             const response = await axios.post('http://localhost:5000/api/chatbot', {
                 message: inputValue
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    // Include Authorization header if your backend requires it
                     Authorization: token ? `Bearer ${token}` : undefined
                 }
             });
 
-            // Extract the bot's response from the backend
-            const botReply = response.data.responseMessage;
+    
+            const botReply = response.data.reply;
 
-            // Append the bot's reply to the chat
-            const botMessage = { text: botReply, sender: 'bot' };
+            const botMessage = { text: botReply || 'No reply.', sender: 'bot' };
             setMessages(prevMessages => [...prevMessages, botMessage]);
 
         } catch (error) {
-            console.error('Error communicating with chatbot:', error);
-            // Handle errors and provide feedback to the user
-            if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
-                const botMessage = { text: `Error: ${error.response.data.message}`, sender: 'bot' };
-                setMessages(prevMessages => [...prevMessages, botMessage]);
+            if (error.response && error.response.data && error.response.data.reply) {
+                setError(error.response.data.reply); // Adjusted to match response structure
             } else {
                 setError('An unknown error occurred.');
-                const botMessage = { text: 'An unknown error occurred. Please try again later.', sender: 'bot' };
-                setMessages(prevMessages => [...prevMessages, botMessage]);
             }
+            const botMessage = { text: error.response?.data?.reply || 'An unknown error occurred. Please try again later.', sender: 'bot' };
+            setMessages(prevMessages => [...prevMessages, botMessage]);
         } finally {
-            setLoading(false); // Hide loading indicator
+            setLoading(false);
         }
     };
 
-    // Handle Enter key press to send messages
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleSendMessage();
