@@ -54,7 +54,8 @@ export default function Homepage() {
         <div className="homepage-content">
           {flag && <p>{message}</p>}
           <h1>Your first steps to the world of online banking</h1>
-          <p>For those who want to learn how to perform online banking. Sign up in minutes!</p>
+          <p>For those who want to learn how to perform online banking.<br/> Sign up in minutes!</p>
+
           <Link to="/signup"><button className='signup-button'>Sign Up</button></Link>
         </div>
         <div className="login">
