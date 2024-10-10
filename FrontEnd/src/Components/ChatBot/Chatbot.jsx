@@ -34,7 +34,7 @@ export default function Chatbot() {
             const token = localStorage.getItem('token'); // Adjust based on your authentication setup
 
             // Send the user's message to the backend
-            const response = await axios.post('/api/chatbot', { // Use relative URL
+            const response = await axios.post('http://localhost:5000/api/chatbot', {
                 message: inputValue
             }, {
                 headers: {
