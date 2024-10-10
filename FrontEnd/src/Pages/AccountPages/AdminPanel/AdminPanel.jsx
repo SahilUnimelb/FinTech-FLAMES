@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AdminAccountTable from './AdminAccountTable';
 import './AdminPanel.css';
 
