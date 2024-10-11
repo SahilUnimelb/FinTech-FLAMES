@@ -45,27 +45,6 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
     event.preventDefault();
     addContact();
     setIsSubmitted(true);
-    if (contactData.contactType === "Bank") {
-      setBankContacts((prevContacts) => [
-        ...prevContacts,
-        {
-          id: new Date().getTime(), // Generate a temporary unique id
-          name: contactData.name,
-          bsb: contactData.bsb,
-          accNo: contactData.accountNumber,
-        },
-      ]);
-    } else if (contactData.contactType === "Phone") {
-      setPayIdContacts((prevContacts) => [
-        ...prevContacts,
-        {
-          id: new Date().getTime(), // Generate a temporary unique id
-          name: contactData.name,
-          phoneNo: contactData.phoneNumber,
-        },
-      ]);
-    }
-    addContactDetails(contactData);
     emptyForm();
   }
 
@@ -167,7 +146,33 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
           Authorization: `Bearer ${token}`
         }
       })
+
+      if (response.data.success) {
+        if (contactData.contactType === "Bank") {
+          setBankContacts((prevContacts) => [
+            ...prevContacts,
+            {
+              id: new Date().getTime(), // Generate a temporary unique id
+              name: contactData.name,
+              bsb: contactData.bsb,
+              accNo: contactData.accountNumber,
+            },
+          ]);
+        } else if (contactData.contactType === "Phone") {
+          setPayIdContacts((prevContacts) => [
+            ...prevContacts,
+            {
+              id: new Date().getTime(), // Generate a temporary unique id
+              name: contactData.name,
+              phoneNo: contactData.phoneNumber,
+            },
+          ]);
+        }
+        addContactDetails(contactData);
+        emptyForm();
+      }
       setMessage(response.data.message);
+      
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         setMessage(`${error.response.data.message}`);

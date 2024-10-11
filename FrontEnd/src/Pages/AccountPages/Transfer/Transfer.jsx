@@ -263,7 +263,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     setFormData(prevFormData => ({
         ...prevFormData,
         name: phone.name,
-        phoneNumber: phone.phoneNumber
+        phoneNumber: phone.phoneNo
       }));
       setOpenPhoneContact(false);
   }
