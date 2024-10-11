@@ -77,16 +77,33 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   
   const handleScheduledTransfer = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/transactions/schedulePayment', {
-        fromAccountType: formData.fromAccountType,
-        toAccNo: formData.accountNumber,
-        toBsb: formData.bsb,
-        amount: formData.amount,
-        description: formData.description,
-        scheduledDate: formData.scheduledDate || formData.date,
-        frequency: formData.frequency,
-        totalRuns: formData.totalRuns
-      }, {
+        let scheduledPackage;
+        if (formData.transferMethod === "Bank Transfer") {
+            scheduledPackage = {
+                fromAccountType: formData.fromAccountType,
+                toAccNo: formData.accountNumber,
+                toBsb: formData.bsb,
+                amount: formData.amount,
+                description: formData.description,
+                scheduleOption: formData.scheduleOption,
+                scheduledDate: formData.scheduledDate || formData.date,
+                frequency: formData.frequency !== "" ? formData.frequency : null,
+                totalRuns: formData.totalRuns !== "" ? formData.totalRuns : null
+            }
+        } else {
+            scheduledPackage = {
+                fromAccountType: formData.fromAccountType,
+                toPhoneNo: formData.phoneNumber,
+                amount: formData.amount,
+                description: formData.description,
+                scheduleOption: formData.scheduleOption,
+                scheduledDate: formData.scheduledDate || formData.date,
+                frequency: formData.frequency !== "" ? formData.frequency : null,
+                totalRuns: formData.totalRuns !== "" ? formData.totalRuns : null
+            }
+        }
+        console.log("SCHEDULE PACKAGE: ", scheduledPackage);
+      const response = await axios.post('http://localhost:5000/api/transactions/schedulePayment', scheduledPackage, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`

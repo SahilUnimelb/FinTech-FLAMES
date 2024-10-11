@@ -17,6 +17,6 @@ router.post('/transfer/within', authenticateToken, transferWithinUser);
 router.post('/schedulePayment', authenticateToken, schedulePayment);
 
 // Get scheduled payments
-router.get('/scheduledPayments', authenticateToken, getScheduledPayments);
+router.get('/getScheduledPayments', authenticateToken, getScheduledPayments);
 
 module.exports = router;

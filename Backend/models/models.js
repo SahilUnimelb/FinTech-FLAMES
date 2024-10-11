@@ -28,8 +28,8 @@ const loginDetailSchema = new mongoose.Schema({
 
 // Define the Acc No and Bsb schema
 const AccnoBsbSchema = new mongoose.Schema({
-  accNo: {type: Number, required: true, unique: true},
-  bsb: {type: Number, required: true, unique: true}
+  accNo: {type: Number, unique: true},
+  bsb: {type: Number, unique: true}
 });
 
 
@@ -51,11 +51,14 @@ const accountDetailSchema = new mongoose.Schema({
 const scheduledPaymentSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   startDate: { type: Date, required: true },
-  frequency: { type: String, enum: ['weekly', 'monthly'], required: true },
+  type: { type: String, enum: ['once', 'recurring']},
+  frequency: { type: String, enum: ['weekly', 'monthly', 'yearly']},
   repeatCount: { type: Number, required: true }, // Number of times the payment should be made
   completedCount: { type: Number, default: 0 }, // Track how many payments have been made
   lastPaymentDate: { type: Date }, // Track when the last payment was made
-  targetAccNo: { type: Number, required: true }, // The account to which the payment will be sent
+  targetAccNo: AccnoBsbSchema,
+  targetPhoneNo: { type: Number },
+  description: String,
 });
 
 // Define bank contacts schema

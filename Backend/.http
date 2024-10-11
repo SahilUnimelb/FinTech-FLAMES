@@ -161,3 +161,70 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 POST http://localhost:5000/api/accounts/getPayIdContacts
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+
+### Schedule Payment BANK - once
+POST http://localhost:5000/api/transactions/schedulePayment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+
+{
+  "fromAccountType": "transaction",
+  "toAccNo": "92126057",
+  "toBsb": "596989",
+  "amount": "100",
+  "description": "Schedule Payment BANK - once",
+  "scheduleOption": "once",
+  "scheduledDate": "2024-10-11"
+}
+
+### Schedule Payment BANK - recurring
+POST http://localhost:5000/api/transactions/schedulePayment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+
+{
+  "fromAccountType": "transaction",
+  "toAccNo": "92126057",
+  "toBsb": "596989",
+  "amount": "100",
+  "description": "Schedule Payment BANK - recurring",
+  "scheduleOption": "recurring",
+  "scheduledDate": "2024-10-11",
+  "frequency": "weekly",
+  "totalRuns": "3"
+}
+
+### Schedule Payment PAYID - once
+POST http://localhost:5000/api/transactions/schedulePayment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+
+{
+  "fromAccountType": "transaction",
+  "toPhoneNo": "7623484114",
+  "amount": "100",
+  "description": "Schedule Payment PAYID - once",
+  "scheduleOption": "once",
+  "scheduledDate": "2024-10-11"
+}
+
+### Schedule Payment PAYID - recurring
+POST http://localhost:5000/api/transactions/schedulePayment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+
+{
+  "fromAccountType": "transaction",
+  "toPhoneNo": "7623484114",
+  "amount": "100",
+  "description": "Schedule Payment PAYID - recurring",
+  "scheduleOption": "recurring",
+  "scheduledDate": "2024-10-11",
+  "frequency": "weekly",
+  "totalRuns": "3"
+}
+
+### Get All Scheduled Payments
+GET http://localhost:5000/api/transactions/getScheduledPayments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
