@@ -254,7 +254,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         ...prevFormData,
         name: account.name,
         bsb: account.bsb,
-        accountNumber: account.accountNumber
+        accountNumber: account.accNo
       }));
       setOpenBankContact(false);
   }
