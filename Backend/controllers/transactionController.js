@@ -180,7 +180,12 @@ exports.transferWithinUser = async(req, res) => {
 
 // schedule payments
 exports.schedulePayment = async (req, res) => {
-    let { fromAccountType, toAccNo, toBsb, toPhoneNo, amount, description, scheduleOption, scheduledDate, frequency, totalRuns } = req.body;
+    let { fromAccountType, name, toAccNo, toBsb, toPhoneNo, amount, description, scheduleOption, scheduledDate, frequency, totalRuns } = req.body;
+
+    if ((toBsb || toAccNo) === "") {
+        toAccNo = null;
+        toBsb = null;
+    }
 
     amount = Number(amount);
     toAccNo = toAccNo ? Number(toAccNo) : null;
@@ -215,6 +220,7 @@ exports.schedulePayment = async (req, res) => {
         // Save the scheduled payment
         user.scheduledPayments.push({
             amount: amount,
+            name: name,
             startDate: new Date(scheduledDate),
             type: scheduleOption,
             frequency: frequency,

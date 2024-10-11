@@ -50,6 +50,7 @@ const accountDetailSchema = new mongoose.Schema({
 // Define Scheduled payments
 const scheduledPaymentSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
+  name: { type: String, required: true },
   startDate: { type: Date, required: true },
   type: { type: String, enum: ['once', 'recurring']},
   frequency: { type: String, enum: ['weekly', 'monthly', 'yearly']},

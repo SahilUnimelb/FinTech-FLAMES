@@ -81,6 +81,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         if (formData.transferMethod === "Bank Transfer") {
             scheduledPackage = {
                 fromAccountType: formData.fromAccountType,
+                name: formData.name,
                 toAccNo: formData.accountNumber,
                 toBsb: formData.bsb,
                 amount: formData.amount,
@@ -93,6 +94,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         } else {
             scheduledPackage = {
                 fromAccountType: formData.fromAccountType,
+                name: formData.name,
                 toPhoneNo: formData.phoneNumber,
                 amount: formData.amount,
                 description: formData.description,
@@ -102,7 +104,6 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                 totalRuns: formData.totalRuns !== "" ? formData.totalRuns : null
             }
         }
-        console.log("SCHEDULE PACKAGE: ", scheduledPackage);
       const response = await axios.post('http://localhost:5000/api/transactions/schedulePayment', scheduledPackage, {
         headers: {
           'Content-Type': 'application/json',

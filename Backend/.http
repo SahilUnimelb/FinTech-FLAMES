@@ -1,3 +1,5 @@
+@host = http://localhost:5000/api/v1
+
 ### Create Account 1
 POST http://localhost:5000/api/accounts/create
 Content-Type: application/json
@@ -21,6 +23,7 @@ Content-Type: application/json
 }
 
 ### Login Account
+# @name login
 POST http://localhost:5000/api/accounts/login
 Content-Type: application/json
 
@@ -32,7 +35,7 @@ Content-Type: application/json
 ### Transfer Money
 POST http://localhost:5000/api/transactions/transfer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "toAccNo": "27618500",
@@ -44,7 +47,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 ### Transfer Money PayID
 POST http://localhost:5000/api/transactions/payIdTransfer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "toPhoneNo": "5424712610",
@@ -55,7 +58,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 ### Transfer Between Account
 POST http://localhost:5000/api/transactions/transfer/within
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "username": "mitchellzheng", 
@@ -66,9 +69,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 }
 
 ### Get Account Info
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/getUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 ### Delete Account
 POST http://localhost:5000/api/admin/delete
@@ -101,7 +105,7 @@ Content-Type: application/json
 ### Admin - get Database
 POST http://localhost:5000/api/admin/getDatabase
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzA3ODhlMDE2MmU5OTliYTJiYmQ2ZGEiLCJpYXQiOjE3Mjg1NDcxMTgsImV4cCI6MTcyODU1MDcxOH0.FAm6kQQ5iDK-MtbP_qSSsK32MxBx1Jk0FO2S57o9ltE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..FAm6kQQ5iDK-MtbP_qSSsK32MxBx1Jk0FO2S57o9ltE
 
 ### Admin - set user balance
 POST http://localhost:5000/api/admin/setBalance
@@ -113,9 +117,10 @@ Content-Type: application/json
 }
 
 ### Add contact - Bsb & Account Number
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/addContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "name": "Fischer Zhang",
@@ -124,9 +129,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 }
 
 ### Add contact - PayId
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/addContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "name": "Fischer Zhang",
@@ -134,9 +140,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 }
 
 ### Remove contact - Bsb & Account Number
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/removeBankContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "bsb": "897716",
@@ -144,31 +151,36 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3Y
 }
 
 ### Remove contact - PayId
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/removePayIdContact
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 {
   "phoneNo": "8408944303"
 }
 
 ### Get contact - Bank
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/getBankContacts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 ### Get contact - PayId
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/accounts/getPayIdContacts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY3YzlhNTVkMThiM2I0Yzg4NzgwMWMiLCJpYXQiOjE3Mjc1MTUwNzUsImV4cCI6MTcyNzUxODY3NX0.f8sGj7oXgMqfSMwITMlJsqISDP8pSFFIdDTLW6b04ec
+Authorization: Bearer {{userAuthToken}}
 
 ### Schedule Payment BANK - once
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/transactions/schedulePayment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+Authorization: Bearer {{userAuthToken}}
 
 {
   "fromAccountType": "transaction",
+  "name": "Fischer Zhang",
   "toAccNo": "92126057",
   "toBsb": "596989",
   "amount": "100",
@@ -178,12 +190,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0M
 }
 
 ### Schedule Payment BANK - recurring
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/transactions/schedulePayment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+Authorization: Bearer {{userAuthToken}}
 
 {
   "fromAccountType": "transaction",
+  "name": "Fischer Zhang",
   "toAccNo": "92126057",
   "toBsb": "596989",
   "amount": "100",
@@ -195,12 +209,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0M
 }
 
 ### Schedule Payment PAYID - once
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/transactions/schedulePayment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+Authorization: Bearer {{userAuthToken}}
 
 {
   "fromAccountType": "transaction",
+  "name": "Fischer Zhang",
   "toPhoneNo": "7623484114",
   "amount": "100",
   "description": "Schedule Payment PAYID - once",
@@ -209,12 +225,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0M
 }
 
 ### Schedule Payment PAYID - recurring
+@userAuthToken = {{login.response.body.token}}
 POST http://localhost:5000/api/transactions/schedulePayment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+Authorization: Bearer {{userAuthToken}}
 
 {
   "fromAccountType": "transaction",
+  "name": "Fischer Zhang",
   "toPhoneNo": "7623484114",
   "amount": "100",
   "description": "Schedule Payment PAYID - recurring",
@@ -225,6 +243,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0M
 }
 
 ### Get All Scheduled Payments
+@userAuthToken = {{login.response.body.token}}
 GET http://localhost:5000/api/transactions/getScheduledPayments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmY0MGQ3MjAxZTZkODU1NjBmNThjNDYiLCJpYXQiOjE3Mjg2MjQ3MzcsImV4cCI6MTcyODYyODMzN30.w3wyMBdNALuqVIv2MVGApiagTJpNMJAgdU-6rr1Uhng
+Authorization: Bearer {{userAuthToken}}

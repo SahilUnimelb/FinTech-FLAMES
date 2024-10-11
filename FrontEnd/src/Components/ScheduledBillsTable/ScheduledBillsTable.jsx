@@ -1,47 +1,99 @@
-import React, { useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import BillHistory from '../../Pages/AccountPages/BillHistory/BillHistory';
 import './ScheduledBillsTable.css';
 export default function ScheduledBillsTable() {
 
-    const data = [
-      { id: 1, name: 'Itmam Khan', amount: '$500', date: '12/09/2023', details: 'View details'},
-      { id: 2, name: 'Andre Chiang', amount: '$600', date: '30/01/2022', details: 'View details'},
-      { id: 3, name: 'Mitchell', amount: '$50000', date: '20/05/2009', details: 'View details'},
-      { id: 4, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 5, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 6, name: 'Get Rich in 21 days LLC', amount: '$700000', date: '25/05/20011', details: 'View details'},
-      { id: 7, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 8, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 9, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 10, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 11, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 12, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 13, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 14, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 15, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 16, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 17, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 18, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 19, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 20, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 21, name: 'Itmam Khan', amount: '$500', date: '12/09/2023', details: 'View details'},
-      { id: 22, name: 'Andre Chiang', amount: '$600', date: '30/01/2022', details: 'View details'},
-      { id: 23, name: 'Mitchell', amount: '$50000', date: '20/05/2009', details: 'View details'},
-      { id: 24, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 25, name: 'Sahil Khatri', amount: '$2000', date: '01/10/2019', details: 'View details'},
-      { id: 26, name: 'Get Rich in 21 days LLC', amount: '$700000', date: '25/05/20011', details: 'View details'},
-      { id: 27, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 28, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 29, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-      { id: 30, name: 'Fischer Table Tennis LTD', amount: '$80000', date: '14/09/2024', details: 'View details'},
-    ];
+  const [data, setData] = useState([]);
   const [view, setView] = useState(false);
-  const [currId, setCurrId] = useState(-1);
-  function onClickLink(id) {
-    setCurrId(id);
+  const [currBill, setCurrBill] = useState(null);
+  const token = localStorage.getItem('authToken');
+  function onClickLink(bill) {
+    setCurrBill(bill);
     setView(true);
   }
+
+  const getScheduledBills = useCallback(async () => {
+    try {
+        const response = await axios.post('http://localhost:5000/api/transactions/getScheduledPayments', {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const formattedResponse = response.data.scheduledPayments.map((bills, index) => {
+            const date = new Date(bills.startDate);
+            const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+
+            return {
+                id: index + 1,  // Create an artificial id
+                name: bills.name,
+                amount: bills.amount,
+                date: formattedDate,
+                details: 'View details',
+                ...bills
+            };
+        });
+        console.log("FORMATTED RESPONSE: ", formattedResponse);
+        setData(formattedResponse);
+    } catch (error) {
+        console.error('Error fetching scheduled bills: ', error);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    getScheduledBills();
+}, [getScheduledBills]);
+
+function handleNextPaymentLogic(bill) {
+    const date = new Date(bill.startDate);
+    const completedCount = bill.completedCount
+
+    if(bill.type === "once") {
+        return bill.date;
+    }
+    else if (bill.type === "recurring"){
+        let nextPaymentDate = new Date(bill.startDate);
+        console.log("BILL: ", bill)
+        let dateString = "";
+        if (bill.frequency === "weekly") {
+            nextPaymentDate.setDate(date.getDate() + (7 * (completedCount)));
+            dateString = dateString = nextPaymentDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        else if (bill.frequency === "monthly") {
+            nextPaymentDate.setMonth(date.getMonth() + (completedCount));
+            dateString = dateString = nextPaymentDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        else if (bill.frequency === "yearly") {
+            nextPaymentDate.setFullYear(date.getFullYear() + (completedCount));
+            dateString = dateString = nextPaymentDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        return dateString;
+    }
+}
+
+function handleFrequencyDisplay(bill) {
+    if(bill.type === "once") {
+        return "One Time Payment";
+    }
+    else if(bill.type === "recurring") {
+        return bill.frequency.charAt(0).toUpperCase() + bill.frequency.slice(1);
+    }
+}
 
   return (
     <div className='scheduled-bills-table'>
@@ -52,7 +104,8 @@ export default function ScheduledBillsTable() {
                 <tr>
                     <th>Name</th>
                     <th>Amount</th>
-                    <th>Date</th>
+                    <th>Next Payment</th>
+                    <th>Frequency</th>
                     <th>Details</th>
                 </tr>
                 </thead>
@@ -60,10 +113,11 @@ export default function ScheduledBillsTable() {
                 {data.map((row) => (
                     <tr key={row.id}>
                     <td>{row.name}</td>
-                    <td>{row.amount}</td>
-                    <td>{row.date}</td>
+                    <td>${row.amount}</td>
+                    <td>{handleNextPaymentLogic(row)}</td>
+                    <td>{handleFrequencyDisplay(row)}</td>
                     <td>
-                        <Link onClick={() => onClickLink(row.id)}>
+                        <Link onClick={() => onClickLink(row)}>
                             {row.details}
                         </Link>
                     </td>
@@ -75,7 +129,7 @@ export default function ScheduledBillsTable() {
     )}
     {view && (
         <>
-        <BillHistory currId = {currId}/>
+        <BillHistory currBill = {currBill}/>
         <button className = 'scheduled-bill-history-button' onClick={() => setView(false)}>Back</button>
         </>
     )}
