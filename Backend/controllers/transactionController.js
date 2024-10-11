@@ -180,16 +180,23 @@ exports.transferWithinUser = async(req, res) => {
 
 // schedule payments
 exports.schedulePayment = async (req, res) => {
-    const { fromAccountType, toAccNo, toBsb, amount, description, scheduledDate, frequency, totalRuns } = req.body;
+    let { fromAccountType, name, toAccNo, toBsb, toPhoneNo, amount, description, scheduleOption, scheduledDate, frequency, totalRuns } = req.body;
 
-    // Validate frequency and totalRuns
-    const validFrequencies = ['none', 'weekly', 'monthly'];
-    if (!validFrequencies.includes(frequency)) {
-        return res.status(400).json({ message: 'Invalid frequency value' });
+    if ((toBsb || toAccNo) === "") {
+        toAccNo = null;
+        toBsb = null;
     }
 
-    if (frequency !== 'none' && (!totalRuns || typeof totalRuns !== 'number' || totalRuns < 1)) {
-        return res.status(400).json({ message: 'Invalid totalRuns value for recurring payments' });
+    amount = Number(amount);
+    toAccNo = toAccNo ? Number(toAccNo) : null;
+    toBsb = toBsb ? Number(toBsb) : null;
+    toPhoneNo = toPhoneNo ? toPhoneNo : null;
+    totalRuns = totalRuns ? Number(totalRuns) : 0;
+    scheduleOption = scheduleOption ? scheduleOption.toLowerCase() : null;
+    frequency = frequency ? frequency.toLowerCase() : null;
+    if (scheduleOption === 'once') {
+        frequency = null;
+        totalRuns = 1;
     }
 
     try {
@@ -198,20 +205,34 @@ exports.schedulePayment = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+        if (toAccNo && toBsb) {
+            const receiver = await User.findOne({ 'AccNoBsb.accNo': toAccNo,  'AccNoBsb.bsb': toBsb});
+            if (!receiver){
+                return res.status(404).json({ message: 'Payment Failed: Account with this bsb and account number does not exist' });
+            }
+        } else if (toPhoneNo) {
+            const receiver = await User.findOne({ 'phoneNo': toPhoneNo });
+            if (!receiver){
+                return res.status(404).json({ message: `Payment Failed: Account with phone number ${toPhoneNo} does not exist` });
+            }
+        }
 
         // Save the scheduled payment
         user.scheduledPayments.push({
-            fromAccountType,
-            toAccNo: Number(toAccNo),
-            toBsb: Number(toBsb),
-            amount: Number(amount),
-            description,
-            scheduledDate: new Date(scheduledDate),
-            frequency: frequency || 'none',
-            totalRuns: frequency === 'none' ? 1 : totalRuns,
-            runsCompleted: 0,
-            isActive: true,
-            isProcessed: false
+            amount: amount,
+            name: name,
+            startDate: new Date(scheduledDate),
+            nextPaymentDate: new Date(scheduledDate),
+            type: scheduleOption,
+            frequency: frequency,
+            repeatCount: totalRuns,
+            completedCount: 0,
+            targetAccNo: {
+                bsb: toBsb, 
+                accNo: toAccNo
+            },
+            targetPhoneNo: toPhoneNo,
+            description: description
         });
 
         await user.save();

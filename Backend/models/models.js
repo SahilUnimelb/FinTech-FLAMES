@@ -28,8 +28,8 @@ const loginDetailSchema = new mongoose.Schema({
 
 // Define the Acc No and Bsb schema
 const AccnoBsbSchema = new mongoose.Schema({
-  accNo: {type: Number, required: true, unique: true},
-  bsb: {type: Number, required: true, unique: true}
+  accNo: {type: Number, unique: true},
+  bsb: {type: Number, unique: true}
 });
 
 
@@ -50,12 +50,17 @@ const accountDetailSchema = new mongoose.Schema({
 // Define Scheduled payments
 const scheduledPaymentSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
+  name: { type: String, required: true },
   startDate: { type: Date, required: true },
-  frequency: { type: String, enum: ['weekly', 'monthly'], required: true },
+  nextPaymentDate: { type: Date, required: true },
+  type: { type: String, enum: ['once', 'recurring']},
+  frequency: { type: String, enum: ['weekly', 'monthly', 'yearly']},
   repeatCount: { type: Number, required: true }, // Number of times the payment should be made
   completedCount: { type: Number, default: 0 }, // Track how many payments have been made
   lastPaymentDate: { type: Date }, // Track when the last payment was made
-  targetAccNo: { type: Number, required: true }, // The account to which the payment will be sent
+  targetAccNo: AccnoBsbSchema,
+  targetPhoneNo: { type: Number },
+  description: String,
 });
 
 // Define bank contacts schema
@@ -539,77 +544,92 @@ const addFrequency = (date, frequency) => {
     return newDate;
 };
 
+// Utility function to determine if 2 dates are the same or not
+function areDatesSameDay(date1, date2) {
+  return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+  );
+}
+
+function handleNextPaymentDate(bill) {
+  if (bill.type === 'once') { 
+    return bill.nextPaymentDate;
+  }
+  else if (bill.type === 'recurring') {
+    let newNextPaymentDate = new Date(bill.nextPaymentDate);
+    if (bill.frequency === 'weekly') {
+      newNextPaymentDate.setDate(bill.nextPaymentDate.getDate() + (7 * (bill.completedCount)));
+    }
+    else if (bill.frequency === 'monthly') {
+      newNextPaymentDate.setMonth(bill.nextPaymentDate.getMonth() + (bill.completedCount));
+    }
+    else if (bill.frequency === 'yearly') {
+      newNextPaymentDate.setFullYear(bill.nextPaymentDate.getFullYear() + (bill.completedCount));
+    }
+    return newNextPaymentDate;
+  }
+}
+
 // Schedule the cron job to run every minute
-cron.schedule('* * * * *', async () => {
-    console.log('Checking for scheduled payments...');
+cron.schedule('*/5 * * * * *', async () => {
+  
 
     try {
         const currentTime = new Date();
-
+        console.log(`Checking for scheduled payments... | ${currentTime}`);
         // Find all users with active scheduled payments due
         const users = await User.find({
-            scheduledPayments: {
-                $elemMatch: {
-                    scheduledDate: { $lte: currentTime },
-                    isProcessed: false,
-                    isActive: true
-                }
-            }
+          scheduledPayments: { $exists: true, $not: { $size: 0 } }
         });
-
         for (const user of users) {
-            for (const payment of user.scheduledPayments) {
-                if (payment.isProcessed || !payment.isActive) continue;
-                if (payment.scheduledDate > currentTime) continue;
+          for (let i = user.scheduledPayments.length - 1; i >= 0; i--) {
+            const payment = user.scheduledPayments[i];
+            const nextPaymentDate = new Date(payment.nextPaymentDate);
 
-                // Perform the transfer
-                const receiver = await User.findOne({ 'AccNoBsb.accNo': payment.toAccNo, 'AccNoBsb.bsb': payment.toBsb });
-
-                if (receiver) {
-                    const fromAccount = user[payment.fromAccountType + 'Acc'];
-
-                    if (fromAccount.balance >= payment.amount) {
-                        fromAccount.balance -= payment.amount;
-                        receiver.transactionAcc.balance += payment.amount;
-
-                        // Record the transaction
-                        const transactionDate = new Date();
-                        fromAccount.transactions.push({
-                            amount: -payment.amount,
-                            date: transactionDate,
-                            log: `Scheduled transfer to ${receiver.name}`,
-                            description: payment.description,
-                        });
-
-                        receiver.transactionAcc.transactions.push({
-                            amount: payment.amount,
-                            date: transactionDate,
-                            log: `Scheduled transfer from ${user.name}`,
-                            description: payment.description,
-                        });
-
-                        // Update scheduled payment
-                        payment.runsCompleted += 1;
-
-                        if (payment.frequency === 'none' || payment.runsCompleted >= payment.totalRuns) {
-                            payment.isProcessed = true;
-                            payment.isActive = false;
-                        } else {
-                            // Schedule the next payment
-                            payment.scheduledDate = addFrequency(payment.scheduledDate, payment.frequency);
-                        }
-
-                        await user.save();
-                        await receiver.save();
-                    } else {
-                        console.log(`User ${user._id} has insufficient balance for scheduled payment.`);
-                        // Optionally, notify the user or take other actions
-                    }
-                } else {
-                    console.log(`Receiver not found for scheduled payment: AccNo ${payment.toAccNo}, BSB ${payment.toBsb}`);
-                    // Optionally, notify the user or take other actions
-                }
+            if (!areDatesSameDay(nextPaymentDate, currentTime)) {
+                continue;
             }
+
+            // Determine the receiver
+            let receiver;
+            if (payment.targetAccNo.accNo && payment.targetAccNo.bsb) {
+                receiver = await User.findOne({ 'AccNoBsb.accNo': payment.targetAccNo.accNo, 'AccNoBsb.bsb': payment.targetAccNo.bsb });
+            } else if (payment.targetPhoneNo) {
+                receiver = await User.findOne({ 'phoneNo': payment.targetPhoneNo });
+            }
+
+            // Perform the transfer
+            user.transactionAcc.balance -= payment.amount;
+            receiver.transactionAcc.balance += payment.amount;
+            payment.completedCount += 1;
+            payment.nextPaymentDate = handleNextPaymentDate(payment);
+
+            // Record the transaction for the user
+            user.transactionAcc.transactions.push({
+                amount: -payment.amount,
+                date: currentTime,
+                log: `Scheduled payment sent to ${receiver.name}`,
+                description: payment.description
+            });
+
+            // Record the transaction for the receiver
+            receiver.transactionAcc.transactions.push({
+                amount: payment.amount,
+                date: currentTime,
+                log: `Scheduled payment received from ${user.name}`,
+                description: payment.description
+            });
+
+            // Check if the payment should be deleted (e.g., after reaching the repeatCount or other termination condition)
+            if (payment.completedCount === payment.repeatCount || payment.type === 'once') {
+                user.scheduledPayments.splice(i, 1); // Remove the payment from the array
+            }
+            // Save the changes for both the user and the receiver
+            await user.save();
+            await receiver.save();
+          }
         }
     } catch (error) {
         console.error('Error processing scheduled payments:', error.message);
