@@ -254,7 +254,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
         ...prevFormData,
         name: account.name,
         bsb: account.bsb,
-        accountNumber: account.accountNumber
+        accountNumber: account.accNo
       }));
       setOpenBankContact(false);
   }
@@ -263,7 +263,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
     setFormData(prevFormData => ({
         ...prevFormData,
         name: phone.name,
-        phoneNumber: phone.phoneNumber
+        phoneNumber: phone.phoneNo
       }));
       setOpenPhoneContact(false);
   }
