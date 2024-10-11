@@ -25,18 +25,19 @@ export default function ScheduledBillsTable() {
 
         const formattedResponse = response.data.scheduledPayments.map((bills, index) => {
             const date = new Date(bills.startDate);
+            const nextDate = new Date(bills.nextPaymentDate);
             const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-
+            const formattedNextDate = `${nextDate.getDate().toString().padStart(2, '0')}/${(nextDate.getMonth() + 1).toString().padStart(2, '0')}/${nextDate.getFullYear()}`;
             return {
                 id: index + 1,  // Create an artificial id
                 name: bills.name,
                 amount: bills.amount,
                 date: formattedDate,
                 details: 'View details',
+                nextPayment: formattedNextDate,
                 ...bills
             };
         });
-        console.log("FORMATTED RESPONSE: ", formattedResponse);
         setData(formattedResponse);
     } catch (error) {
         console.error('Error fetching scheduled bills: ', error);
@@ -46,45 +47,6 @@ export default function ScheduledBillsTable() {
   useEffect(() => {
     getScheduledBills();
 }, [getScheduledBills]);
-
-function handleNextPaymentLogic(bill) {
-    const date = new Date(bill.startDate);
-    const completedCount = bill.completedCount
-
-    if(bill.type === "once") {
-        return bill.date;
-    }
-    else if (bill.type === "recurring"){
-        let nextPaymentDate = new Date(bill.startDate);
-        console.log("BILL: ", bill)
-        let dateString = "";
-        if (bill.frequency === "weekly") {
-            nextPaymentDate.setDate(date.getDate() + (7 * (completedCount)));
-            dateString = dateString = nextPaymentDate.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-        }
-        else if (bill.frequency === "monthly") {
-            nextPaymentDate.setMonth(date.getMonth() + (completedCount));
-            dateString = dateString = nextPaymentDate.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-        }
-        else if (bill.frequency === "yearly") {
-            nextPaymentDate.setFullYear(date.getFullYear() + (completedCount));
-            dateString = dateString = nextPaymentDate.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-        }
-        return dateString;
-    }
-}
 
 function handleFrequencyDisplay(bill) {
     if(bill.type === "once") {
@@ -114,7 +76,7 @@ function handleFrequencyDisplay(bill) {
                     <tr key={row.id}>
                     <td>{row.name}</td>
                     <td>${row.amount}</td>
-                    <td>{handleNextPaymentLogic(row)}</td>
+                    <td>{row.nextPayment}</td>
                     <td>{handleFrequencyDisplay(row)}</td>
                     <td>
                         <Link onClick={() => onClickLink(row)}>

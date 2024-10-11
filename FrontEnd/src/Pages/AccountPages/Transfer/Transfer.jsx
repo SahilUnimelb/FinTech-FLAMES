@@ -104,6 +104,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
                 totalRuns: formData.totalRuns !== "" ? formData.totalRuns : null
             }
         }
+        console.log("SCHEDULE PACKAGE: ", scheduledPackage);
       const response = await axios.post('http://localhost:5000/api/transactions/schedulePayment', scheduledPackage, {
         headers: {
           'Content-Type': 'application/json',

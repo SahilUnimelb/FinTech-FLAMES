@@ -222,6 +222,7 @@ exports.schedulePayment = async (req, res) => {
             amount: amount,
             name: name,
             startDate: new Date(scheduledDate),
+            nextPaymentDate: new Date(scheduledDate),
             type: scheduleOption,
             frequency: frequency,
             repeatCount: totalRuns,
