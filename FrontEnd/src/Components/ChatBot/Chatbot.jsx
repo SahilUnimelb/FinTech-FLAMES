@@ -25,7 +25,7 @@ export default function Chatbot() {
         try {
             const token = localStorage.getItem('token');
 
-            const response = await axios.post('http://localhost:5000/api/chatbot', {
+            const response = await axios.post('http://localhost:5000/api/chatbot/chatbot', {
                 message: inputValue
             });
 
