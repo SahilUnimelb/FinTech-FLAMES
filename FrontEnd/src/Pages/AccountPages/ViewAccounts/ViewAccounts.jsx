@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from '../../../Components/Dropdown/Dropdown';
 import './ViewAccounts.css';
+import { isValid } from 'date-fns';
 
 export default function ViewAccounts({active, setActive, onClickDiv}) {
   const options = ['Profile', 'Savings Account', 'Transactions Account']
@@ -103,8 +104,6 @@ if the formatting needs changing. */
 
 
   // Group the filtered transactions by month
-
-
   const TransactionTable = ({ transactions }) => {
     const rows = [...transactions];
 
@@ -118,7 +117,11 @@ if the formatting needs changing. */
 
     // Group transactions by month and year
     return sortedTransactions.reduce((groups, transaction) => {
-      const parsedDate = parse(transaction.date, 'dd/MM/yyyy', new Date());
+      const parsedDate = parse(transaction.date, 'MM/dd/yyyy', new Date());
+      if (!isValid(parsedDate)) {
+        console.log(`Invalid date encountered: ${parsedDate}`);
+        return groups; // Skip invalid dates
+      }
       const monthYear = format(parsedDate, 'MMMM yyyy');
 
       if (!groups[monthYear]) {
@@ -130,6 +133,10 @@ if the formatting needs changing. */
       return groups;
     }, {});
   };
+
+  function formatDate(date) {
+    return format(date, 'dd/MM/yyyy');
+  }
 
   // Function to filter transactions based on search query
   const filteredTransactions = useMemo(() => {
@@ -163,6 +170,7 @@ if the formatting needs changing. */
     // If the query doesn't match month or date, return all transactions
     return transactions;
   }, [searchQuery, transactions]);
+
     const groupedTransactions = useMemo(() => {
       return groupTransactionsByMonth(filteredTransactions);
     }, [filteredTransactions]);
@@ -206,7 +214,7 @@ if the formatting needs changing. */
                   {/* Transactions for the Month */}
                   {groupedTransactions[monthYear].map((transaction, index) => (
                     <tr key={index}>
-                      <td className="transact-date">{transaction.date}</td>
+                      <td className="transact-date">{formatDate(transaction.date)}</td>
                       <td className="transact-desc">{transaction.description}</td>
                       <td
                         className={`transact-amount ${

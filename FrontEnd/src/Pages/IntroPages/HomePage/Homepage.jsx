@@ -85,6 +85,7 @@ export default function Homepage() {
                 <input type="checkbox" id="remember" />
               </div> */}
             </div>
+            <p className="additional-text">{message}</p>
             <button className="login-button">Continue</button>
           </form>
 
