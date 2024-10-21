@@ -28,4 +28,10 @@ router.post('/removeBankContact', authenticateToken, removeBankContact);
 // Remove PayId Contact
 router.post('/removePayIdContact', authenticateToken, removePayIdContact);
 
+// Forget Password
+router.post('/forgetPassword', authenticationToken, forgetPassword);
+
+// Reset Password
+router.post('/resetPassword', authenticationToken, resetPassword);
+
 module.exports = router;
