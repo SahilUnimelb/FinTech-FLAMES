@@ -1,28 +1,51 @@
-import React from 'react';
+// onetimepin.jsx
+import React, { useState } from 'react';
+import axios from 'axios';
 import logo from '../../../Assets/logo.png';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './OneTimePin.css';
 
 export default function OneTimePin() {
+    const [otp, setOtp] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleConfirmOTP = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/resetPassword', { otp });
+            alert('OTP verified! You can now reset your password.');
+            navigate('/reset'); // Redirect to Reset Password page
+        } catch (err) {
+            setError('Invalid OTP. Please try again.');
+        }
+    };
+
     return (
         <div className="otp">
             <div className="otp-container">
                 <div className="logo">
-                    <img src = {logo} alt = "" />
+                    <img src={logo} alt="Logo" />
                 </div>
                 <h1>Reset Password PIN</h1>
                 <div className="otp-text">
-                    <h3>Please enter the One Time PIN that was sent to your email below to reset your password.</h3>
+                    <h3>Please enter the One Time PIN sent to your email.</h3>
                 </div>
                 <div className="enter-otp">
-                    <input type= "input-otp" placeholder='Enter OTP here.'/>
+                    <input
+                        type="text"
+                        placeholder="Enter OTP here."
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                    />
                 </div>
                 <div className="resend-otp-container">
-                    <button>Confirm</button>
-                    <p className="resend-otp">Did not receive email? <span><Link>Click here.</Link></span></p>
+                    <button onClick={handleConfirmOTP}>Confirm</button>
+                    {error && <p className="error">{error}</p>}
+                    <p className="resend-otp">
+                        Did not receive email? <span>Click here.</span>
+                    </p>
                 </div>
-                
             </div>
         </div>
-    )
+    );
 }
