@@ -1,24 +1,59 @@
-import React from 'react';
+// reset.jsx
+import React, { useState } from 'react';
+import axios from 'axios';
 import logo from '../../../Assets/logo.png';
-import './Reset.css';
+import { useNavigate } from 'react-router-dom';
+import './OneTimePin.css';
 
 export default function ResetPassword() {
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleResetPassword = async () => {
+        if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return;
+        }
+        try {
+            const response = await axios.post('http://localhost:5000/resetPassword', { password });
+            alert('Password reset successful! You can now log in.');
+            navigate('/login'); // Redirect to login
+        } catch (err) {
+            setError('Failed to reset password. Please try again.');
+        }
+    };
+
     return (
-        <div className="reset">
-            <div className="reset-container">
+        <div className="otp">
+            <div className="otp-container">
                 <div className="logo">
-                    <img src = {logo} alt = "" />
+                    <img src={logo} alt="Logo" />
                 </div>
-                <h1>Reset your password</h1>
-                <div className="reset-text">
-                    <h3>Please enter your new password.</h3>
+                <h1>Reset Password</h1>
+                <div className="otp-text">
+                    <h3>Enter your new password below.</h3>
                 </div>
-                <div className="new-password">
-                    <input type= "new-password" placeholder='Enter new password.'/>
-                    <input type= "confirmation" placeholder='Confirm new password.'/>
+                <div className="enter-otp">
+                    <input
+                        type="password"
+                        placeholder="Enter new password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Confirm new password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
                 </div>
-                <button>Confirm</button>
+                <div className="resend-otp-container">
+                    <button onClick={handleResetPassword}>Reset Password</button>
+                    {error && <p className="error">{error}</p>}
+                </div>
             </div>
         </div>
-    )
+    );
 }
