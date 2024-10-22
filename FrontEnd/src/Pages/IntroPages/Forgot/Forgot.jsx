@@ -1,27 +1,51 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+// forgot.jsx
+import React, { useState } from 'react';
+import axios from 'axios'; // For backend requests
 import logo from '../../../Assets/logo.png';
-import './Forgot.css';
+import { Link, useNavigate } from 'react-router-dom';
+import './OneTimePin.css';
 
 export default function ForgotPassword() {
-    return(
-        <div className="forgot">
-            <div className="forgot-container">
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleSendOTP = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/forgetPassword', { email });
+            alert('OTP sent to your email!');
+            navigate('/otp'); // Redirect to OTP page
+        } catch (err) {
+            setError('Failed to send OTP. Please try again.');
+        }
+    };
+
+    return (
+        <div className="otp">
+            <div className="otp-container">
                 <div className="logo">
-                    <img src = {logo} alt = "" />
+                    <img src={logo} alt="Logo" />
                 </div>
-                <h1>Forgotten your password?</h1>
-                <div className="forgot-text">
-                    <p>Please enter below the email address associated with your account,
-                        and we will send you a link to reset your password.</p>
+                <h1>Forgot Password</h1>
+                <div className="otp-text">
+                    <h3>Please enter your email to receive a reset password PIN.</h3>
                 </div>
-                <div className="email-address">
-                    <input type= "email-address" placeholder='Email  Address'/>
+                <div className="enter-otp">
+                    <input
+                        type="email"
+                        placeholder="Enter your email here."
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
-                <button>Confirm</button>
-                <p className='forgot-agree'>Don't have an account? <span><Link to = "/signup" className='forgot-signup-link'>Click here.</Link></span></p>
-                <p className='forgot-agree'>Back to<span><Link to = "/" className='forgot-signup-link'> Home.</Link></span></p>
+                <div className="resend-otp-container">
+                    <button onClick={handleSendOTP}>Send OTP</button>
+                    {error && <p className="error">{error}</p>}
+                    <p className="resend-otp">
+                        <span><Link to="/login">Back to login</Link></span>
+                    </p>
+                </div>
             </div>
         </div>
-    )
+    );
 }
