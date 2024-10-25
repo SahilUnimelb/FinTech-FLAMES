@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import logo from '../../../Assets/logo.png';
 import { useNavigate } from 'react-router-dom';
-import './OneTimePin.css';
+import './Reset.css';
 
 export default function ResetPassword() {
     const [password, setPassword] = useState('');

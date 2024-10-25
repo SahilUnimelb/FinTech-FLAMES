@@ -1,5 +1,5 @@
 const express = require('express');
-const { createAccount, login, getUserAccount, addContact, getBankContacts, getPayIdContacts, removeBankContact, removePayIdContact } = require('../controllers/accountController');
+const { createAccount, login, getUserAccount, addContact, getBankContacts, getPayIdContacts, removeBankContact, removePayIdContact, forgotPassword, resetPassword } = require('../controllers/accountController');
 const { authenticateToken } = require('../middleWare/auth')
 
 const router = express.Router();
@@ -29,7 +29,7 @@ router.post('/removeBankContact', authenticateToken, removeBankContact);
 router.post('/removePayIdContact', authenticateToken, removePayIdContact);
 
 // Forget Password
-router.post('/forgetPassword', authenticateToken, forgetPassword);
+router.post('/forgetPassword', authenticateToken, forgotPassword);
 
 // Reset Password
 router.post('/resetPassword', authenticateToken, resetPassword);
