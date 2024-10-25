@@ -573,7 +573,7 @@ function handleNextPaymentDate(bill) {
 }
 
 // Schedule the cron job to run every minute
-cron.schedule('*/5 * * * * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
   
 
     try {
@@ -635,3 +635,12 @@ cron.schedule('*/5 * * * * *', async () => {
         console.error('Error processing scheduled payments:', error.message);
     }
 });
+
+module.exports = {
+  User,
+  generateAccNo,
+  generateBsb,
+  generateRandomCardNumber,
+  generateRandomCVV,
+  generatePhoneNo,
+};

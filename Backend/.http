@@ -11,6 +11,17 @@ Content-Type: application/json
   "password": "password123"
 }
 
+### Create Account 1 - email failure
+POST http://localhost:5000/api/accounts/create
+Content-Type: application/json
+
+{
+  "name": "imposter man",
+  "email": "mitchell@example.com",
+  "username": "idontexist",
+  "password": "password123"
+}
+
 ### Create Account 2
 POST http://localhost:5000/api/accounts/create
 Content-Type: application/json
@@ -94,6 +105,7 @@ Content-Type: application/json
 }
 
 ### Admin - Login Account
+# @name admin
 POST http://localhost:5000/api/accounts/login
 Content-Type: application/json
 
@@ -103,9 +115,10 @@ Content-Type: application/json
 }
 
 ### Admin - get Database
+@adminAuthToken = {{admin.response.body.token}}
 POST http://localhost:5000/api/admin/getDatabase
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..FAm6kQQ5iDK-MtbP_qSSsK32MxBx1Jk0FO2S57o9ltE
+Authorization: Bearer {{adminAuthToken}}
 
 ### Admin - set user balance
 POST http://localhost:5000/api/admin/setBalance
@@ -244,6 +257,9 @@ Authorization: Bearer {{userAuthToken}}
 
 ### Get All Scheduled Payments
 @userAuthToken = {{login.response.body.token}}
-GET http://localhost:5000/api/transactions/getScheduledPayments
+POST http://localhost:5000/api/transactions/getScheduledPayments
 Content-Type: application/json
 Authorization: Bearer {{userAuthToken}}
+
+### Chatbot
+POST http://localhost:5000/api/chatbot

@@ -12,5 +12,14 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.15",
     "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.2",
+    "sinon": "^19.0.2",
+    "supertest": "^7.0.0"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }
