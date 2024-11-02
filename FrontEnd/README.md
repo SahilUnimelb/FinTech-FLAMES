@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# FrontEnd Logic Layer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This layer contains the core logic of the frontend of the application
 
-## Available Scripts
+- **Technologies Used**: React.js, react-router-dom
 
-In the project directory, you can run:
+##### Key Components:
 
-### `npm start`
+- **`Navbar.jsx`**
+  - **Description**: Renders the navbars for the app
+  - **Responsibilities**: Contains links for different pages, such as home, view accounts, transfer and settings. Also contains a logoff button
+  - 
+- **`Chatbot.jsx`**
+  - **Description**: Renders the chatbot of the app
+  - **Responsibilities**: Users can interact with the chatbot and seek immediate assistance
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+##### Key Pages:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **`Account.jsx`**
+  - **Description**: Manages account pages
+  - **Responsibilities**: Contains the components of all the main pages in the account and helps to pass data between those pages
+    
+- **`Admin.jsx`**
+  - **Description**: Renders the admin panel of the app
+  - **Responsibilities**: Admin can perform all the administrative activities from this page
+    
+- **`Contacts.jsx`**
+  - **Description**: Renders all the saved contacts
+  - **Responsibilities**: Users can add/delete contacts of other users from this page
+    
+- **`EditProfile.jsx`**
+  - **Description**: Renders the edit profile page of the app
+  - **Responsibilities**: User can edit the details of their account from this page
 
-### `npm test`
+- **`Home.jsx`**
+  - **Description**: Renders the home page of the account
+  - **Responsibilities**: User can see the bank balance of their accounts and as well as check the transaction history
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **`Settings.jsx`**
+  - **Description**: Renders the settings page of the account
+  - **Responsibilities**: User can perform actions from the settings page, such as turn on instructons mode etc.
 
-### `npm run build`
+- **`Transfer.jsx`**
+  - **Description**: Renders the transaction page of the account
+  - **Responsibilities**: Users can send funds to other users, or between their own accounts or even schedule payment for future date
+    
+- **`ViewAccounts.jsx`**
+  - **Description**: Renders the view account page of the account
+  - **Responsibilities**: User can check all their details related to their account, including their username, credit card and previous transactions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **`Homepage.jsx`**
+  - **Description**: Renders the front page of the app
+  - **Responsibilities**: User can see the front page of the app and as well as login or go to the sign up or forget password page
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **`Signup.jsx`**
+  - **Description**: Renders the signup page of tha account
+  - **Responsibilities**: User can create new account from this page
