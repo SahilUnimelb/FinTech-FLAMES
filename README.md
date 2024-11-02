@@ -2,8 +2,12 @@
 This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 # Table of Contents
 1. [Project Overview](#project-overview)
-2. [Demo](#demo)
-3. [Features](#features)
+   - [Description of key classes](#description-of-key-classes)
+      - [BackEnd](#backend)
+      - [FrontEnd](#frontend)
+   - [Description of Database Structure](#database-structure)
+3. [Demo](#demo)
+4. [Features](#features)
    - [Sprint 1](#sprint-1-basic-account-management-and-setup)
    - [Sprint 2](#sprint-2-simulated-banking-and-transactions)
    - [Sprint 3](#sprint-3-transaction-history-and-administration)
@@ -22,6 +26,12 @@ This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 8. [Changelog](#changelog)
 9. [Traceability Matrix](#traceability-matrix)
 # Project Overview
+### Description of Key Classes
+- #### [Backend](Backend\README.md)
+- #### [Frontend]()
+### Database Structure
+- [Database Structure Readme](Backend\models\README.md)
+(remove this line when you finish, create a read me in the front end talking about the structure of the code and then link it)
 # Demo
 Link to the website: https://learn-to-bank.onrender.com
 # Features
