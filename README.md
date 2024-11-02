@@ -89,7 +89,9 @@ Link to the website: https://learn-to-bank.onrender.com
 - ### [NonFunctional Considerations](Docs/NonFunctionalConsiderations.pdf)
 - ### [User Stories](Docs/UserStories.pdf)
 - ### [Test Cases](Docs/TestCases.pdf)
+
 # Changelog
+ [Changelog](https://github.com/SahilUnimelb/FinTech-FLAMES/blob/main/changelog.md)
 
 # Installation
 To begin, please follow the steps below for installing Npm and Node and setting up the server and database:
