@@ -27,7 +27,7 @@ This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 9. [Traceability Matrix](#traceability-matrix)
 # Project Overview
 ### Description of Key Classes
-- #### [Backend](Backend\README.md)
+- #### [Backend](Backend/README.md)
 - #### [Frontend]()
 (remove this line when you finish, create a read me in the front end talking about the structure of the code and then link it)
 ### Database Structure
