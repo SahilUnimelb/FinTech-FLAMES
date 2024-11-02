@@ -28,7 +28,7 @@ This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 # Project Overview
 ### Description of Key Classes
 - #### [Backend](Backend/README.md)
-- #### [Frontend]()
+- #### [Frontend](FrontEnd/README.md)
 (remove this line when you finish, create a read me in the front end talking about the structure of the code and then link it)
 ### Database Structure
 - [Database Structure Readme](Backend/models/README.md)
