@@ -1,6 +1,11 @@
 # FinTech-FLAMES
 This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 Link to the website: https://learn-to-bank.onrender.com
+
+# Table of Contents
+
+
+
 # Installation
 To begin, please follow the steps below for installing Npm and Node and setting up the server and database:
 ## Download Node and Npm
@@ -117,3 +122,10 @@ Optional if the above command does not work:
 mkdir C:\data\db
 ```
 Then run the first command again
+
+## Documents
+- [Architecture System Diagram](Docs/ArchitectureSystemDiagram.pdf)
+- [Domain Model](Docs\DomainModel.pdf)
+- [Motivational Model](Docs\MotivationalModel.pdf)
+- [Non Functional Considerations](Docs\NonFunctionalConsiderations.pdf)
+- [User Stories](Docs\UserStories.pdf)
