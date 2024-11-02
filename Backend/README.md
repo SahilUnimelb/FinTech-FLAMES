@@ -28,6 +28,9 @@ This layer contains the core logic of the application, processing user requests 
     - Connects to the MongoDB database and starts the server.
     - Logs incoming requests for monitoring purposes.
 
+##### Key Algorithmns
+- [Scheduled Payments](Backend/controllers/README.md)
+
 ## Data Access Layer
 The data access layer is responsible for interacting with the database, handling data retrieval, storage, and management.
 - **Technologies Used**:  Node.js, Express.js, Mongoose, MongoDB, bcryptjs, speakeasy, nodemailer, express-rate-limit, node-cron
