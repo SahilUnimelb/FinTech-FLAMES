@@ -84,11 +84,11 @@ Link to the website: https://learn-to-bank.onrender.com
 
 # Documentation
 - ### [Architecture System Diagram](Docs/ArchitectureSystemDiagram.pdf)
-- ### [Domain Model](Docs\DomainModel.pdf)
-- ### [Motivational Model](Docs\MotivationalModel.pdf)
-- ### [NonFunctional Considerations](Docs\NonFunctionalConsiderations.pdf)
-- ### [User Stories](Docs\UserStories.pdf)
-- ### [Test Cases](Docs\TestCases.pdf)
+- ### [Domain Model](Docs/DomainModel.pdf)
+- ### [Motivational Model](Docs/MotivationalModel.pdf)
+- ### [NonFunctional Considerations](Docs/NonFunctionalConsiderations.pdf)
+- ### [User Stories](Docs/UserStories.pdf)
+- ### [Test Cases](Docs/TestCases.pdf)
 
 # Installation
 To begin, please follow the steps below for installing Npm and Node and setting up the server and database:
