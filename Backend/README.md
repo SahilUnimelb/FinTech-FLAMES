@@ -1,4 +1,4 @@
-#### Backend Logic Layer
+## Backend Logic Layer
 This layer contains the core logic of the application, processing user requests and interacting with the data layer.
 
 - **Technologies Used**: Node.js, Express.js, jsonwebtoken, bcryptjs, fuse.js, fs, path
@@ -28,7 +28,7 @@ This layer contains the core logic of the application, processing user requests 
     - Connects to the MongoDB database and starts the server.
     - Logs incoming requests for monitoring purposes.
 
-#### Data Access Layer
+## Data Access Layer
 The data access layer is responsible for interacting with the database, handling data retrieval, storage, and management.
 - **Technologies Used**:  Node.js, Express.js, Mongoose, MongoDB, bcryptjs, speakeasy, nodemailer, express-rate-limit, node-cron
 
@@ -38,7 +38,7 @@ The data access layer is responsible for interacting with the database, handling
   - **Responsibilities**: Defines the structure for user records and provides database interaction methods.
 
 
-#### Database Layer
+## Database Layer
 This layer consists of the database itself, which stores all persistent data for the application.
 
 - **Database Used**: MongoDB (for a NoSQL structure)
