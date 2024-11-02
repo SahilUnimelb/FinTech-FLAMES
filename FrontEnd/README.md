@@ -4,6 +4,16 @@ This layer contains the core logic of the frontend of the application
 
 - **Technologies Used**: React.js, react-router-dom
 
+## Structure of the Frontend layer
+
+src/
+|
+├── Assets/
+├── Components/
+└── Pages/
+    ├── AccountPages/
+    └── IntroPages/
+    
 ##### Key Components:
 
 - **`Navbar.jsx`**
@@ -15,6 +25,8 @@ This layer contains the core logic of the frontend of the application
   - **Responsibilities**: Users can interact with the chatbot and seek immediate assistance
 
 ##### Key Pages:
+
+##### Key AccountPages:
 
 - **`Account.jsx`**
   - **Description**: Manages account pages
@@ -48,9 +60,15 @@ This layer contains the core logic of the frontend of the application
   - **Description**: Renders the view account page of the account
   - **Responsibilities**: User can check all their details related to their account, including their username, credit card and previous transactions
 
+##### Key IntroPages:
+
 - **`Homepage.jsx`**
   - **Description**: Renders the front page of the app
   - **Responsibilities**: User can see the front page of the app and as well as login or go to the sign up or forget password page
+
+- **`Forgot.jsx`**
+  - **Description**: Renders the forget password page of the app
+  - **Responsibilities**: User can see reset their password through this page if they forget their password
 
 - **`Signup.jsx`**
   - **Description**: Renders the signup page of tha account
