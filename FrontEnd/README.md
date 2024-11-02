@@ -4,15 +4,6 @@ This layer contains the core logic of the frontend of the application
 
 - **Technologies Used**: React.js, react-router-dom
 
-## Structure of the Frontend layer
-
-src/  
-├── Assets/  
-├── Components/  
-└── Pages/  
-    ├── AccountPages/  
-    └── IntroPages/  
-    
 ##### Key Components:
 
 - **`Navbar.jsx`**
