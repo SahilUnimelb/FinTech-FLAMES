@@ -29,7 +29,7 @@ This layer contains the core logic of the application, processing user requests 
     - Logs incoming requests for monitoring purposes.
 
 ##### Key Algorithmns
-- [Scheduled Payments](Backend/controllers/README.md)
+- [Scheduled Payments](controllers/README.md)
 
 ## Data Access Layer
 The data access layer is responsible for interacting with the database, handling data retrieval, storage, and management.
