@@ -7,11 +7,11 @@ This layer contains the core logic of the frontend of the application
 ## Structure of the Frontend layer
 
 src/  
-  Assets/  
-  Components/  
-  Pages/  
-     AccountPages/  
-     IntroPages/  
+├── Assets/  
+├── Components/  
+└── Pages/  
+    ├── AccountPages/  
+    └── IntroPages/  
     
 ##### Key Components:
 
