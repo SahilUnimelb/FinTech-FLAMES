@@ -98,7 +98,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
 
   const getBankContacts = useCallback(async () => {
     try {
-      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/getBankContacts', {}, {
+      const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/getBankContacts', {}, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -112,7 +112,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
 
   const getPayIdContacts = useCallback(async () => {
     try {
-      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/getPayIdContacts', {}, {
+      const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/getPayIdContacts', {}, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -140,7 +140,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
           phoneNo: contactData.phoneNumber
         }
       }
-      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/addContact', contactPackage, {
+      const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/addContact', contactPackage, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -188,7 +188,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
         bsb: selectedAccount.bsb,
         accNo: selectedAccount.accNo
       }
-      await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/removeBankContact', contactPackage, {
+      await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/removeBankContact', contactPackage, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -205,7 +205,7 @@ export default function Contacts({accounts, phones, addContactDetails, selectedA
       let contactPackage = {
         phoneNo: selectedAccount.phoneNo
       }
-      await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/removePayIdContact', contactPackage, {
+      await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/removePayIdContact', contactPackage, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`

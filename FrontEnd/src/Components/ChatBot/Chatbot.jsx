@@ -23,9 +23,7 @@ export default function Chatbot() {
         setLoading(true);
 
         try {
-            const token = localStorage.getItem('token');
-
-            const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/chatbot/chatbot', {
+            const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/chatbot/chatbot', {
                 message: inputValue
             });
 

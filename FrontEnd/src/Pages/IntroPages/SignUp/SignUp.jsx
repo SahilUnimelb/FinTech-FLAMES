@@ -22,7 +22,7 @@ export default function SignUp() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/create', formData);
+      const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/create', formData);
       setMessage(response.data.message); // Success message from backend
     } catch (error) {
       if (error.response && error.response.data) {

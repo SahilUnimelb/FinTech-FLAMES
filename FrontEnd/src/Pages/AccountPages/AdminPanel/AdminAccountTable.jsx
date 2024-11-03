@@ -13,7 +13,7 @@ export default function AdminAccountTable() {
 
     const getDatabase = useCallback(async () => {
         try {
-            const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/admin/getDatabase', {}, {
+            const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/admin/getDatabase', {}, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
@@ -44,7 +44,7 @@ export default function AdminAccountTable() {
 
     const applyBalanceChange = async() => {
         try {
-            await axios.post('https://learn-to-bank-backend.onrender.com/api/admin/setBalance', {
+            await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/admin/setBalance', {
                 accNumber: currUser.accNo,  // Use the current user's accNo in the request
                 newBalance: fundAmount
             }, {
@@ -61,7 +61,7 @@ export default function AdminAccountTable() {
 
     const applyAccountDeactivation = async() => {
         try {
-            await axios.post('https://learn-to-bank-backend.onrender.com/api/admin/delete', {
+            await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/admin/delete', {
                 username: currUser.username
             }, {
                 headers: {
@@ -77,7 +77,7 @@ export default function AdminAccountTable() {
 
     const applyAccountReactivation = async() => {
         try {
-            await axios.post('https://learn-to-bank-backend.onrender.com/api/admin/reactivate', {
+            await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/admin/reactivate', {
                 username: currUser.username
             }, {
                 headers: {

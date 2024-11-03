@@ -24,7 +24,7 @@ export default function Homepage() {
 
     try {
       // Send POST request to backend for login
-      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/login', formData);
+      const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/login', formData);
       const { token, message } = response.data;
       setMessage(message);
 

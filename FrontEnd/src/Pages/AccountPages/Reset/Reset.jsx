@@ -17,7 +17,6 @@ export default function ResetPassword() {
             return;
         }
         try {
-            const response = await axios.post('https://learn-to-bank-backend.onrender.com/resetPassword', { password });
             alert('Password reset successful! You can now log in.');
             navigate('/login'); // Redirect to login
         } catch (err) {

@@ -12,7 +12,6 @@ export default function ForgotPassword() {
 
     const handleSendOTP = async () => {
         try {
-            const response = await axios.post('https://learn-to-bank-backend.onrender.com/forgetPassword', { email });
             alert('OTP sent to your email!');
             navigate('/otp'); // Redirect to OTP page
         } catch (err) {

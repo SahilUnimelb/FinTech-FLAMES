@@ -16,7 +16,7 @@ export default function ScheduledBillsTable() {
 
   const getScheduledBills = useCallback(async () => {
     try {
-        const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/transactions/getScheduledPayments', {}, {
+        const response = await axios.post('https://learn-to-bank-backend-7mtr.onrender.com/api/transactions/getScheduledPayments', {}, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
