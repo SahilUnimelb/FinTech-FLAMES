@@ -19,12 +19,9 @@ This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
    - [Non Functional Considerations](#nonfunctional-considerations)
    - [User Stories](#user-stories)
    - [Test Cases](#test-cases)
-6. [System Requirements](#system-requirements)
-   - [Tools and Database Versions](#tools-and-database-versions)
-7. [Installation Guide](#installation)
-   - [Setup and Configuration](#setup-and-configuration)
-8. [Changelog](#changelog)
-9. [Traceability Matrix](#traceability-matrix)
+6. [Installation Guide](#installation)
+   - [Dependencies](#additional-dependencies-to-install)
+7. [Changelog](#changelog)
 # Project Overview
 ### Description of Key Classes
 - #### [Backend](Backend/README.md)
@@ -89,9 +86,6 @@ Link to the website: https://learn-to-bank.onrender.com
 - ### [NonFunctional Considerations](Docs/NonFunctionalConsiderations.pdf)
 - ### [User Stories](Docs/UserStories.pdf)
 - ### [Test Cases](Docs/TestCases.pdf)
-
-# Changelog
- [Changelog](https://github.com/SahilUnimelb/FinTech-FLAMES/blob/main/changelog.md)
 
 # Installation
 To begin, please follow the steps below for installing Npm and Node and setting up the server and database:
@@ -209,5 +203,8 @@ Optional if the above command does not work:
 mkdir C:\data\db
 ```
 Then run the first command again
+
+# Changelog
+ [Changelog](https://github.com/SahilUnimelb/FinTech-FLAMES/blob/main/changelog.md)
 
 
