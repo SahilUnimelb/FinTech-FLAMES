@@ -22,6 +22,7 @@ This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 6. [Installation Guide](#installation)
    - [Dependencies](#additional-dependencies-to-install)
 7. [Changelog](#changelog)
+8. [Deployment](#deployment)
 # Project Overview
 ### Description of Key Classes
 - #### [Backend](Backend/README.md)
@@ -206,5 +207,7 @@ Then run the first command again
 
 # Changelog
  [Changelog](https://github.com/SahilUnimelb/FinTech-FLAMES/blob/main/changelog.md)
+
+# Deployment
 
 
