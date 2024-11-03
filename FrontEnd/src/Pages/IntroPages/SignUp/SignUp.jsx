@@ -6,11 +6,9 @@ import './SignUp.css';
 export default function SignUp() {
   const [formData, setFormData] = useState({
     name: '',
-    username: '',
     email: '',
-    password: '',
-    //phoneNo: '',
-    //initialDeposit: ''
+    username: '',
+    password: ''
   })
 
   const [message, setMessage] = useState('');
@@ -24,7 +22,6 @@ export default function SignUp() {
     e.preventDefault();
 
     try {
-      // POST request to your backend API
       const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/create', formData);
       setMessage(response.data.message); // Success message from backend
     } catch (error) {

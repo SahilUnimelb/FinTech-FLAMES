@@ -32,7 +32,6 @@ const AccnoBsbSchema = new mongoose.Schema({
   bsb: {type: Number, unique: true}
 });
 
-
 // Define the card details schema
 const cardDetailSchema = new mongoose.Schema({
   number: {type: String, required: true, unique: true},
@@ -58,7 +57,10 @@ const scheduledPaymentSchema = new mongoose.Schema({
   repeatCount: { type: Number, required: true }, // Number of times the payment should be made
   completedCount: { type: Number, default: 0 }, // Track how many payments have been made
   lastPaymentDate: { type: Date }, // Track when the last payment was made
-  targetAccNo: AccnoBsbSchema,
+  targetAccNo: {
+    accNo: { type: Number, sparse: true },
+    bsb: { type: Number, sparse: true }
+  },
   targetPhoneNo: { type: Number },
   description: String,
 });

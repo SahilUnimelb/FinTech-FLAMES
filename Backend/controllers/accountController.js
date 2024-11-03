@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 // Account Registration / Creation
 exports.createAccount = async (req, res) => {
     const { name, email, username, password} = req.body;
-
     try {
         // Check if username is already taken
         const existingUser = await User.findOne({ 'login.username': username });
@@ -70,7 +69,8 @@ exports.createAccount = async (req, res) => {
             roles: 'user',
             lastLogedInAt: new Date(),
             is2FAEnabled: true,
-            isDeleted: false
+            isDeleted: false,
+            // scheduledPayments: []
         });
 
         await newUser.save();
