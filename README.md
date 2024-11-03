@@ -32,7 +32,7 @@ This is the main branch of FinTech-Flames Learn-To-Bank simulation website <br/>
 - [Database Structure Readme](Backend/models/README.md)
 
 # Demo
-Link to the website: https://learn-to-bank.onrender.com
+Link to the website: [https://learn-to-bank.onrender.com](https://learn-to-bank-md60.onrender.com/)
 # Features
 ### Sprint 1: Basic Account Management and Setup
 **Goal:** Implement fundamental account functionality, including signup, login, and basic account management.
