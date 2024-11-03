@@ -214,5 +214,5 @@ Then run the first command again
  [Changelog](https://github.com/SahilUnimelb/FinTech-FLAMES/blob/main/changelog.md)
 
 # Deployment
-
+ [Deployment](https://github.com/SahilUnimelb/FinTech-FLAMES/blob/main/deployment.md)
 
