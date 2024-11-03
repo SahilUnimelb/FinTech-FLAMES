@@ -130,14 +130,19 @@ npm install mongoose
 ```
 npm install cors
 ```
-3. Nodemailer
+4. Nodemailer
 ```
 npm install nodemailer
 ```
-3. Speakeasy
+5. Speakeasy
 ```
 npm install speakeasy
 ```
+6. Jest
+```
+npm install Jest
+```
+
 # Start the app
 To start the app do the following depending on the machine:
 # MacOS
