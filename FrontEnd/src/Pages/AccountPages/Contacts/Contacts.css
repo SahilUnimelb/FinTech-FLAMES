@@ -341,10 +341,13 @@
   .mobile-view {
     font-size: 15px;
   }
+  .contact-header p {
+    font-size: 15px;
+  }
 }
 @media(max-width:400px) {
   .contact-header p {
-    font-size: 25px;
+    font-size: 15px;
   }
   .contact-header img {
     width: 40px;
