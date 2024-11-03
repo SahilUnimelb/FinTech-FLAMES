@@ -58,8 +58,8 @@ const scheduledPaymentSchema = new mongoose.Schema({
   completedCount: { type: Number, default: 0 }, // Track how many payments have been made
   lastPaymentDate: { type: Date }, // Track when the last payment was made
   targetAccNo: {
-    accNo: { type: Number, sparse: true },
-    bsb: { type: Number, sparse: true }
+    accNo: { type: Number },
+    bsb: { type: Number }
   },
   targetPhoneNo: { type: Number },
   description: String,

@@ -1,7 +1,7 @@
 @host = http://localhost:5000/api/v1
 
 ### Create Account 1
-POST https://learn-to-bank-backend.onrender.com/api/accounts/create
+POST https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/create
 Content-Type: application/json
 
 {
@@ -12,12 +12,12 @@ Content-Type: application/json
 }
 
 ### Create Account 1 - email failure
-POST http://localhost:5000/api/accounts/create
+POST https://learn-to-bank-backend-7mtr.onrender.com/api/accounts/create
 Content-Type: application/json
 
 {
   "name": "imposter man",
-  "email": "mitchell@example.com",
+  "email": "person@example.com",
   "username": "idontexist",
   "password": "password123"
 }
