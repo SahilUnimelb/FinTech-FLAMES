@@ -14,7 +14,11 @@ const chatbotRoutes = require('./routes/chatbotRoutes');
 
 dotenv.config();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://learn-to-bank-md60.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
 
 // Middleware to parse JSON requests
 app.use(express.json());
