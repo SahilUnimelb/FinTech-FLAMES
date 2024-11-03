@@ -317,7 +317,6 @@ if the formatting needs changing. */
                 <h1>Balance: ${accountData.savingAccDetails.balance}</h1>
                 <h1>Saving History</h1>
                 <TransactionTable transactions={savingsHistory} />
-                <button className="print-pdf">Export as PDF</button>
               </>
             )}
             {active === "Transactions Account" && (
@@ -325,10 +324,8 @@ if the formatting needs changing. */
                 <h1>Balance: ${accountData.transAccDetails.balance}</h1>
                 <h1>Transaction History</h1>
                 <TransactionTable transactions={transactionsHistory} />
-                <button className="print-pdf">Export as PDF</button>
               </>
             )}
-          {/* need to find a way to make the react-pdf attachement work*/}
           </div>
         </div>
       </div>
