@@ -224,23 +224,6 @@
     transform: rotateY(180deg);
 }
 
-/* ============================== */
-
-.print-pdf {
-    background-color: #1a3b4a;
-    padding: 15px 45px;
-    color: white;
-    border: none;
-    border-radius: 35px;
-    cursor: pointer;
-    margin: 20px;
-    font-size: larger;
-}
-
-.print-pdf:hover {
-    background-color: #142d39;
-}
-
 /* Transaction History Table CSS */
 
 .scrollable-container {
