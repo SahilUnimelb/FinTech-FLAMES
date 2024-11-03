@@ -25,7 +25,7 @@ export default function SignUp() {
 
     try {
       // POST request to your backend API
-      const response = await axios.post('http://localhost:5000/api/accounts/create', formData);
+      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/create', formData);
       setMessage(response.data.message); // Success message from backend
     } catch (error) {
       if (error.response && error.response.data) {

@@ -105,7 +105,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
             }
         }
         console.log("SCHEDULE PACKAGE: ", scheduledPackage);
-      const response = await axios.post('http://localhost:5000/api/transactions/schedulePayment', scheduledPackage, {
+      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/transactions/schedulePayment', scheduledPackage, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -125,7 +125,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   const handleInternalTransfer = async () => {
     try {
 
-      const response = await axios.post('http://localhost:5000/api/transactions/transfer/within', {
+      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/transactions/transfer/within', {
         fromAccountType: formData.senderAccount,
         toAccountType: formData.receiverAccount,
         amount: formData.amount,
@@ -149,7 +149,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const handleBankTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/transactions/transfer', {
+        const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/transactions/transfer', {
             toAccNo: formData.accountNumber,
             toBsb: formData.bsb,
             amount: formData.amount,
@@ -175,7 +175,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const handlePayIdTransfer = async () => {
     try{
-        const response = await axios.post('http://localhost:5000/api/transactions/payIdTransfer', {
+        const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/transactions/payIdTransfer', {
             toPhoneNo: formData.phoneNumber,
             amount: formData.amount,
             description: formData.description
@@ -215,7 +215,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
 
   const getBankContacts = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/accounts/getBankContacts', {}, {
+      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/getBankContacts', {}, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -229,7 +229,7 @@ export default function Transfer({accounts, phones, addContactDetails}) {
   
   const getPayIdContacts = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/accounts/getPayIdContacts', {}, {
+      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/getPayIdContacts', {}, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`

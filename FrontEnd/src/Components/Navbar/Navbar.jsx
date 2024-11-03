@@ -26,7 +26,7 @@ export default function Navbar() {
   const getAccountData = useCallback(async () => {
     try {
       // Make a request to get the user account details
-      const response = await axios.post('http://localhost:5000/api/accounts/getUser', {}, {
+      const response = await axios.post('https://learn-to-bank-backend.onrender.com/api/accounts/getUser', {}, {
         headers: {
           Authorization: `Bearer ${token}`, // Send the token in the Authorization header
         },

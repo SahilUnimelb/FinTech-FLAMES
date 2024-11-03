@@ -12,7 +12,7 @@ export default function OneTimePin() {
 
     const handleConfirmOTP = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/resetPassword', { otp });
+            const response = await axios.post('https://learn-to-bank-backend.onrender.com/resetPassword', { otp });
             alert('OTP verified! You can now reset your password.');
             navigate('/reset'); // Redirect to Reset Password page
         } catch (err) {
